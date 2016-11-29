@@ -28,6 +28,7 @@ namespace GameClansServer.TableEntities
 			this.RowKey = sClanName;
 			this.PassPhrase = "";
 		}
+		public ClanTableEntity() { }
 
 		public string PassPhrase { get; set; }
 	}

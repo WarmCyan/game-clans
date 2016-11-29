@@ -30,6 +30,8 @@ namespace GameClansServer.TableEntities
 			this.ZendoScore = 0;
 		}
 
+		public UserTableEntity() { }
+
 		public string PassPhrase { get; set; }
 		public int ZendoScore { get; set; }
 	}

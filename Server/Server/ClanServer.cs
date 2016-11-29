@@ -68,6 +68,7 @@ namespace GameClansServer
 			// if we make it to this point we're good, add the new clan!
 			ClanTableEntity pClan = new ClanTableEntity(sClanName);
 			pClan.PassPhrase = this.Sha256Hash(sClanPassPhrase);
+			this.Table.Execute(TableOperation.Insert(pClan));
 
 			return Master.MessagifySimple("You have successfully created the clan " + sClanName + "!");
 		}
