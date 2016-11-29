@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Zendo.cs
 //  Date created: 11/28/2016
-//  Date edited: 11/28/2016
+//  Date edited: 11/29/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: My implementation of the awesome game of Zendo!
@@ -16,6 +16,48 @@ using System.Xml.Linq;
 
 namespace GameClansServer.Games
 {
+
+	public class ZendoLogEvent
+	{
+		// construction
+		public ZendoLogEvent(string sMsg)
+		{
+			this.Message = sMsg;
+			this.Time = DateTime.Now;
+		}
+		public ZendoLogEvent(string sMsg, string sData)
+		{
+			this.Message = sMsg;
+			this.Data = sData;
+			this.Time = DateTime.Now;
+		}
+		
+		// properties
+		public string Message { get; set; } 
+		public string Data { get; set; }
+		public DateTime Time { get; set; }
+	}
+
+	public class ZendoKoan
+	{
+		public ZendoKoan(string sKoan, string sUserName)
+		{
+			this.Koan = sKoan;
+			this.User = sUserName;
+		}
+		public ZendoKoan(string sKoan, string sUserName, bool bHasBuddhaNature)
+		{
+			this.Koan = sKoan;
+			this.User = sUserName;
+			this.HasBuddhaNature = bHasBuddhaNature;
+		}
+
+		public string Koan { get; set; }
+		public string User { get; set; }
+		public bool HasBuddhaNature { get; set; } 
+	}
+	
+
 	public class Zendo
 	{
 		// member variables
@@ -28,8 +70,10 @@ namespace GameClansServer.Games
 
 		private string m_sMaster;
 		private List<string> m_lStudents;
-		private string m_sStateStatus; // "setup" (waiting for players to join), "initial" (waiting for Master's 2 koans), "open" (users can submit koans or guesses), "awaiting master" (waiting for master to analyze koan), "awaiting students" (mondo, waiting for majority of students to make their prediction), "awaiting disproval"
-		private List<string> m_lEventLog;
+		private string m_sStateStatus; // "setup" (waiting for players to join), "initial" (waiting for Master's 2 koans), "open" (users can submit koans or guesses), "pending master" (waiting for master to analyze koan), "pending students" (mondo, waiting for majority of students to make their prediction), "pending disproval"
+		private List<ZendoLogEvent> m_lEventLog;
+		private List<string> m_lKoans; // first character is T|F for whether has buddha nature. Then comma delimited character pairs (first character is color, second is direction)
+		private string m_sPendingKoan;
 
 		// construction
 		// (if id is passed in, load that game's xml)
@@ -106,8 +150,7 @@ namespace GameClansServer.Games
 			return "";
 		}
 
-		// TODO: programming while tired, double check!
-		public string SubmitInitialKoans(string sGameID, string sClanName, string sUserName, string sUserPassPhrase)
+		public string SubmitInitialKoans(string sGameID, string sClanName, string sUserName, string sUserPassPhrase, string sBuddhaNatureKoan, string sNonBuddhaNatureKoan)
 		{
 			this.Initialize();
 
@@ -126,7 +169,47 @@ namespace GameClansServer.Games
 			// make sure this user is the master and can in fact be submitting the initial koans
 			if (sUserName != m_sMaster) { return Master.MessagifyError("Only the master can submit the initial koans"); }
 
-			// TODO: handle the koans here
+			// add the two koans
+			sBuddhaNatureKoan = "T" + sBuddhaNatureKoan;
+			sNonBuddhaNatureKoan = "F" + sNonBuddhaNatureKoan;
+			m_lKoans.Add(sBuddhaNatureKoan);
+			m_lKoans.Add(sNonBuddhaNatureKoan);
+
+			// open up the game status
+			m_sStateStatus = "open";
+
+			// TODO: notifications for users  (notifications should basically be the exact same thing as the event log
+			m_lEventLog.Add(new ZendoLogEvent("The master has built the initial koans", "<Koan>" + sBuddhaNatureKoan + "</Koan><Koan>" + sNonBuddhaNatureKoan + "</Koan>"));
+
+			this.Save();
+			return "";
+		}
+
+		public string SubmitKoan(string sGameID, string sClanName, string sUserName, string sUserPassPhrase, string sKoan)
+		{
+			this.Initialize();
+
+			// verify user
+			if (!m_pServer.VerifyUserPassPhrase(sClanName, sUserName, sUserPassPhrase)) { return Master.MessagifyError("Invalid login."); }
+
+			this.Load(sGameID);
+
+			// verify it's a student submitting koan
+			if (sUserName == m_sMaster) { return Master.MessagifyError("Only students can submit koans for analysis"); }
+
+			// make sure the state is open
+			if (m_sStateStatus != "open") 
+			{
+				if (m_sStateStatus == "pending master") { return Master.MessagifyError("The master has not analyzed the current pending koan"); }
+				if (m_sStateStatus == "pending students") { return Master.MessagifyError("Mondo has been called on the pending koan"); }
+				if (m_sStateStatus == "pending disproval") { return Master.MessagifyError("The master is currently attempting to disprove the current guess"); }
+				return Master.MessagifyError("The game is not currently accepting koan submissions");
+			}
+
+			m_sPendingKoan = sKoan;
+
+			// TODO: notification for master
+			m_lEventLog.Add(new ZendoLogEvent(sUserName + " has built a new koan", sKoan));
 
 			this.Save();
 			return "";
@@ -142,6 +225,9 @@ namespace GameClansServer.Games
 
 			m_lPlayerNames = new List<string>();
 			m_lStudents = new List<string>();
+			m_lKoans = new List<string>();
+			m_lEventLog = new List<ZendoLogEvent>();
+			m_sPendingKoan = "";
 			m_sMaster = "";
 		}
 
