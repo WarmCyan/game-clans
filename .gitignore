@@ -2,3 +2,5 @@ Server/packages/*
 Server/Server/bin/*
 Server/Server/obj/*
 Server/Server/.vs/*
+
+**/_hidden_.cs

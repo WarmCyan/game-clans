@@ -1,5 +1,5 @@
 ﻿//*************************************************************
-//  File: ClanTableEntity.cs
+//  File: UserTableEntity.cs
 //  Date created: 11/28/2016
 //  Date edited: 11/28/2016
 //  Author: Nathan Martindale
@@ -17,18 +17,20 @@ using Microsoft.WindowsAzure.Storage.Table;
 
 namespace GameClansServer.TableEntities
 {
-	public class ClanTableEntity : TableEntity
+	public class UserTableEntity : TableEntity
 	{
-		// partition key is CLAN
-		// row key is the name of the clan
+		// partition key is "clan name|USER"
+		// row key is username 
 	
-		public ClanTableEntity(string sClanName) 
+		public UserTableEntity(string sClanName, string sUserName)
 		{
-			this.PartitionKey = "CLAN";
-			this.RowKey = sClanName;
+			this.PartitionKey = Master.BuildUserPartitionKey(sClanName);
+			this.RowKey = sUserName;
 			this.PassPhrase = "";
+			this.ZendoScore = 0;
 		}
 
 		public string PassPhrase { get; set; }
+		public int ZendoScore { get; set; }
 	}
 }

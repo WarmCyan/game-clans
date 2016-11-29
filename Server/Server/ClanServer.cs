@@ -33,7 +33,12 @@ namespace GameClansServer
 		private CloudTable m_pTable = null;
 		private CloudBlobContainer m_pContainer = null;
 
-
+		// construction
+		public ClanServer()
+		{
+			this.Initialize();
+		}
+		
 		// properties
 		public CloudTable Table
 		{
@@ -52,50 +57,79 @@ namespace GameClansServer
 			}
 		}
 
-		// construction
-		public ClanServer()
-		{
-			this.Initialize();
-		}
-
 		// outward facing methods
 
-		public string JoinClan(string sClanName, string sPassPhrase, string sUserName)
+		public string CreateClan(string sClanName, string sClanPassPhrase)
 		{
+			// make sure a clan with this name doesn't already exist	
+			TableOperation pClanRetrieveOp = TableOperation.Retrieve<ClanTableEntity>("CLAN", sClanName);
+			if (this.Table.Execute(pClanRetrieveOp).Result != null) { return Master.MessagifyError("A clan with this name already exists."); }
 
-			// if matches, add username 
+			// if we make it to this point we're good, add the new clan!
+			ClanTableEntity pClan = new ClanTableEntity(sClanName);
+			pClan.PassPhrase = this.Sha256Hash(sClanPassPhrase);
 
-			return "";
+			return Master.MessagifySimple("You have successfully created the clan " + sClanName + "!");
 		}
 
-		// does this do something like end 
-		public string GetClanStuff(string sClanName)
+		public string JoinClan(string sClanName, string sClanPassPhrase, string sUserName, string sUserPassPhrase)
 		{
-			return "";
+			// make sure the clan password is correct
+			if (!VerifyClanPassPhrase(sClanName, sClanPassPhrase)) { return Master.MessagifyError("Clan password incorrect."); }
+
+			// make sure the username doesn't already exist
+			TableOperation pUserRetrieveOp = TableOperation.Retrieve<UserTableEntity>(Master.BuildUserPartitionKey(sClanName), sUserName);
+			if (this.Table.Execute(pUserRetrieveOp).Result != null) { return Master.MessagifyError("User with this name already exists in this clan."); }
+
+			// if we make it to this point, we're good, add a new user!
+			UserTableEntity pUser = new UserTableEntity(sClanName, sUserName);
+			pUser.PassPhrase = this.Sha256Hash(sUserPassPhrase);
+			this.Table.Execute(TableOperation.Insert(pUser));
+
+			//return "You have successfully joined the clan " + sClanName + " as " + sUserName;
+			return Master.Messagify("You have successfully joined the clan " + sClanName + " as " + sUserName, Master.MSGTYPE_BOTH, "<ClanStub ClanName='" + sClanName + "' UserName='" + sUserName + "' />");
 		}
 
 		// inner methods
 
-		private bool VerifyClanPassPhrase(string sClanName, string sPassPhrase)
+		private bool VerifyClanPassPhrase(string sClanName, string sClanPassPhrase)
 		{
 			// get the requested clan row from the table 
 			TableOperation pClanRetrieveOp = TableOperation.Retrieve<ClanTableEntity>("CLAN", sClanName);
 			TableResult pClanRetrieveResult = this.Table.Execute(pClanRetrieveOp);
 			ClanTableEntity pClan = (ClanTableEntity)pClanRetrieveResult.Result;
 
-			// encrypt passphrase
-			SHA256 p256 = SHA256Managed.Create();
-			byte[] aBytes = Encoding.UTF8.GetBytes(sPassPhrase);
-			byte[] aHashBytes = p256.ComputeHash(aBytes);
-			string sHash = this.GetStringFromHash(aHashBytes);
+			// hash clan passphrase
+			string sClanHash = this.Sha256Hash(sClanPassPhrase);
 
 			// check if the passphrase matches 
+			return sClanHash == pClan.PassPhrase;
+		}
 
+		private bool VerifyUserPassPhrase(string sClanName, string sUserName, string sUserPassPhrase)
+		{
+			// get the requested user row from the table
+			TableOperation pUserRetrieveOp = TableOperation.Retrieve<UserTableEntity>(Master.BuildUserPartitionKey(sClanName), sUserName);
+			TableResult pUserRetrieveResult = this.Table.Execute(pUserRetrieveOp);
+			UserTableEntity pUser = (UserTableEntity)pUserRetrieveResult.Result;
 
-			return false;
+			// hash user passphrase
+			string sUserHash = this.Sha256Hash(sUserPassPhrase);
+
+			// check if the passphrase matches
+			return sUserHash == pUser.PassPhrase;
 		}
 
 		// thanks to http://www.codeshare.co.uk/blog/sha-256-and-sha-512-hash-examples/
+		private string Sha256Hash(string sString)
+		{
+			SHA256 p256 = SHA256Managed.Create();
+			byte[] aBytes = Encoding.UTF8.GetBytes(sString);
+			byte[] aHashBytes = p256.ComputeHash(aBytes);
+			string sHash = this.GetStringFromHash(aHashBytes);
+			return sHash;
+		}
+
 		private string GetStringFromHash(byte[] aHashBytes)
 		{
 			StringBuilder pResult = new StringBuilder();
@@ -106,6 +140,7 @@ namespace GameClansServer
 			return pResult.ToString();
 		}
 
+		// set up cloud storage account stuff
 		private void Initialize()
 		{
 			m_pStorageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
