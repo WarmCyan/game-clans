@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
+using System.Xml.Linq;
 
 using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
@@ -91,10 +92,32 @@ namespace GameClansServer
 			return Master.Messagify("You have successfully joined the clan " + sClanName + " as " + sUserName, Master.MSGTYPE_BOTH, "<ClanStub ClanName='" + sClanName + "' UserName='" + sUserName + "' />");
 		}
 
-		// inner methods
 
-		private bool VerifyClanPassPhrase(string sClanName, string sClanPassPhrase)
+		// inner methods
+		
+		/*public List<string> GetUsersInClan(string sClanName)
 		{
+			
+		}*/
+
+		public void SaveGame(XElement pStateXml, string sGameID)
+		{
+			CloudBlockBlob pBlob = this.Container.GetBlockBlobReference(sGameID);
+			pBlob.UploadText(pStateXml.ToString());
+		}
+
+		public XElement LoadGame(string sGameID)
+		{
+			CloudBlockBlob pBlob = this.Container.GetBlockBlobReference(sGameID);
+			string sContents = pBlob.DownloadText();
+			XElement pStateXml = XElement.Parse(sContents);
+			return pStateXml;
+		} 
+
+		public bool VerifyClanPassPhrase(string sClanName, string sClanPassPhrase)
+		{
+			if (sClanName == null || sClanPassPhrase == null) { return false; }
+			
 			// get the requested clan row from the table 
 			TableOperation pClanRetrieveOp = TableOperation.Retrieve<ClanTableEntity>("CLAN", sClanName);
 			TableResult pClanRetrieveResult = this.Table.Execute(pClanRetrieveOp);
@@ -107,8 +130,10 @@ namespace GameClansServer
 			return sClanHash == pClan.PassPhrase;
 		}
 
-		private bool VerifyUserPassPhrase(string sClanName, string sUserName, string sUserPassPhrase)
+		public bool VerifyUserPassPhrase(string sClanName, string sUserName, string sUserPassPhrase)
 		{
+			if (sClanName == null || sUserName == null || sUserPassPhrase == null || sUserPassPhrase == "") { return false; }
+		
 			// get the requested user row from the table
 			TableOperation pUserRetrieveOp = TableOperation.Retrieve<UserTableEntity>(Master.BuildUserPartitionKey(sClanName), sUserName);
 			TableResult pUserRetrieveResult = this.Table.Execute(pUserRetrieveOp);
