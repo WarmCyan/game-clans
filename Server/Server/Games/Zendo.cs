@@ -106,6 +106,31 @@ namespace GameClansServer.Games
 			return "";
 		}
 
+		// TODO: programming while tired, double check!
+		public string SubmitInitialKoans(string sGameID, string sClanName, string sUserName, string sUserPassPhrase)
+		{
+			this.Initialize();
+
+			// verify user
+			if (!m_pServer.VerifyUserPassPhrase(sClanName, sUserName, sUserPassPhrase)) { return Master.MessagifyError("Invalid login"); }
+
+			this.Load(sGameID);
+
+			// are we actually at this stage?
+			if (m_sStateStatus != "initial")
+			{
+				if (m_sStateStatus == "setup") { return Master.MessagifyError("The game hasn't been started yet"); }
+				return Master.MessagifyError("The game is no longer in the initial stage");
+			}
+
+			// make sure this user is the master and can in fact be submitting the initial koans
+			if (sUserName != m_sMaster) { return Master.MessagifyError("Only the master can submit the initial koans"); }
+
+			// TODO: handle the koans here
+
+			this.Save();
+			return "";
+		}
 
 		// inner methods
 

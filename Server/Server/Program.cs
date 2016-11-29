@@ -15,8 +15,11 @@ namespace GameClansServer
 			/*string sMsg = CreateClan();
 			Console.WriteLine(sMsg);*/
 
-			/*string sMsg = JoinClan();
+			/*string sMsg = JoinClan("WildfireXIII", "password");
 			Console.WriteLine(sMsg);*/
+
+			string sMsg = JoinClan("Dude", "testing");
+			Console.WriteLine(sMsg);
 
 			Console.WriteLine("\nComplete!");
 			Console.Read();
@@ -28,10 +31,10 @@ namespace GameClansServer
 			return cs.CreateClan("Testing Clan", "testing");
 		}
 
-		static string JoinClan()
+		static string JoinClan(string sUserName, string sPassword)
 		{
 			ClanServer cs = new ClanServer();
-			return cs.JoinClan("Testing Clan", "testing", "WildfireXIII", "password");
+			return cs.JoinClan("Testing Clan", "testing", sUserName, sPassword);
 		}
 	}
 }
