@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Zendo.cs
 //  Date created: 11/28/2016
-//  Date edited: 11/29/2016
+//  Date edited: 11/30/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: My implementation of the awesome game of Zendo!
@@ -425,6 +425,16 @@ namespace GameClansServer.Games
 			m_pServer.AddNotification(sClanName, sUserName, sUserName + " has submitted a guess. Go disprove it!");
 
 			this.Save();
+			return "";
+		}
+
+		public string DisproveGuess(string sGameID, string sClanName, string sUserName, string sUserPassPhrase, string sKoan)
+		{
+			return "";
+		}
+
+		public string GrantEnlightenment(string sGameID, string sClanName, string sUSerName, string sUserPassPhrase)
+		{
 			return "";
 		}
 
