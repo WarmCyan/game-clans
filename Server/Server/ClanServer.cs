@@ -94,11 +94,19 @@ namespace GameClansServer
 
 
 		// inner methods
-		
+
 		/*public List<string> GetUsersInClan(string sClanName)
 		{
 			
 		}*/
+
+		public void AddNotification(string sClanName, string sUserName, string sContent)
+		{
+			UserNotifTableEntity pNotif = new UserNotifTableEntity(sClanName, sUserName);
+			pNotif.Time = DateTime.Now;
+			pNotif.Content = sContent;
+			this.Table.Execute(TableOperation.Insert(pNotif));
+		}
 
 		public void SaveGame(XElement pStateXml, string sGameID)
 		{

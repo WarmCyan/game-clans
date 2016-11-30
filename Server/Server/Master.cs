@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Master.cs
 //  Date created: 11/28/2016
-//  Date edited: 11/28/2016
+//  Date edited: 11/29/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: Superclass of static functions and properties
@@ -27,7 +27,8 @@ namespace GameClansServer
 		// methods
 		
 		public static string BuildUserPartitionKey(string sClanName) { return sClanName + "|USER"; }
-
+		public static string BuildUserNotifPartitionKey(string sClanName, string sUserName) { return sClanName + "|" + sUserName + "|NOTIF"; }
+		
 		public static string MessagifySimple(string sMsg) { return Messagify(sMsg, MSGTYPE_DEFAULT, ""); } // why is this necessary?
 		public static string MessagifyError(string sMsg) { return Messagify(sMsg, MSGTYPE_ERROR, ""); }
 		public static string MessagifyError(string sMsg, string sData) { return Messagify(sMsg, MSGTYPE_ERROR, sData); }
