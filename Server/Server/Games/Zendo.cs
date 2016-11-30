@@ -37,7 +37,7 @@ namespace GameClansServer.Games
 		public string Guess { get; set; }
 		public string User { get; set; }
 		public DateTime Time { get; set; } 
-		public ZendoKoan Disproval { get; set; } // TODO: necessary?
+		public ZendoKoan Disproval { get; set; } 
 
 		public XElement Xml
 		{
@@ -47,7 +47,7 @@ namespace GameClansServer.Games
 				pXml.SetAttributeValue("User", this.User);
 				pXml.SetAttributeValue("Time", this.Time);
 				pXml.SetElementValue("Guess", this.Guess);
-				//pXml.SetElementValue("Disproval", this.Disproval.Xml);
+				pXml.SetElementValue("Disproval", this.Disproval.Xml);
 				return pXml;
 			}
 		}
