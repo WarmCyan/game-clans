@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Zendo.cs
 //  Date created: 11/28/2016
-//  Date edited: 11/29/2016
+//  Date edited: 11/30/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: My implementation of the awesome game of Zendo!
@@ -22,6 +22,35 @@ namespace GameClansServer.Games
 		Master = 1,
 		Student = 2,
 		Player = 3
+	}
+
+	public class ZendoGuess
+	{
+		// construction
+		public ZendoGuess(string sGuess, string sUserName)
+		{
+			this.Guess = sGuess;
+			this.User = sUserName;
+		}
+
+		// properties
+		public string Guess { get; set; }
+		public string User { get; set; }
+		public DateTime Time { get; set; } 
+		public ZendoKoan Disproval { get; set; } 
+
+		public XElement Xml
+		{
+			get
+			{
+				XElement pXml = new XElement("Guess");
+				pXml.SetAttributeValue("User", this.User);
+				pXml.SetAttributeValue("Time", this.Time);
+				pXml.SetElementValue("Guess", this.Guess);
+				pXml.SetElementValue("Disproval", this.Disproval.Xml);
+				return pXml;
+			}
+		}
 	}
 
 	public class ZendoUser
@@ -137,32 +166,23 @@ namespace GameClansServer.Games
 		private string m_sGameID;
 
 		private string m_sMaster;
-		//private List<string> m_lStudents;
 		private List<ZendoUser> m_lStudents;
-		private string m_sStateStatus; // "setup" (waiting for players to join), "initial" (waiting for Master's 2 koans), "open" (users can submit koans or guesses), "pending master" (waiting for master to analyze koan), "pending students" (mondo, waiting for majority of students to make their prediction), "pending disproval"
+		private string m_sStateStatus; // "setup" (waiting for players to join), "initial" (waiting for Master's 2 koans), "open" (users can submit koans or guesses), "pending master" (waiting for master to analyze koan), "pending students" (mondo, waiting for majority of students to make their prediction), "pending disproval", "final" (game over, student has attained enlightenment)
 		private List<ZendoLogEvent> m_lEventLog;
 		private List<ZendoKoan> m_lKoans; // first character is T|F for whether has buddha nature. Then comma delimited character pairs (first character is color, second is direction)
 		private ZendoKoan m_pPendingKoan;
 		private bool m_bMondo;
 		private Dictionary<string, bool> m_dMondoPredictions;
-		//private Dictionary<string, int> m_dGuessingStones;
-
+		private List<ZendoGuess> m_lGuesses;
+		private ZendoGuess m_pPendingGuess;
+		private string m_sRule;
+		private string m_sWinningUser;
+		private List<string> m_lUsersGivenUp; 
+		
 		// construction
 		// (if id is passed in, load that game's xml)
 		public Zendo() { }
-		// NOTE: don't think the below constructors would ever actually be used
-		/*public Zendo(ClanServer pServer)
-		{
-			this.m_pServer = pServer;
-		}
-		public Zendo(ClanServer pServer, string sGameID)
-		{
-			this.m_pServer = pServer;
-			this.m_sGameID = sGameID;
-
-			// load xml (route through server, since this is loading text from a blob)
-		}*/
-
+		
 		// properties
 		public XElement StateXml // NOTE: this should only be used for literal saving and loading
 		{
@@ -383,8 +403,116 @@ namespace GameClansServer.Games
 			return "";
 		}
 
+		public string SubmitGuess(string sGameID, string sClanName, string sUserName, string sUserPassPhrase, string sGuess)
+		{
+			string sResult = this.Prepare(sGameID, sClanName, sUserName, sUserPassPhrase, AuthenticationType.Student);
+			if (sResult != "") { return sResult; }
+
+			// make sure the state status is open
+			if (m_sStateStatus != "open")
+			{
+				if (m_sStateStatus == "pending master") { return Master.MessagifyError("The master has not analyzed the current pending koan"); }
+				if (m_sStateStatus == "pending students") { return Master.MessagifyError("Mondo has been called on the pending koan"); }
+				if (m_sStateStatus == "pending disproval") { return Master.MessagifyError("The master is currently attempting to disprove the current guess"); }
+				return Master.MessagifyError("The game is not currently accepting koan submissions");
+			}
+
+			ZendoGuess pGuess = new ZendoGuess(sGuess, sUserName);
+			pGuess.Time = DateTime.Now;
+			m_pPendingGuess = pGuess;
+
+			// set the status, add an event log and notify the master
+			m_sStateStatus = "pending disproval";
+			m_lEventLog.Add(new ZendoLogEvent(sUserName + " has made a guess: '" + sGuess + "'"));
+			m_pServer.AddNotification(sClanName, sUserName, sUserName + " has submitted a guess. Go disprove it!");
+
+			this.Save();
+			return "";
+		}
+
+		public string DisproveGuess(string sGameID, string sClanName, string sUserName, string sUserPassPhrase, string sKoan, bool bHasBuddhaNature)
+		{
+			string sResult = this.Prepare(sGameID, sClanName, sUserName, sUserPassPhrase, AuthenticationType.Master);
+			if (sResult != "") { return sResult; }
+			
+			// check game state
+			if (m_sStateStatus != "pending disproval") { return Master.MessagifyError("There is no pending guess right now"); }
+
+			// add the koan disprovivng the guess
+			ZendoKoan pKoan = new ZendoKoan(m_lKoans.Count, sKoan, "master");
+			pKoan.HasBuddhaNature = bHasBuddhaNature;
+			m_pPendingGuess.Disproval = pKoan;
+
+			m_lKoans.Add(pKoan);
+			m_lGuesses.Add(m_pPendingGuess);
+			//m_pPendingGuess = null;
+
+			// change the state
+			m_sStateStatus = "open";
+
+			// notify the user who submitted the guess and add an event log
+			m_pServer.AddNotification(sClanName, m_pPendingGuess.User, "The master has disproven your guess");
+			m_lEventLog.Add(new ZendoLogEvent("The master has disproven " + m_pPendingGuess.User + "'s guess", pKoan.Xml.ToString()));
+
+			this.Save();
+			return "";
+		}
+
+		public string GrantEnlightenment(string sGameID, string sClanName, string sUserName, string sUserPassPhrase)
+		{
+			string sResult = this.Prepare(sGameID, sClanName, sUserName, sUserName, AuthenticationType.Master);
+			if (sResult != "") { return sResult; }
+
+			// make sure the state was right
+			if (m_sStateStatus != "pending disproval") { return Master.MessagifyError("There is no pending guess right now"); }
+
+			// notify the user that they won and add an event log
+			m_pServer.AddNotification(sClanName, m_pPendingGuess.User, "The master was unable to disprove your guess. You have reached enlightenment!");
+			m_lEventLog.Add(new ZendoLogEvent("The maser was unable to disprove " + m_pPendingGuess.User + "'s guess. " + m_pPendingGuess.User + " has become enlightened!"));
+
+			m_sWinningUser = m_pPendingGuess.User;
+			this.GameOver();
+
+			this.Save();
+			return "";
+		}
+
+		public string VoteToGiveUp(string sGameID, string sClanName, string sUserName, string sUserPassPhrase)
+		{
+			string sResult = this.Prepare(sGameID, sClanName, sUserName, sUserPassPhrase, AuthenticationType.Student);
+			if (sResult != "") { return sResult; }
+
+			// add the vote to the list
+			if (!m_lUsersGivenUp.Contains(sUserName))
+			{
+				m_lUsersGivenUp.Add(sUserName);
+
+				// add to the event log
+				m_lEventLog.Add(new ZendoLogEvent(sUserName + " has voted to give up"));
+			}
+
+			// if unanimous, end the game
+			if (m_lUsersGivenUp.Count == m_lStudents.Count) { this.GameOver(); }
+
+			this.Save();
+			return "";
+		}
+
 		// inner methods
 
+		private void GameOver()
+		{
+			m_sStateStatus = "final";
+
+			if (m_sWinningUser == "" && m_sWinningUser != null)
+			{
+				// winner
+			}
+			else
+			{
+				// given up
+			}
+		}
 
 		private string Prepare(string sGameID, string sClanName, string sUserName, string sUserPassPhrase, AuthenticationType pType)
 		{
@@ -430,6 +558,7 @@ namespace GameClansServer.Games
 			int iRandomIndex = pRandom.Next(0, m_lPlayerNames.Count);
 			return m_lPlayerNames[iRandomIndex];
 		}
+			
 
 		// NOTE: not sure if I actually need this?
 		private ZendoKoan GetKoanById(int iID)
