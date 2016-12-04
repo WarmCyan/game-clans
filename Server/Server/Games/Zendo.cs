@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Zendo.cs
 //  Date created: 11/28/2016
-//  Date edited: 11/30/2016
+//  Date edited: 12/3/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: My implementation of the awesome game of Zendo!
@@ -70,10 +70,15 @@ namespace GameClansServer.Games
 		{
 			get
 			{
-				XElement pXml = new XElement("User");
+				XElement pXml = new XElement("Student");
 				pXml.SetAttributeValue("GuessingStones", this.GuessingStones);
 				pXml.SetAttributeValue("Name", this.UserName);
 				return pXml;
+			}
+			set
+			{
+				this.GuessingStones = (int)value.Attribute("GuessingStones");
+				this.UserName = value.Attribute("Name").ToString();
 			}
 		}
 	}
@@ -190,6 +195,18 @@ namespace GameClansServer.Games
 			{
 				XElement pXml = new XElement("Game");
 				pXml.SetAttributeValue("ID", m_sGameID);
+				pXml.SetAttributeValue("ClanName", m_sClanName);
+				pXml.SetAttributeValue("Master", m_sMaster);
+				pXml.SetAttributeValue("StateStatus", m_sStateStatus);
+
+				// player names
+				XElement pUsersXml = new XElement("PlayerNames");
+				foreach (string sName in m_lPlayerNames) { pUsersXml.Add(new XElement("PlayerName") { Value = sName }); }
+
+				// students
+				XElement pStudentsXml = new XElement("Students");
+				foreach (ZendoUser pUser in m_lStudents) { pStudentsXml.Add(pUser.Xml); }
+				
 
 				return pXml;
 			}
