@@ -92,6 +92,38 @@ namespace GameClansServer
 			return Master.Messagify("You have successfully joined the clan " + sClanName + " as " + sUserName, Master.MSGTYPE_BOTH, "<ClanStub ClanName='" + sClanName + "' UserName='" + sUserName + "' />");
 		}
 
+		public string GetLastNNotifications(string sClanName, string sUserName, string sUserPassPhrase, int iOffset, int iCount)
+		{
+			// make sure the user has permission
+			if (!VerifyUserPassPhrase(sClanName, sUserName, sUserPassPhrase)) { return Master.MessagifyError("Invalid login."); }
+			
+			return "";
+		}
+
+		// TODO: maybe there should just be the last N notifications function above, and let the client handle ones that aren't read however it needs?
+		public string GetUnreadNotifications(string sClanName, string sUserName, string sUserPassPhrase)
+		{
+			// make sure the user has permission
+			if (!VerifyUserPassPhrase(sClanName, sUserName, sUserPassPhrase)) { return Master.MessagifyError("Invalid login."); }
+
+			// get the list of notification entries for this user
+			TableQuery<UserNotifTableEntity> pQuery = new TableQuery<UserNotifTableEntity>().Where("PartitionKey eq '" + Master.BuildUserNotifPartitionKey(sClanName, sUserName) + "' and Seen eq false");
+			List<UserNotifTableEntity> lUserNotifications = this.Table.ExecuteQuery(pQuery).ToList();
+
+			// set all notifications to seen
+			TableBatchOperation pBatch = new TableBatchOperation();
+			foreach (UserNotifTableEntity pNotif in lUserNotifications) 
+			{ 
+				pNotif.Seen = true;
+				pBatch.Add(TableOperation.Replace(pNotif));
+			}
+			this.Table.ExecuteBatch(pBatch);
+
+			// TODO: return the xml list of unread notifications
+		
+			return "";
+		}
+
 
 		// inner methods
 
