@@ -27,7 +27,13 @@ namespace GameClansServer.Games
 	public class ZendoGuess
 	{
 		// construction
-		public ZendoGuess() { }
+		public ZendoGuess() 
+		{
+			this.Guess = "";
+			this.User = "";
+			this.Time = DateTime.MinValue;
+			this.Disproval = new ZendoKoan();
+		}
 		public ZendoGuess(string sGuess, string sUserName)
 		{
 			this.Guess = sGuess;
@@ -71,7 +77,11 @@ namespace GameClansServer.Games
 	public class ZendoUser
 	{
 		// construction
-		public ZendoUser() { }
+		public ZendoUser() 
+		{
+			this.GuessingStones = 0;
+			this.UserName = "";
+		}
 		public ZendoUser(string sUserName)
 		{
 			this.UserName = sUserName;
@@ -156,7 +166,13 @@ namespace GameClansServer.Games
 	public class ZendoKoan
 	{
 		// construction
-		public ZendoKoan() { }
+		public ZendoKoan() 
+		{
+			this.ID = 0;
+			this.Koan = "";
+			this.User = "";
+			this.HasBuddhaNature = false;
+		}
 		public ZendoKoan(int iID, string sKoan, string sUserName)
 		{
 			this.ID = iID;
@@ -260,29 +276,30 @@ namespace GameClansServer.Games
 				XElement pPendingKoan = new XElement("PendingKoan");
 				pPendingKoan.Add(m_pPendingKoan.Xml);
 				XElement pPendingGuess = new XElement("PendingGuess");
-				pPendingGuess.Add(m_pPendingGuess);
+				pPendingGuess.Add(m_pPendingGuess.Xml);
 				pPendingXml.Add(pPendingKoan);
 				pPendingXml.Add(pPendingGuess);
+				pXml.Add(pPendingXml);
 
 				// player names
 				XElement pUsersXml = new XElement("PlayerNames");
 				foreach (string sName in m_lPlayerNames) { pUsersXml.Add(new XElement("PlayerName") { Value = sName }); }
-				pPendingXml.Add(pUsersXml);
+				pXml.Add(pUsersXml);
 
 				// students
 				XElement pStudentsXml = new XElement("Students");
 				foreach (ZendoUser pUser in m_lStudents) { pStudentsXml.Add(pUser.Xml); }
-				pPendingXml.Add(pStudentsXml);
+				pXml.Add(pStudentsXml);
 
 				// log
 				XElement pLogXml = new XElement("Log");
 				foreach (ZendoLogEvent pEvent in m_lEventLog) { pLogXml.Add(pEvent.Xml); }
-				pPendingXml.Add(pLogXml);
+				pXml.Add(pLogXml);
 
 				// koans
 				XElement pKoansXml = new XElement("Koans");
 				foreach (ZendoKoan pKoan in m_lKoans) { pKoansXml.Add(pKoan.Xml); }
-				pPendingXml.Add(pKoansXml);
+				pXml.Add(pKoansXml);
 
 				// predictions
 				XElement pPredictionsXml = new XElement("Predicitons");
@@ -293,12 +310,12 @@ namespace GameClansServer.Games
 					pPredictionXml.SetAttributeValue("Value", m_dMondoPredictions[sUser]);
 					pPredictionsXml.Add(pPredictionXml);
 				}
-				pPendingXml.Add(pPredictionsXml);
+				pXml.Add(pPredictionsXml);
 
 				// guesses
 				XElement pGuessesXml = new XElement("Guesses");
 				foreach (ZendoGuess pGuess in m_lGuesses) { pGuessesXml.Add(pGuess.Xml); }
-				pPendingXml.Add(pGuessesXml);
+				pXml.Add(pGuessesXml);
 
 				// votes to give up
 				XElement pGivenUpXml = new XElement("GivenUp");
@@ -308,7 +325,7 @@ namespace GameClansServer.Games
 					pGiveUpXml.SetValue(sUser);
 					pGivenUpXml.Add(pGiveUpXml);
 				}
-				pPendingXml.Add(pGivenUpXml);
+				pXml.Add(pGivenUpXml);
 
 				return pXml;
 			}
@@ -370,6 +387,8 @@ namespace GameClansServer.Games
 			if (!m_pServer.VerifyUserPassPhrase(sClanName, sUserName, sUserPassPhrase)) { return Master.MessagifyError("Invalid login."); }
 
 			this.InitializeNewGame(sClanName);
+
+			m_pServer.AddActiveGame(sClanName, m_sGameID);
 
 			this.Save();
 			return Master.MessagifySimple("Successfully started a new game of Zendo!");
@@ -699,7 +718,15 @@ namespace GameClansServer.Games
 			m_lStudents = new List<ZendoUser>();
 			m_lKoans = new List<ZendoKoan>();
 			m_lEventLog = new List<ZendoLogEvent>();
-			m_pPendingKoan = null;
+			m_pPendingKoan = new ZendoKoan();
+			m_pPendingGuess = new ZendoGuess();
+			m_lUsersGivenUp = new List<string>();
+			m_bMondo = false;
+			m_dMondoPredictions = new Dictionary<string, bool>();
+			m_sRule = "";
+			m_sWinningUser = "";
+			m_lGuesses = new List<ZendoGuess>();
+			m_lUsersGivenUp = new List<string>();
 			m_sMaster = "";
 		}
 

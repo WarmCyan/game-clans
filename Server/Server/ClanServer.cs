@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: ClanServer.cs
 //  Date created: 11/28/2016
-//  Date edited: 12/3/2016
+//  Date edited: 12/8/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: Main server that has all the outward facing REST API functions
@@ -152,7 +152,14 @@ namespace GameClansServer
 			string sContents = pBlob.DownloadText();
 			XElement pStateXml = XElement.Parse(sContents);
 			return pStateXml;
-		} 
+		}
+
+		public void AddActiveGame(string sClanName, string sGameID)
+		{
+			GameTableEntity pGame = new GameTableEntity(sClanName, sGameID);
+			pGame.Active = true;
+			this.Table.Execute(TableOperation.Insert(pGame));
+		}
 
 		public bool VerifyClanPassPhrase(string sClanName, string sClanPassPhrase)
 		{

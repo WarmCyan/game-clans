@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using GameClansServer.Games;
+
 namespace GameClansServer 
 {
 	class Program
@@ -18,11 +20,23 @@ namespace GameClansServer
 			/*string sMsg = JoinClan("WildfireXIII", "password");
 			Console.WriteLine(sMsg);*/
 
-			string sMsg = JoinClan("Dude", "testing");
+			/*string sMsg = JoinClan("Dude", "testing");
+			Console.WriteLine(sMsg);*/
+			
+			/*string sMsg = JoinClan("SomeGuy", "testing");
+			Console.WriteLine(sMsg);*/
+
+			string sMsg = StartZendoGame();
 			Console.WriteLine(sMsg);
 
 			Console.WriteLine("\nComplete!");
 			Console.Read();
+		}
+
+		static string StartZendoGame()
+		{
+			Zendo z = new Zendo();
+			return z.CreateNewGame("Testing Clan", "WildfireXIII", "password");
 		}
 
 		static string CreateClan()
