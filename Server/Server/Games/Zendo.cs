@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Zendo.cs
 //  Date created: 11/28/2016
-//  Date edited: 12/3/2016
+//  Date edited: 12/8/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: My implementation of the awesome game of Zendo!
@@ -27,6 +27,7 @@ namespace GameClansServer.Games
 	public class ZendoGuess
 	{
 		// construction
+		public ZendoGuess() { }
 		public ZendoGuess(string sGuess, string sUserName)
 		{
 			this.Guess = sGuess;
@@ -50,12 +51,27 @@ namespace GameClansServer.Games
 				pXml.SetElementValue("Disproval", this.Disproval.Xml);
 				return pXml;
 			}
+			set
+			{
+				this.User = value.Attribute("User").Value;
+				this.Time = DateTime.Parse(value.Attribute("Time").Value);
+				this.Guess = value.Element("Guess").Value;
+				this.Disproval = ZendoKoan.Load(value.Element("Disproval"));
+			}
+		}
+
+		public static ZendoGuess Load(XElement pXml)
+		{
+			ZendoGuess pGuess = new ZendoGuess();
+			pGuess.Xml = pXml;
+			return pGuess;
 		}
 	}
 
 	public class ZendoUser
 	{
 		// construction
+		public ZendoUser() { }
 		public ZendoUser(string sUserName)
 		{
 			this.UserName = sUserName;
@@ -77,15 +93,23 @@ namespace GameClansServer.Games
 			}
 			set
 			{
-				this.GuessingStones = (int)value.Attribute("GuessingStones");
-				this.UserName = value.Attribute("Name").ToString();
+				this.GuessingStones = Convert.ToInt32(value.Attribute("GuessingStones").Value);
+				this.UserName = value.Attribute("Name").Value;
 			}
+		}
+
+		public static ZendoUser Load(XElement pXml)
+		{
+			ZendoUser pUser = new ZendoUser();
+			pUser.Xml = pXml;
+			return pUser;
 		}
 	}
 		
 	public class ZendoLogEvent
 	{
 		// construction
+		public ZendoLogEvent() { }
 		public ZendoLogEvent(string sMsg)
 		{
 			this.Message = sMsg;
@@ -113,11 +137,26 @@ namespace GameClansServer.Games
 				pXml.SetElementValue("Data", this.Data);
 				return pXml;
 			}
+			set
+			{
+				this.Time = DateTime.Parse(value.Attribute("Time").Value);
+				this.Message = value.Element("Message").Value;
+				this.Data = value.Element("Data").Value;
+			}
+		}
+
+		public static ZendoLogEvent Load(XElement pXml)
+		{
+			ZendoLogEvent pEvent = new ZendoLogEvent();
+			pEvent.Xml = pXml;
+			return pEvent;
 		}
 	}
 
 	public class ZendoKoan
 	{
+		// construction
+		public ZendoKoan() { }
 		public ZendoKoan(int iID, string sKoan, string sUserName)
 		{
 			this.ID = iID;
@@ -157,6 +196,20 @@ namespace GameClansServer.Games
 				pXml.Value = this.Koan;
 				return pXml;
 			}
+			set
+			{
+				this.ID = Convert.ToInt32(value.Attribute("ID").Value);
+				this.User = value.Attribute("User").Value;
+				this.HasBuddhaNature = Convert.ToBoolean(value.Attribute("BuddhaNature").Value);
+				this.Koan = value.Value;
+			}
+		}
+
+		public static ZendoKoan Load(XElement pXml)
+		{
+			ZendoKoan pKoan = new ZendoKoan();
+			pKoan.Xml = pXml;
+			return pKoan;
 		}
 	}
 	
@@ -198,21 +251,110 @@ namespace GameClansServer.Games
 				pXml.SetAttributeValue("ClanName", m_sClanName);
 				pXml.SetAttributeValue("Master", m_sMaster);
 				pXml.SetAttributeValue("StateStatus", m_sStateStatus);
+				pXml.SetAttributeValue("Rule", m_sRule);
+				pXml.SetAttributeValue("Mondo", m_bMondo);
+				pXml.SetAttributeValue("WinningUser", m_sWinningUser);
+
+				// pending
+				XElement pPendingXml = new XElement("Pending");
+				XElement pPendingKoan = new XElement("PendingKoan");
+				pPendingKoan.Add(m_pPendingKoan.Xml);
+				XElement pPendingGuess = new XElement("PendingGuess");
+				pPendingGuess.Add(m_pPendingGuess);
+				pPendingXml.Add(pPendingKoan);
+				pPendingXml.Add(pPendingGuess);
 
 				// player names
 				XElement pUsersXml = new XElement("PlayerNames");
 				foreach (string sName in m_lPlayerNames) { pUsersXml.Add(new XElement("PlayerName") { Value = sName }); }
+				pPendingXml.Add(pUsersXml);
 
 				// students
 				XElement pStudentsXml = new XElement("Students");
 				foreach (ZendoUser pUser in m_lStudents) { pStudentsXml.Add(pUser.Xml); }
-				
+				pPendingXml.Add(pStudentsXml);
+
+				// log
+				XElement pLogXml = new XElement("Log");
+				foreach (ZendoLogEvent pEvent in m_lEventLog) { pLogXml.Add(pEvent.Xml); }
+				pPendingXml.Add(pLogXml);
+
+				// koans
+				XElement pKoansXml = new XElement("Koans");
+				foreach (ZendoKoan pKoan in m_lKoans) { pKoansXml.Add(pKoan.Xml); }
+				pPendingXml.Add(pKoansXml);
+
+				// predictions
+				XElement pPredictionsXml = new XElement("Predicitons");
+				foreach (string sUser in m_dMondoPredictions.Keys)
+				{
+					XElement pPredictionXml = new XElement("Prediction");
+					pPredictionXml.SetAttributeValue("User", sUser);
+					pPredictionXml.SetAttributeValue("Value", m_dMondoPredictions[sUser]);
+					pPredictionsXml.Add(pPredictionXml);
+				}
+				pPendingXml.Add(pPredictionsXml);
+
+				// guesses
+				XElement pGuessesXml = new XElement("Guesses");
+				foreach (ZendoGuess pGuess in m_lGuesses) { pGuessesXml.Add(pGuess.Xml); }
+				pPendingXml.Add(pGuessesXml);
+
+				// votes to give up
+				XElement pGivenUpXml = new XElement("GivenUp");
+				foreach (string sUser in m_lUsersGivenUp)
+				{
+					XElement pGiveUpXml = new XElement("GiveUp");
+					pGiveUpXml.SetValue(sUser);
+					pGivenUpXml.Add(pGiveUpXml);
+				}
+				pPendingXml.Add(pGivenUpXml);
 
 				return pXml;
 			}
 			set // set all class properties from state assigned
 			{
-				
+				// base stuff
+				m_sGameID = value.Attribute("ID").Value;
+				m_sClanName = value.Attribute("ClanName").Value;
+				m_sMaster = value.Attribute("Master").Value;
+				m_sStateStatus = value.Attribute("StateStatus").Value;
+				m_sRule = value.Attribute("Rule").Value;
+				m_bMondo = Convert.ToBoolean(value.Attribute("Mondo").Value);
+				m_sWinningUser = value.Attribute("WinningUser").Value;
+
+				// pending things
+				XElement pPending = value.Element("Pending");
+				m_pPendingGuess = ZendoGuess.Load(pPending.Element("PendingGuess").Element("Guess"));
+				m_pPendingKoan = ZendoKoan.Load(pPending.Element("PendingKoan").Element("Koan"));
+
+				// player names
+				List<XElement> lNameXmls = value.Element("PlayerNames").Elements("PlayerName").ToList();
+				foreach (XElement pNameXml in lNameXmls) { m_lPlayerNames.Add(pNameXml.Value); }
+
+				// students
+				List<XElement> lStudentXmls = value.Element("Students").Elements("Student").ToList();
+				foreach (XElement pStudentXml in lStudentXmls) { m_lStudents.Add(ZendoUser.Load(pStudentXml)); }
+
+				// log
+				List<XElement> lLogXmls = value.Element("Log").Elements("LogEvent").ToList();
+				foreach (XElement pLogXml in lLogXmls) { m_lEventLog.Add(ZendoLogEvent.Load(pLogXml)); }
+
+				// koans
+				List<XElement> lKoanXmls = value.Element("Koans").Elements("Koan").ToList();
+				foreach (XElement pKoanXml in lKoanXmls) { m_lKoans.Add(ZendoKoan.Load(pKoanXml)); }
+
+				// predictions
+				List<XElement> lPredictionXmls = value.Element("Predictions").Elements("Prediction").ToList();
+				foreach (XElement pPredictionXml in lPredictionXmls) { m_dMondoPredictions.Add(pPredictionXml.Attribute("User").Value, Convert.ToBoolean(pPredictionXml.Attribute("Value").Value)); }
+
+				// guesses
+				List<XElement> lGuessXmls = value.Element("Guesses").Elements("Guess").ToList();
+				foreach (XElement pGuessXml in lGuessXmls) { m_lGuesses.Add(ZendoGuess.Load(pGuessXml)); }
+
+				// votes to give up
+				List<XElement> lGiveUpXmls = value.Element("GivenUp").Elements("GiveUp").ToList();
+				foreach (XElement pGiveUpXmls in lGiveUpXmls) { m_lUsersGivenUp.Add(pGiveUpXmls.Value); }
 			}
 		}
 
