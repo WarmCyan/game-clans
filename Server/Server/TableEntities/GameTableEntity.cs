@@ -29,5 +29,6 @@ namespace GameClansServer.TableEntities
 		public GameTableEntity() { }
 
 		public bool Active { get; set; }
+		public string GameType { get; set; }
 	}
 }

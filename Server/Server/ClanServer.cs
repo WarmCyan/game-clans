@@ -92,6 +92,21 @@ namespace GameClansServer
 			return Master.Messagify("You have successfully joined the clan " + sClanName + " as " + sUserName, Master.MSGTYPE_BOTH, "<ClanStub ClanName='" + sClanName + "' UserName='" + sUserName + "' />");
 		}
 
+		public string ListActiveGames(string sClanName, string sUserName, string sUserPassPhrase)
+		{
+			// make sure the user has permission
+			if (!VerifyUserPassPhrase(sClanName, sUserName, sUserPassPhrase)) { return Master.MessagifyError("Invalid login."); }
+
+			TableQuery<GameTableEntity> pQuery = new TableQuery<GameTableEntity>().Where("PartitionKey eq'" + Master.BuildGamePartitionKey(sClanName) + "' and Active eq true");
+			List<GameTableEntity> lGames = this.Table.ExecuteQuery(pQuery).ToList();
+
+			string sResponse = "<Games>";
+			foreach (GameTableEntity pGame in lGames) { sResponse += "<Game>" + pGame.RowKey + "</Game>"; }
+			sResponse += "</Games>";
+
+			return sResponse;
+		}
+
 		public string GetLastNNotifications(string sClanName, string sUserName, string sUserPassPhrase, int iOffset, int iCount)
 		{
 			// make sure the user has permission
@@ -154,10 +169,11 @@ namespace GameClansServer
 			return pStateXml;
 		}
 
-		public void AddActiveGame(string sClanName, string sGameID)
+		public void AddActiveGame(string sClanName, string sGameID, string sGameName)
 		{
 			GameTableEntity pGame = new GameTableEntity(sClanName, sGameID);
 			pGame.Active = true;
+			pGame.GameType = sGameName;
 			this.Table.Execute(TableOperation.Insert(pGame));
 		}
 

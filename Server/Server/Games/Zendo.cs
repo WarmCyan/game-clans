@@ -54,7 +54,8 @@ namespace GameClansServer.Games
 				pXml.SetAttributeValue("User", this.User);
 				pXml.SetAttributeValue("Time", this.Time);
 				pXml.SetElementValue("Guess", this.Guess);
-				pXml.SetElementValue("Disproval", this.Disproval.Xml);
+				//pXml.SetElementValue("Disproval", this.Disproval.Xml);
+				pXml.Add(this.Disproval.Xml);
 				return pXml;
 			}
 			set
@@ -62,7 +63,8 @@ namespace GameClansServer.Games
 				this.User = value.Attribute("User").Value;
 				this.Time = DateTime.Parse(value.Attribute("Time").Value);
 				this.Guess = value.Element("Guess").Value;
-				this.Disproval = ZendoKoan.Load(value.Element("Disproval"));
+				//this.Disproval = ZendoKoan.Load(value.Element("Disproval"));
+				this.Disproval = ZendoKoan.Load(value.Element("Koan"));
 			}
 		}
 
@@ -302,7 +304,7 @@ namespace GameClansServer.Games
 				pXml.Add(pKoansXml);
 
 				// predictions
-				XElement pPredictionsXml = new XElement("Predicitons");
+				XElement pPredictionsXml = new XElement("Predictions");
 				foreach (string sUser in m_dMondoPredictions.Keys)
 				{
 					XElement pPredictionXml = new XElement("Prediction");
@@ -388,7 +390,7 @@ namespace GameClansServer.Games
 
 			this.InitializeNewGame(sClanName);
 
-			m_pServer.AddActiveGame(sClanName, m_sGameID);
+			m_pServer.AddActiveGame(sClanName, m_sGameID, "Zendo");
 
 			this.Save();
 			return Master.MessagifySimple("Successfully started a new game of Zendo!");
