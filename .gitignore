@@ -3,4 +3,9 @@ Server/Server/bin/*
 Server/Server/obj/*
 Server/Server/.vs/*
 
-**/_hidden_.cs
+**/_hidden.cs
+
+Client/packages/*
+Client/Client/bin/*
+Client/Client/obj/*
+Client/Client/.vs/*
