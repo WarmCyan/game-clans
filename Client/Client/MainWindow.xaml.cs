@@ -39,7 +39,16 @@ namespace Client
 
 		private void btnJoin_Click(object sender, RoutedEventArgs e)
 		{
-			WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/");
+			string sUser = txtUserName.Text;
+			string sPass = txtPassword.Text;
+			string sGame = txtGameID.Text;
+
+			string sClan = "Testing Clan";
+			string sBody = "<params><param name='sGameID'>" + sGame + "</param><param name='sClanName'>" + sClan + "</param><param name='sUserName'>" + sUser + "</param><param name='sUserPassPhrase'>" + sPass + "</param></params>";
+			
+			string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer.Games/Zendo/JoinGame", sBody, true);
+			sResponse = Master.CleanResponse(sResponse);
+			blkLog.Text += sResponse + "\n";
 		}
 
 		private void btnListGames_Click(object sender, RoutedEventArgs e)
@@ -49,9 +58,22 @@ namespace Client
 
 			string sClan = "Testing Clan";
 
-			string sBody = "<params><param name='sClanNAme'></param></params>";
+			string sBody = "<params><param name='sClanName'>" + sClan + "</param><param name='sUserName'>" + sUser + "</param><param name='sUserPassPhrase'>" + sPass + "</param></params>";
+
+			string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer/ClanServer/ListActiveGames", sBody, true);
+			sResponse = Master.CleanResponse(sResponse);
+			blkLog.Text += sResponse + "\n";
+		}
+
+		private void btnStartGame_Click(object sender, RoutedEventArgs e)
+		{
+			string sGame = txtGameID.Text;
+
+			string sBody = "<params><param name='sGameID'>" + sGame + "</param></params>";
 			
-			//WebCommunications.SendPostRequest
+			string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer.Games/Zendo/StartGame", sBody, true);
+			sResponse = Master.CleanResponse(sResponse);
+			blkLog.Text += sResponse + "\n";
 		}
 	}
 }

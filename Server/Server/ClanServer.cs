@@ -104,7 +104,7 @@ namespace GameClansServer
 			foreach (GameTableEntity pGame in lGames) { sResponse += "<Game>" + pGame.RowKey + "</Game>"; }
 			sResponse += "</Games>";
 
-			return sResponse;
+			return Master.MessagifyData(sResponse);
 		}
 
 		public string GetLastNNotifications(string sClanName, string sUserName, string sUserPassPhrase, int iOffset, int iCount)

@@ -33,7 +33,7 @@ namespace GameClansServer
 		public static string MessagifySimple(string sMsg) { return Messagify(sMsg, MSGTYPE_DEFAULT, ""); } // why is this necessary?
 		public static string MessagifyError(string sMsg) { return Messagify(sMsg, MSGTYPE_ERROR, ""); }
 		public static string MessagifyError(string sMsg, string sData) { return Messagify(sMsg, MSGTYPE_ERROR, sData); }
-		public static string MessagifyData(string sData) { return Messagify("", MSGTYPE_DATA, ""); }
+		public static string MessagifyData(string sData) { return Messagify("", MSGTYPE_DATA, sData); }
 		public static string Messagify(string sMsg, string sType, string sData) { return "<Message Type='" + sType + "'><Text>" + sMsg + "</Text><Data>" + sData + "</Data></Message>"; }
 	}
 

@@ -126,6 +126,7 @@ namespace GameClansServer.Games
 		{
 			this.Message = sMsg;
 			this.Time = DateTime.Now;
+			this.Data = "";
 		}
 		public ZendoLogEvent(string sMsg, string sData)
 		{
@@ -344,34 +345,43 @@ namespace GameClansServer.Games
 
 				// pending things
 				XElement pPending = value.Element("Pending");
+				m_pPendingGuess = new ZendoGuess();
+				m_pPendingKoan = new ZendoKoan();
 				m_pPendingGuess = ZendoGuess.Load(pPending.Element("PendingGuess").Element("Guess"));
 				m_pPendingKoan = ZendoKoan.Load(pPending.Element("PendingKoan").Element("Koan"));
 
 				// player names
+				m_lPlayerNames = new List<string>();
 				List<XElement> lNameXmls = value.Element("PlayerNames").Elements("PlayerName").ToList();
 				foreach (XElement pNameXml in lNameXmls) { m_lPlayerNames.Add(pNameXml.Value); }
 
 				// students
+				m_lStudents = new List<ZendoUser>();
 				List<XElement> lStudentXmls = value.Element("Students").Elements("Student").ToList();
 				foreach (XElement pStudentXml in lStudentXmls) { m_lStudents.Add(ZendoUser.Load(pStudentXml)); }
 
 				// log
+				m_lEventLog = new List<ZendoLogEvent>();
 				List<XElement> lLogXmls = value.Element("Log").Elements("LogEvent").ToList();
 				foreach (XElement pLogXml in lLogXmls) { m_lEventLog.Add(ZendoLogEvent.Load(pLogXml)); }
 
 				// koans
+				m_lKoans = new List<ZendoKoan>();
 				List<XElement> lKoanXmls = value.Element("Koans").Elements("Koan").ToList();
 				foreach (XElement pKoanXml in lKoanXmls) { m_lKoans.Add(ZendoKoan.Load(pKoanXml)); }
 
 				// predictions
+				m_dMondoPredictions = new Dictionary<string, bool>();
 				List<XElement> lPredictionXmls = value.Element("Predictions").Elements("Prediction").ToList();
 				foreach (XElement pPredictionXml in lPredictionXmls) { m_dMondoPredictions.Add(pPredictionXml.Attribute("User").Value, Convert.ToBoolean(pPredictionXml.Attribute("Value").Value)); }
 
 				// guesses
+				m_lGuesses = new List<ZendoGuess>();
 				List<XElement> lGuessXmls = value.Element("Guesses").Elements("Guess").ToList();
 				foreach (XElement pGuessXml in lGuessXmls) { m_lGuesses.Add(ZendoGuess.Load(pGuessXml)); }
 
 				// votes to give up
+				m_lUsersGivenUp = new List<string>();
 				List<XElement> lGiveUpXmls = value.Element("GivenUp").Elements("GiveUp").ToList();
 				foreach (XElement pGiveUpXmls in lGiveUpXmls) { m_lUsersGivenUp.Add(pGiveUpXmls.Value); }
 			}
@@ -400,16 +410,21 @@ namespace GameClansServer.Games
 		{
 			string sResult = this.Prepare(sGameID, sClanName, sUserName, sUserPassPhrase, AuthenticationType.All);
 			if (sResult != "") { return sResult; }
+
+			// make sure user hasn't already joined
+			if (m_lPlayerNames.Contains(sUserName)) { return Master.MessagifyError("You have already joined this game"); }
 			
 			this.AddUser(sUserName);
 			this.Save();
-			return "";
+			return Master.MessagifySimple("Successfully joined the Zendo game!");
 		}
 
 		public string StartGame(string sGameID)
 		{
 			this.Initialize();
 			this.Load(sGameID);
+
+			if (this.m_sStateStatus != "setup") { return Master.MessagifyError("The game has already been started."); }
 
 			// choose a master if one wasn't already chosen
 			if (m_sMaster == "" || m_sMaster == null) { m_sMaster = this.ChooseRandomName(); }
@@ -421,13 +436,18 @@ namespace GameClansServer.Games
 				if (sUser == m_sMaster) { continue; }
 				ZendoUser pUser = new ZendoUser(sUser);
 				pUser.GuessingStones = 0;
+				m_lStudents.Add(pUser);
 			}
 
+			// add event log and notify the master
+			m_pServer.AddNotification(m_sClanName, m_sMaster, "You have been chosen as the master! Create your rule and initial koans!");
+			m_lEventLog.Add(new ZendoLogEvent(m_sMaster + " has been chosen as the master"));
+
 			this.Save();
-			return "";
+			return Master.MessagifySimple("The Zendo game has been started!");
 		}
 
-		public string SubmitInitialKoans(string sGameID, string sClanName, string sUserName, string sUserPassPhrase, string sBuddhaNatureKoan, string sNonBuddhaNatureKoan)
+		public string SubmitInitialKoans(string sGameID, string sClanName, string sUserName, string sUserPassPhrase, string sRule, string sBuddhaNatureKoan, string sNonBuddhaNatureKoan)
 		{
 			string sResult = this.Prepare(sGameID, sClanName, sUserName, sUserPassPhrase, AuthenticationType.Master);
 			if (sResult != "") { return sResult; }
@@ -438,6 +458,9 @@ namespace GameClansServer.Games
 				if (m_sStateStatus == "setup") { return Master.MessagifyError("The game hasn't been started yet"); }
 				return Master.MessagifyError("The game is no longer in the initial stage");
 			}
+
+			// set the rule
+			m_sRule = sRule;
 			
 			// add the two koans
 			ZendoKoan pBuddhaKoan = new ZendoKoan(0, sBuddhaNatureKoan, "master", true);
@@ -677,6 +700,8 @@ namespace GameClansServer.Games
 			this.Save();
 			return "";
 		}
+
+		//public string GetKoans(string s)
 
 		// inner methods
 

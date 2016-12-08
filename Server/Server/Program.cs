@@ -22,11 +22,14 @@ namespace GameClansServer
 
 			/*string sMsg = JoinClan("Dude", "testing");
 			Console.WriteLine(sMsg);*/
-			
+
 			/*string sMsg = JoinClan("SomeGuy", "testing");
 			Console.WriteLine(sMsg);*/
 
-			string sMsg = StartZendoGame();
+			/*string sMsg = StartZendoGame();
+			Console.WriteLine(sMsg);*/
+
+			string sMsg = JoinGame("WildfireXIII", "password", "g_Zendo_636167986558817917");
 			Console.WriteLine(sMsg);
 
 			Console.WriteLine("\nComplete!");
@@ -37,6 +40,18 @@ namespace GameClansServer
 		{
 			Zendo z = new Zendo();
 			return z.CreateNewGame("Testing Clan", "WildfireXIII", "password");
+		}
+		
+		static string JoinGame(string sUserName, string sPassword, string sGameID)
+		{
+			Zendo z = new Zendo();
+			return z.JoinGame(sGameID, "Testing Clan", sUserName, sPassword);
+		}
+
+		static string StartGame(string sGameID)
+		{
+			Zendo z = new Zendo();
+			return z.StartGame(sGameID);
 		}
 
 		static string CreateClan()
@@ -50,5 +65,6 @@ namespace GameClansServer
 			ClanServer cs = new ClanServer();
 			return cs.JoinClan("Testing Clan", "testing", sUserName, sPassword);
 		}
+
 	}
 }

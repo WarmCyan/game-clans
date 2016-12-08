@@ -13,7 +13,8 @@
 			<Button Name="btnListGames" Click="btnListGames_Click">ListGames</Button>
 			<TextBox Name="txtGameID" />
 			<Button Name="btnJoin" Click="btnJoin_Click">Join</Button>
-			<TextBlock Name="blkLog" Height="100" TextWrapping="Wrap"></TextBlock>
+			<Button Name="btnStartGame" Click="btnStartGame_Click">Start</Button>
+			<TextBox Name="blkLog" Height="100" TextWrapping="Wrap"></TextBox>
 		</StackPanel>
         
     </Grid>
