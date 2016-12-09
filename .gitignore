@@ -1,14 +1,14 @@
 Server/packages/*
 Server/Server/bin/*
 Server/Server/obj/*
-Server/.vs/*
+Server/Server/.vs/*
 
 **/_hidden.cs
 
 Client/packages/*
 Client/Client/bin/*
 Client/Client/obj/*
-Client/.vs/*
+Client/Client/.vs/*
 
 App/packages/*
 App/App/bin/*
