@@ -14,6 +14,9 @@
 			<TextBox Name="txtGameID" />
 			<Button Name="btnJoin" Click="btnJoin_Click">Join</Button>
 			<Button Name="btnStartGame" Click="btnStartGame_Click">Start</Button>
+			<TextBox Name="txtInput"></TextBox>
+			<TextBox Name="txtInput2"></TextBox>
+			<!--<Button Name=""-->
 			<TextBox Name="blkLog" Height="100" TextWrapping="Wrap"></TextBox>
 		</StackPanel>
         
