@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: ClanServer.cs
 //  Date created: 11/28/2016
-//  Date edited: 12/8/2016
+//  Date edited: 12/11/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: Main server that has all the outward facing REST API functions
@@ -91,6 +91,11 @@ namespace GameClansServer
 			//return "You have successfully joined the clan " + sClanName + " as " + sUserName;
 			return Master.Messagify("You have successfully joined the clan " + sClanName + " as " + sUserName, Master.MSGTYPE_BOTH, "<ClanStub ClanName='" + sClanName + "' UserName='" + sUserName + "' />");
 		}
+
+		/*public string ChangePassword(string sClanNameList, string sUserNameList, string sUserOldPassPhrase, string sUserNewPassPhrase)
+		{
+		
+		}	*/
 
 		public string ListActiveGames(string sClanName, string sUserName, string sUserPassPhrase)
 		{

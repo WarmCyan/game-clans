@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: BaseActivity.cs
 //  Date created: 12/9/2016
-//  Date edited: 12/9/2016
+//  Date edited: 12/11/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: Base activity that other activities should extend to the same drawer layouts
@@ -40,7 +40,7 @@ namespace App
 
 		protected void CreateDrawer()
 		{
-			m_lNavTitles = new List<string>() { "Home", "Games", /*"Chats",*/ "Profile", "Notifications", "Groups" };
+			m_lNavTitles = new List<string>() { "Home", "Games", /*"Chats",*/ "Profile", "Notifications", "Groups", "Settings" };
 
 			m_pDrawerLayout = FindViewById<DrawerLayout>(Resource.Id.appDrawerLayout);
 			m_pDrawerList = FindViewById<ListView>(Resource.Id.appDrawerList);
@@ -62,7 +62,10 @@ namespace App
 						break;
 					case 4: // groups
 						Intent pIntent = new Intent(this, (new GroupListActivity()).Class);
+						this.Finish();
 						StartActivity(pIntent);
+						break;
+					case 5: // settings
 						break;
 				}
 			};

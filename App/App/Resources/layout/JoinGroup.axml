@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <EditText
+        android:id="@+id/txtClanName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="Clan Name" />
+    <EditText
+        android:id="@+id/txtClanPassword"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="Clan Password"
+        android:layout_margin="10dp"
+        android:inputType="textPassword" />
+    <EditText
+        android:id="@+id/txtUserName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="Desired Username" />
+    <Button
+        android:id="@+id/btnSubmitJoin"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:padding="20dp"
+        android:text="Join!" />
+</LinearLayout>
