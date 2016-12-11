@@ -1,10 +1,10 @@
 ﻿//*************************************************************
 //  File: MainWindow.xaml.cs
 //  Date created: 12/8/2016
-//  Date edited: 12/8/2016
+//  Date edited: 12/10/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
-//  Description: 
+//  Description: This windows has all the clans and clan stuff on it. Games will open in a new window
 //*************************************************************
 
 using System;
@@ -74,6 +74,36 @@ namespace Client
 			string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer.Games/Zendo/StartGame", sBody, true);
 			sResponse = Master.CleanResponse(sResponse);
 			blkLog.Text += sResponse + "\n";
+		}
+
+		private void btnJoinClan_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+
+		}
+
+		private void btnJoinClan_MouseEnter(object sender, MouseEventArgs e)
+		{
+
+		}
+
+		private void btnJoinClan_MouseLeave(object sender, MouseEventArgs e)
+		{
+
+		}
+
+		private void btnCreateClan_MouseLeave(object sender, MouseEventArgs e)
+		{
+
+		}
+
+		private void btnCreateClan_MouseEnter(object sender, MouseEventArgs e)
+		{
+
+		}
+
+		private void btnCreateClan_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+
 		}
 	}
 }

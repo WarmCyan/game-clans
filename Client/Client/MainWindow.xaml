@@ -5,9 +5,38 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="400" Width="650"
+		Background="#333333" TextOptions.TextFormattingMode="Display">
     <Grid>
-		<StackPanel>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="200" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Border Grid.Column="0" BorderBrush="#444444" BorderThickness="0,0,2,0">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Stretch">
+					<StackPanel Name="stkClanStack">
+					</StackPanel>
+				</ScrollViewer>
+				<StackPanel Grid.Row="1">
+					<Border BorderBrush="#444444" BorderThickness="0,2,0,0">
+						<TextBlock TextAlignment="Center" Name="btnJoinClan" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnJoinClan_MouseLeave" MouseEnter="btnJoinClan_MouseEnter" MouseUp="btnJoinClan_MouseUp">Join Clan</TextBlock>
+					</Border>
+				</StackPanel>
+				<StackPanel Grid.Row="2">
+					<Border BorderBrush="#444444" BorderThickness="0,2,0,0">
+						<TextBlock TextAlignment="Center" Name="btnCreateClan" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnCreateClan_MouseLeave" MouseEnter="btnCreateClan_MouseEnter" MouseUp="btnCreateClan_MouseUp">Create Clan</TextBlock>
+					</Border>
+				</StackPanel>
+			</Grid>
+		</Border>
+
+		<!--<StackPanel>
 			<TextBox Name="txtUserName" />
 			<TextBox Name="txtPassword" />
 			<Button Name="btnListGames" Click="btnListGames_Click">ListGames</Button>
@@ -16,9 +45,7 @@
 			<Button Name="btnStartGame" Click="btnStartGame_Click">Start</Button>
 			<TextBox Name="txtInput"></TextBox>
 			<TextBox Name="txtInput2"></TextBox>
-			<!--<Button Name=""-->
 			<TextBox Name="blkLog" Height="100" TextWrapping="Wrap"></TextBox>
-		</StackPanel>
-        
+		</StackPanel>-->
     </Grid>
 </Window>
