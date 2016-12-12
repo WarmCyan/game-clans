@@ -25,7 +25,7 @@ using DWL.Utility;
 
 namespace App
 {
-	[Activity(Label = "JoinClanActivity")]
+	[Activity(Label = "Join Clan")]
 	public class JoinClanActivity : Activity
 	{
 		protected override void OnCreate(Bundle savedInstanceState)
@@ -63,13 +63,22 @@ namespace App
 				var pBuilder = new AlertDialog.Builder(this);
 				pBuilder.SetMessage(sResponseMssage);
 
-				if (pResponse.Attribute("Type").Value == "Error")
+				if (pResponse.Attribute("Type").Value == "Error" || pResponse.Element("Data").Element("ClanStub") == null)
 				{
 					pBuilder.SetPositiveButton("Ok", (e, s) => { return; });
 				}
 				else
 				{
-					pBuilder.SetPositiveButton("Ok", (e, s) => { /* do stuff here */ this.Finish(); });
+					pBuilder.SetPositiveButton("Ok", (e, s) =>
+					{
+						XElement pClanStub = pResponse.Element("Data").Element("ClanStub");
+						string sClanName = pClanStub.Attribute("ClanName").Value;
+						string sUserName = pClanStub.Attribute("UserName").Value;
+
+						File.AppendAllLines(Master.GetBaseDir() + "_clans.dat", new List<string>() { sClanName + "|" + sUserName });
+						this.SetResult(Result.Ok);
+						this.Finish();
+					});
 				}
 				pBuilder.Create().Show();
 			};

@@ -28,7 +28,7 @@ namespace App
 		public static string GetBaseDir()
 		{
 			if (s_sBaseDir == "") { s_sBaseDir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal); }
-			return s_sBaseDir;
+			return s_sBaseDir + "/";
 		}
 
 		public static string CleanResponse(string sResponse) { return sResponse.Trim('\"').Replace("\\\"", "\"").Replace("\\r", "\r").Replace("\\n", "\n").Replace("\\t", "\t").Replace("\\\\", "\\"); }

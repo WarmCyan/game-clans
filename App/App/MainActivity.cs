@@ -30,8 +30,10 @@ namespace App
 			base.OnCreate(bundle);
 			_hidden.InitializeWeb();
 
+			_RunTempCommands(); // TODO: REMOVE
+
 			// make sure that all the necessary files exist
-			if (!File.Exists(Master.GetBaseDir() + "_clans.dat")) { File.Create(Master.GetBaseDir() + "_clans.dat"); }
+			if (!File.Exists(Master.GetBaseDir() + "_clans.dat")) { File.Create(Master.GetBaseDir() + "_clans.dat").Dispose(); }
 			if (!File.Exists(Master.GetBaseDir() + "_key.dat"))
 			{
 				Intent pIntent = new Intent(this, (new KeyActivity().Class));
@@ -42,7 +44,7 @@ namespace App
 			SetContentView(Resource.Layout.Main);
 			base.CreateDrawer();
 		}
-		
+
 		/*protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
 		{
 			base.OnActivityResult(requestCode, resultCode, data);
@@ -51,6 +53,11 @@ namespace App
 				// TODO: HANDLE EXTRA HERE
 			}
 		}*/
+
+		private void _RunTempCommands()
+		{
+			//File.Delete(Master.GetBaseDir() + "_clans.dat");
+		}
 	}
 }
 
