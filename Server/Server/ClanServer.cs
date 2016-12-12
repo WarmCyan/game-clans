@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: ClanServer.cs
 //  Date created: 11/28/2016
-//  Date edited: 12/11/2016
+//  Date edited: 12/12/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: Main server that has all the outward facing REST API functions
@@ -189,6 +189,8 @@ namespace GameClansServer
 			// get the requested clan row from the table 
 			TableOperation pClanRetrieveOp = TableOperation.Retrieve<ClanTableEntity>("CLAN", sClanName);
 			TableResult pClanRetrieveResult = this.Table.Execute(pClanRetrieveOp);
+
+			if (pClanRetrieveResult.Result == null) { return false; }
 			ClanTableEntity pClan = (ClanTableEntity)pClanRetrieveResult.Result;
 
 			// hash clan passphrase
@@ -205,6 +207,8 @@ namespace GameClansServer
 			// get the requested user row from the table
 			TableOperation pUserRetrieveOp = TableOperation.Retrieve<UserTableEntity>(Master.BuildUserPartitionKey(sClanName), sUserName);
 			TableResult pUserRetrieveResult = this.Table.Execute(pUserRetrieveOp);
+
+			if (pUserRetrieveResult.Result == null) { return false; }
 			UserTableEntity pUser = (UserTableEntity)pUserRetrieveResult.Result;
 
 			// hash user passphrase

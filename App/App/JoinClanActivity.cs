@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: JoinClanActivity.cs
 //  Date created: 12/11/2016
-//  Date edited: 12/11/2016
+//  Date edited: 12/12/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -41,15 +41,37 @@ namespace App
 			pJoin.Click += delegate
 			{
 				// TODO: SANITIZATION!
-
-				string sBody = "<params><param name=sClanName='>" + pClan.Text + "</param><param name='sClanPassPhrase'>" + pPass.Text + "</param><param name='sUserName'>" + pUser.Text + "</param><param name='sUserPassPhrase'>" + File.ReadAllText(Master.GetBaseDir() + "_key.dat") + "</param></params>";
+				_hidden.InitializeWeb();
+				string sUserPass = File.ReadAllText(Master.GetBaseDir() + "_key.dat");
+				string sBody = "<params><param name='sClanName'>" + pClan.Text.ToString() + "</param><param name='sClanPassPhrase'>" + pPass.Text.ToString() + "</param><param name='sUserName'>" + pUser.Text.ToString() + "</param><param name='sUserPassPhrase'>" + sUserPass +  "</param></params>";
 				string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer/ClanServer/JoinClan", sBody, true);
 
-				XElement pResponse = XElement.Parse(sResponse);
-				Master.Popup(this, pResponse.Element("Text").Value);
-				if (pResponse.Attribute("Type").Value == "Error") { return; }
+				XElement pResponse = null;
+				try
+				{
+					pResponse = XElement.Parse(Master.CleanResponse(sResponse));
+				}
+				catch (Exception e)
+				{
+					sResponse = "<Message Type='Error'><Text>" + e.Message + "</Text><Data /></Message>";
+					pResponse = XElement.Parse(sResponse);
+				}
 				
-				this.Finish();
+				//Master.Popup(this, pResponse.Element("Text").Value);
+				string sResponseMssage = pResponse.Element("Text").Value;
+
+				var pBuilder = new AlertDialog.Builder(this);
+				pBuilder.SetMessage(sResponseMssage);
+
+				if (pResponse.Attribute("Type").Value == "Error")
+				{
+					pBuilder.SetPositiveButton("Ok", (e, s) => { return; });
+				}
+				else
+				{
+					pBuilder.SetPositiveButton("Ok", (e, s) => { /* do stuff here */ this.Finish(); });
+				}
+				pBuilder.Create().Show();
 			};
 		}
 	}

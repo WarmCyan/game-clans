@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 using GameClansServer.Games;
 
+using DWL.Utility;
+
 namespace GameClansServer 
 {
 	class Program
@@ -14,11 +16,14 @@ namespace GameClansServer
 		{
 			Console.WriteLine("Hello world!\n");
 
-			string sMsg = CreateClan();
-			Console.WriteLine(sMsg);
+			/*string sMsg = CreateClan();
+			Console.WriteLine(sMsg);*/
 
 			/*string sMsg = JoinClan("WildfireXIII", "password");
 			Console.WriteLine(sMsg);*/
+			
+			string sMsg = urlJoinClan("WildfireXIII", "password");
+			Console.WriteLine(sMsg);
 
 			/*string sMsg = JoinClan("Dude", "testing");
 			Console.WriteLine(sMsg);*/
@@ -64,6 +69,19 @@ namespace GameClansServer
 		{
 			ClanServer cs = new ClanServer();
 			return cs.JoinClan("Testing Clan", "testing", sUserName, sPassword);
+		}
+
+		static string urlJoinClan(string sUserName, string sPassword)
+		{
+
+
+			string sClan = "Testing Clan";
+			string sClanPass = "testing";
+		
+			string sBody = "<params><param name='sClanName'>" + sClan + "</param><param name='sClanPassPhrase'>" + sClanPass + "</param><param name='sUserName'>" + sUserName + "</param><param name='sUserPassPhrase'>" + sPassword + "</param></params>";
+			string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer/ClanServer/JoinClan", sBody, true);
+
+			return sResponse;
 		}
 
 	}

@@ -31,10 +31,13 @@ namespace App
 			return s_sBaseDir;
 		}
 
+		public static string CleanResponse(string sResponse) { return sResponse.Trim('\"').Replace("\\\"", "\"").Replace("\\r", "\r").Replace("\\n", "\n").Replace("\\t", "\t").Replace("\\\\", "\\"); }
+
 		public static void Popup(Context pContext, string sMsg)
 		{
 			var pBuilder = new AlertDialog.Builder(pContext);
 			pBuilder.SetMessage(sMsg);
+			pBuilder.SetPositiveButton("Ok", (e, s) => { return; });
 			pBuilder.Create().Show();
 		}
 	}
