@@ -78,8 +78,29 @@ namespace App
 			// aapt resource value: 0x7f050003
 			public const int clansList = 2131034115;
 			
+			// aapt resource value: 0x7f05000e
+			public const int lblMyStatsName = 2131034126;
+			
+			// aapt resource value: 0x7f05000f
+			public const int lblMyStatsPlace = 2131034127;
+			
+			// aapt resource value: 0x7f050010
+			public const int lblMyStatsScore = 2131034128;
+			
+			// aapt resource value: 0x7f050012
+			public const int lblScoreName = 2131034130;
+			
+			// aapt resource value: 0x7f050013
+			public const int lblScorePlace = 2131034131;
+			
+			// aapt resource value: 0x7f050014
+			public const int lblScoreScore = 2131034132;
+			
 			// aapt resource value: 0x7f05000c
 			public const int relativeLayoutThing = 2131034124;
+			
+			// aapt resource value: 0x7f050011
+			public const int scrlScoreBoard = 2131034129;
 			
 			// aapt resource value: 0x7f05000d
 			public const int textViewName = 2131034125;
@@ -129,6 +150,9 @@ namespace App
 			
 			// aapt resource value: 0x7f030004
 			public const int Main = 2130903044;
+			
+			// aapt resource value: 0x7f030005
+			public const int ScoreRow = 2130903045;
 			
 			static Layout()
 			{

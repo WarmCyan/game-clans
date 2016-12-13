@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayoutThing"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:padding="10dp">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <!-- <TextView
+            android:id="@+id/textViewName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="Text here"
+            android:textColor="#ffffff"
+            android:textSize="15dp"
+            android:layout_margin="10dp" />-->
+        <TextView
+            android:id="@+id/lblScoreName"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:textSize="15dp"
+            android:text="WildfireXIII" />
+        <TextView
+            android:id="@+id/lblScorePlace"
+            android:layout_width="0dp"
+            android:layout_weight=".7"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:textSize="15dp"
+            android:text="1st" />
+        <TextView
+            android:id="@+id/lblScoreScore"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:textSize="15dp"
+            android:text="1000" />
+    </LinearLayout>
+</RelativeLayout>

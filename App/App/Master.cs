@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: Master.cs
 //  Date created: 12/9/2016
-//  Date edited: 12/12/2016
+//  Date edited: 12/13/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -57,6 +57,17 @@ namespace App
 			pBuilder.SetMessage(sMsg);
 			pBuilder.SetPositiveButton("Ok", (e, s) => { return; });
 			pBuilder.Create().Show();
+		}
+
+		public static string BuildCommonBody() { return BuildCommonBody(""); }
+		public static string BuildCommonBody(string sOtherXML)
+		{
+			return "<params><param name='sClanName'>" + s_sActiveClan + "</param><param name='sUserName'>" + s_sActiveUserName + "</param><param name='sUserPassPhrase'>" + s_sKey + "</param>" + sOtherXML + "</params>";
+		}
+
+		public static XElement ReadResponse(string sResponse)
+		{
+		
 		}
 	}
 }

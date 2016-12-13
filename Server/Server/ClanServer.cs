@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: ClanServer.cs
 //  Date created: 11/28/2016
-//  Date edited: 12/12/2016
+//  Date edited: 12/13/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: Main server that has all the outward facing REST API functions
@@ -144,6 +144,43 @@ namespace GameClansServer
 			return "";
 		}
 
+		// also returns what place passed user is
+		public string GetClanLeaderboard(string sClanName, string sUserName, string sUserPassPhrase)
+		{
+			// make sure user has permission
+			if (!VerifyUserPassPhrase(sClanName, sUserName, sUserPassPhrase)) { return Master.MessagifyError("Invalid login."); }
+
+			// get all rows of users from that clan
+			TableQuery<UserTableEntity> pQuery = new TableQuery<UserTableEntity>().Where("PartitionKey eq '" + Master.BuildUserPartitionKey(sClanName) + "'");
+			List<UserTableEntity> lUsers = this.Table.ExecuteQuery(pQuery).ToList();
+
+			// sort user list by zendo score (TODO: eventually make this a composite from the different games)
+			// thanks to http://stackoverflow.com/questions/20902248/sorting-a-list-in-c-sharp-using-list-sortcomparisont-comparison
+			lUsers.Sort((x, y) => -x.ZendoScore.CompareTo(y.ZendoScore));
+
+			// return an xml list
+			XElement pLeaderboard = new XElement("Leaderboard");
+			int iPlace = 0;
+			foreach (UserTableEntity pUser in lUsers)
+			{
+				iPlace++;
+				XElement pScore = new XElement("Score");
+				pScore.SetAttributeValue("User", pUser.RowKey);
+				pScore.SetAttributeValue("Score", pUser.ZendoScore);
+				pScore.SetAttributeValue("Place", this.Numberify(iPlace));
+				pLeaderboard.Add(pScore);
+
+				// we found the desired user!
+				if (pUser.RowKey == sUserName)
+				{
+					pLeaderboard.SetAttributeValue("Place", this.Numberify(iPlace));
+					pLeaderboard.SetAttributeValue("Score", pUser.ZendoScore);
+				}
+			}
+		
+			return Master.MessagifyData(pLeaderboard.ToString());
+		}
+
 
 		// inner methods
 
@@ -218,8 +255,27 @@ namespace GameClansServer
 			return sUserHash == pUser.PassPhrase;
 		}
 
+		// make text number (cardinal?)
+		private string Numberify(int iNumber)
+		{
+			string sSuffix = "";
+
+			// determine the suffix by the last digit
+			int iLastDigit = iNumber % 10;
+			if (iLastDigit == 1) { sSuffix = "st"; }
+			else if (iLastDigit == 2) { sSuffix = "nd"; }
+			else if (iLastDigit == 3) { sSuffix = "rd"; }
+			else { sSuffix = "th"; }
+
+			// then, double check exceptions, because english sucks...
+			if (iNumber == 11 || iNumber == 12 || iNumber == 13) { sSuffix = "th"; }
+
+			return iNumber + sSuffix;
+		}
+
 		// thanks to http://www.codeshare.co.uk/blog/sha-256-and-sha-512-hash-examples/
-		private string Sha256Hash(string sString)
+		// TODO: make private
+		public string Sha256Hash(string sString)
 		{
 			SHA256 p256 = SHA256Managed.Create();
 			byte[] aBytes = Encoding.UTF8.GetBytes(sString);

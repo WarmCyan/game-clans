@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: MainActivity.cs
 //  Date created: 12/9/2016
-//  Date edited: 12/11/2016
+//  Date edited: 12/13/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -10,6 +10,8 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Xml.Linq;
+
 using Android.App;
 using Android.Content;
 using Android.Runtime;
@@ -18,6 +20,7 @@ using Android.Widget;
 using Android.OS;
 
 using Android.Support.V4.Widget;
+using DWL.Utility;
 
 namespace App
 {
@@ -53,7 +56,25 @@ namespace App
 			SetContentView(Resource.Layout.Main);
 			base.CreateDrawer();
 
-			if (Master.GetActiveClan() != "") { this.Title = Master.GetActiveClan() + " - " + Master.GetActiveUserName(); }
+			if (Master.GetActiveClan() != "") 
+			{ 
+				this.Title = Master.GetActiveClan() + " - " + Master.GetActiveUserName();
+				this.BuildHomeDashboard();
+			}
+		}
+
+		private void BuildHomeDashboard()
+		{
+			// get the scoreboard from the server
+			string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer/ClanServer/GetClanLeaderboard", Master.BuildCommonBody(), true);
+
+			XElement pResponse = null;
+			try { pResponse = XElement.Parse(Master.CleanResponse(sResponse)); }
+			catch (Exception e)
+			{
+				sResponse = "<Message Type='Error'><Text>" + e.Message + "</Text><Data /></Message>";
+				pResponse = XElement.Parse(sResponse);
+			}
 		}
 
 		/*protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
