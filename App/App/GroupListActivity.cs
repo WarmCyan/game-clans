@@ -25,6 +25,12 @@ namespace App
 	[Activity(Label = "Your Clans")]
 	public class GroupListActivity : BaseActivity
 	{
+		// member variables
+		private List<string> m_lClanNames; // clan name - user name
+		private List<string> m_lClanParts; // clan name only
+		private List<string> m_lUserParts; // user name only
+	
+		
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
@@ -47,20 +53,37 @@ namespace App
 
 		private void RefreshClanList()
 		{
-			string[] aClansList = File.ReadAllLines(Master.GetBaseDir() + "_clans.dat");
+			m_lClanNames = File.ReadAllLines(Master.GetBaseDir() + "_clans.dat").ToList();
+			m_lClanParts = new List<string>();
+			m_lUserParts = new List<string>();
 
 			// clan name|user name
 			//for (int i = 0; i < aClansList.Length; i++) { aClansList[i] = aClansList[i].Substring(0, aClansList[i].IndexOf("|")); }
-			for (int i = 0; i < aClansList.Length; i++) { aClansList[i] = aClansList[i].Replace("|", " - "); }
+			for (int i = 0; i < m_lClanNames.Count; i++) 
+			{
+				m_lClanParts.Add(m_lClanNames[i].Substring(0, m_lClanNames[i].IndexOf("|")));
+				m_lUserParts.Add(m_lClanNames[i].Substring(m_lClanNames[i].IndexOf("|") + 1));
+				m_lClanNames[i] = m_lClanNames[i].Replace("|", " - "); 
+			}
 			
 			ListView pClansList = FindViewById<ListView>(Resource.Id.clansList);
-			pClansList.Adapter = new DrawerItemCustomAdapter(this, Resource.Layout.ListViewItemRow, aClansList);
+			pClansList.Adapter = new DrawerItemCustomAdapter(this, Resource.Layout.ListViewItemRow, m_lClanNames.ToArray());
 
 			pClansList.ItemClick += (object sender, Android.Widget.AdapterView.ItemClickEventArgs e) =>
 			{
 				int iChoice = e.Position;
-				string sClanName = aClansList[iChoice];
-				// TODO: handle clicking on that clan name here
+				Master.SetActiveClan(m_lClanParts[iChoice]);
+				Master.SetActiveUserName(m_lUserParts[iChoice]);
+
+				// store this in the _active file, so as to persist between app openings and closings
+				List<string> lLines = new List<string>();
+				lLines.Add(m_lClanParts[iChoice]);
+				lLines.Add(m_lUserParts[iChoice]);
+				File.WriteAllLines(Master.GetBaseDir() + "_active.dat", lLines.ToArray());
+				
+				Intent pIntent = new Intent(this, (new MainActivity()).Class);
+				this.Finish();
+				StartActivity(pIntent);
 			};
 		}
 		

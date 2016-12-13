@@ -68,7 +68,9 @@ namespace App
 					// TODO: make the server call
 				}
 
-				File.WriteAllText(Master.GetBaseDir() + "_key.dat", this.Sha256Hash(pPass1.Text));
+				string sEncrypted = this.Sha256Hash(pPass1.Text);
+				File.WriteAllText(Master.GetBaseDir() + "_key.dat", sEncrypted);
+				Master.SetKey(sEncrypted);
 				this.Finish();
 			};
 		}

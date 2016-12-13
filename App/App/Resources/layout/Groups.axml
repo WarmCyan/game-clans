@@ -12,18 +12,19 @@
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
-        <!--<TextView
-			android:id="@+id/txtLabel"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_centerVertical="true"
-			android:text="Groups thing" />-->
             <Button
                 android:id="@+id/btnJoin"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:padding="20dp"
                 android:text="Join Clan" />
+            <TextView
+                android:id="@+id/txtLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:layout_centerVertical="true"
+                android:text="Tap a clan below to set it as your current active clan. (This lets you see and join all activity for that clan.)" />
             <ListView
                 android:id="@+id/clansList"
                 android:layout_width="fill_parent"

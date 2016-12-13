@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: BaseActivity.cs
 //  Date created: 12/9/2016
-//  Date edited: 12/11/2016
+//  Date edited: 12/12/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: Base activity that other activities should extend to the same drawer layouts
@@ -40,7 +40,13 @@ namespace App
 
 		protected void CreateDrawer()
 		{
-			m_lNavTitles = new List<string>() { "Home", "Games", /*"Chats",*/ "Profile", "Notifications", "Groups", "Settings" };
+			m_lNavTitles = new List<string>() { "Home", "Games", /*"Chats",*/ "Profile", "Notifications", "Clans", "Settings" };
+			string sActive = Master.GetActiveClan();
+			if (sActive != "") 
+			{ 
+				m_lNavTitles[0] = sActive;
+				m_lNavTitles[2] = Master.GetActiveUserName() + "'s Profile";
+			}
 
 			m_pDrawerLayout = FindViewById<DrawerLayout>(Resource.Id.appDrawerLayout);
 			m_pDrawerList = FindViewById<ListView>(Resource.Id.appDrawerList);
@@ -50,9 +56,11 @@ namespace App
 			{
 				int iChoice = e.Position;
 				//string sChoice = m_lNavTitles[iChoice];
+				Intent pIntent = null;
 				switch (iChoice)
 				{
 					case 0: // home
+						pIntent = new Intent(this, (new MainActivity()).Class);
 						break;
 					case 1: // games
 						break;
@@ -61,13 +69,14 @@ namespace App
 					case 3: // notifications	
 						break;
 					case 4: // groups
-						Intent pIntent = new Intent(this, (new GroupListActivity()).Class);
-						this.Finish();
-						StartActivity(pIntent);
+						pIntent = new Intent(this, (new GroupListActivity()).Class);
 						break;
 					case 5: // settings
 						break;
 				}
+				if (pIntent == null) { return; }
+				this.Finish();
+				StartActivity(pIntent);
 			};
 		}
 	}

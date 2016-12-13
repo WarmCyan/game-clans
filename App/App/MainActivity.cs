@@ -21,7 +21,7 @@ using Android.Support.V4.Widget;
 
 namespace App
 {
-	[Activity(Label = "App", MainLauncher = true, Icon = "@drawable/icon")]
+	[Activity(Label = "Game Clans", MainLauncher = true, Icon = "@drawable/icon")]
 	public class MainActivity : BaseActivity // TODO: just extend MainActivity in the other activities and it should automagically get the drawer navigation?
 	{
 	
@@ -39,10 +39,21 @@ namespace App
 				Intent pIntent = new Intent(this, (new KeyActivity().Class));
 				StartActivity(pIntent);
 			}
+			else { Master.SetKey(File.ReadAllText(Master.GetBaseDir() + "_key.dat")); }
+
+			// TODO: save temp currently active clan so persistent between app open times, and load it here
+			if (File.Exists(Master.GetBaseDir() + "_active.dat")) 
+			{ 
+				string[] aLines = File.ReadAllLines(Master.GetBaseDir() + "_active.dat");
+				Master.SetActiveClan(aLines[0]);
+				Master.SetActiveUserName(aLines[1]);
+			}
 
 			// Set our view from the "main" layout resource
 			SetContentView(Resource.Layout.Main);
 			base.CreateDrawer();
+
+			if (Master.GetActiveClan() != "") { this.Title = Master.GetActiveClan() + " - " + Master.GetActiveUserName(); }
 		}
 
 		/*protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
@@ -56,7 +67,13 @@ namespace App
 
 		private void _RunTempCommands()
 		{
+			if (Master.TEMP_RUN) { return; }
+
+
 			//File.Delete(Master.GetBaseDir() + "_clans.dat");
+
+			
+			Master.TEMP_RUN = true;
 		}
 	}
 }
