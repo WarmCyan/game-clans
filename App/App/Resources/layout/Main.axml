@@ -4,52 +4,73 @@
     android:id="@+id/appDrawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-        <!--android:background="#555555" >-->
-            <TextView
-                android:id="@+id/lblMyStatsName"
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:textSize="25dp"
-                android:text="WildfireXIII" />
-            <TextView
-                android:id="@+id/lblMyStatsPlace"
-                android:layout_width="0dp"
-                android:layout_weight=".7"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:textSize="25dp"
-                android:text="1st" />
-            <TextView
-                android:id="@+id/lblMyStatsScore"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:textSize="25dp"
-                android:text="1000" />
-        </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:layout_margin="15dp"
-            android:background="#555555">
-            <ScrollView
-                android:id="@+id/scrlScoreBoard"
+            android:layout_height="fill_parent">
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent" />
+                android:layout_height="wrap_content">
+            <!--android:background="#555555" >-->
+                <TextView
+                    android:id="@+id/lblMyStatsName"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:textSize="25dp"
+                    android:text="WildfireXIII" />
+                <TextView
+                    android:id="@+id/lblMyStatsPlace"
+                    android:layout_width="0dp"
+                    android:layout_weight=".7"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:textSize="25dp"
+                    android:text="1st" />
+                <TextView
+                    android:id="@+id/lblMyStatsScore"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:textSize="25dp"
+                    android:text="1000" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="250dp"
+                android:layout_margin="10dp"
+                android:background="#555555">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:textSize="20dp"
+                    android:text="Clan Leaderboard"
+                    android:textColor="#ffffff" />
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="2dp"
+                    android:background="#BBBBBB" />
+                <ScrollView
+                    android:id="@+id/scrlScoreBoard"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+                    <LinearLayout
+                        android:id="@+id/lstScoreBoard"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </ScrollView>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
     <ListView
         android:id="@+id/appDrawerList"
         android:layout_width="240dp"

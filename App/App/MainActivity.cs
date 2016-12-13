@@ -67,13 +67,36 @@ namespace App
 		{
 			// get the scoreboard from the server
 			string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer/ClanServer/GetClanLeaderboard", Master.BuildCommonBody(), true);
+			XElement pResponse = Master.ReadResponse(sResponse);
 
-			XElement pResponse = null;
-			try { pResponse = XElement.Parse(Master.CleanResponse(sResponse)); }
-			catch (Exception e)
+			if (pResponse.Element("Data").Element("Leaderboard") != null)
 			{
-				sResponse = "<Message Type='Error'><Text>" + e.Message + "</Text><Data /></Message>";
-				pResponse = XElement.Parse(sResponse);
+				XElement pLeaderboard = pResponse.Element("Data").Element("Leaderboard");
+
+				TextView pMyUser = FindViewById<TextView>(Resource.Id.lblMyStatsName);
+				TextView pMyScore = FindViewById<TextView>(Resource.Id.lblMyStatsScore);
+				TextView pMyPlace = FindViewById<TextView>(Resource.Id.lblMyStatsPlace);
+
+				pMyUser.Text = Master.GetActiveUserName();
+				pMyScore.Text = pLeaderboard.Attribute("Score").Value;
+				pMyPlace.Text = pLeaderboard.Attribute("Place").Value;
+
+				LinearLayout pScoreboardLayout = FindViewById<LinearLayout>(Resource.Id.lstScoreBoard);
+
+				foreach (XElement pScoreXml in pLeaderboard.Elements("Score"))
+				{
+					View pScoreRow = LayoutInflater.From(this).Inflate(Resource.Layout.ScoreRow, pScoreboardLayout, false);
+
+					TextView pUser = pScoreRow.FindViewById<TextView>(Resource.Id.lblScoreName);
+					TextView pPlace = pScoreRow.FindViewById<TextView>(Resource.Id.lblScorePlace);
+					TextView pScore = pScoreRow.FindViewById<TextView>(Resource.Id.lblScoreScore);
+
+					pUser.Text = pScoreXml.Attribute("User").Value;
+					pPlace.Text = pScoreXml.Attribute("Place").Value;
+					pScore.Text = pScoreXml.Attribute("Score").Value;
+
+					pScoreboardLayout.AddView(pScoreRow);
+				}
 			}
 		}
 

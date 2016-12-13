@@ -46,16 +46,7 @@ namespace App
 				string sBody = "<params><param name='sClanName'>" + pClan.Text.ToString() + "</param><param name='sClanPassPhrase'>" + pPass.Text.ToString() + "</param><param name='sUserName'>" + pUser.Text.ToString() + "</param><param name='sUserPassPhrase'>" + sUserPass +  "</param></params>";
 				string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer/ClanServer/JoinClan", sBody, true);
 
-				XElement pResponse = null;
-				try
-				{
-					pResponse = XElement.Parse(Master.CleanResponse(sResponse));
-				}
-				catch (Exception e)
-				{
-					sResponse = "<Message Type='Error'><Text>" + e.Message + "</Text><Data /></Message>";
-					pResponse = XElement.Parse(sResponse);
-				}
+				XElement pResponse = Master.ReadResponse(sResponse);
 				
 				//Master.Popup(this, pResponse.Element("Text").Value);
 				string sResponseMssage = pResponse.Element("Text").Value;
