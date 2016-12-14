@@ -48,12 +48,13 @@
                 android:layout_margin="10dp"
                 android:background="#555555">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:padding="10dp"
                     android:textSize="20dp"
                     android:text="Clan Leaderboard"
-                    android:textColor="#ffffff" />
+                    android:background="#CCCCCC"
+                    android:textColor="#000000" />
                 <View
                     android:layout_width="fill_parent"
                     android:layout_height="2dp"
