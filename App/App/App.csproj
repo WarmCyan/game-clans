@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="BaseActivity.cs" />
     <Compile Include="DrawerItemCustomAdapter.cs" />
+    <Compile Include="GameActivities\ZendoActivity.cs" />
     <Compile Include="GamesActivity.cs" />
     <Compile Include="GroupListActivity.cs" />
     <Compile Include="JoinClanActivity.cs" />
@@ -91,6 +92,9 @@
     <AndroidResource Include="Resources\layout\Games.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\Game_Zendo.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Main.axml" />
@@ -104,6 +108,7 @@
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.
