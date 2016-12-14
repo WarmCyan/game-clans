@@ -106,7 +106,7 @@ namespace GameClansServer
 			List<GameTableEntity> lGames = this.Table.ExecuteQuery(pQuery).ToList();
 
 			string sResponse = "<Games>";
-			foreach (GameTableEntity pGame in lGames) { sResponse += "<Game>" + pGame.RowKey + "</Game>"; }
+			foreach (GameTableEntity pGame in lGames) { sResponse += "<Game GameType='" + pGame.GameType + "'>" + pGame.RowKey + "</Game>"; }
 			sResponse += "</Games>";
 
 			return Master.MessagifyData(sResponse);

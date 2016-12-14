@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: BaseActivity.cs
 //  Date created: 12/9/2016
-//  Date edited: 12/12/2016
+//  Date edited: 12/13/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: Base activity that other activities should extend to the same drawer layouts
@@ -63,6 +63,7 @@ namespace App
 						pIntent = new Intent(this, (new MainActivity()).Class);
 						break;
 					case 1: // games
+						pIntent = new Intent(this, (new GamesActivity()).Class);
 						break;
 					case 2: // profile (eventually chats)
 						break;

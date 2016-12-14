@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="BaseActivity.cs" />
     <Compile Include="DrawerItemCustomAdapter.cs" />
+    <Compile Include="GamesActivity.cs" />
     <Compile Include="GroupListActivity.cs" />
     <Compile Include="JoinClanActivity.cs" />
     <Compile Include="KeyActivity.cs" />
@@ -85,6 +86,9 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\ScoreRow.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\Games.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>
