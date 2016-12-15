@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Zendo.cs
 //  Date created: 11/28/2016
-//  Date edited: 12/8/2016
+//  Date edited: 12/14/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: My implementation of the awesome game of Zendo!
@@ -698,6 +698,144 @@ namespace GameClansServer.Games
 			if (m_lUsersGivenUp.Count == m_lStudents.Count) { this.GameOver(); }
 
 			this.Save();
+			return "";
+		}
+
+		// message format:
+		// <Status></Status>
+		// <Action></Action> (join [join game], disabled [joined], initial koans [master only], disabled [waiting for initial koans, for students], build koan, predict koan, judge koan [master only], disabled [waiting for master judgement], disabled [waiting for master disproval], disabled [game over]
+		// <Event Log>
+		//		<Event>...
+		// </Event Log>
+		// <Koans>
+		//		<Koan>...
+		// </Koans>
+		public string GetUserBoard(string sGameID, string sClanName, string sUserName, string sUserPassPhrase)
+		{
+			string sResult = this.Prepare(sGameID, sClanName, sUserName, sUserPassPhrase, AuthenticationType.All);
+			if (sResult != "") { return sResult; }
+
+			string sAction = "";
+			string sStatus = "";
+
+			// switches based on the game status and whether this player is playing or not and what their role is
+			if (m_sStateStatus == "setup")
+			{
+				// if user hasn't joined
+				if (!m_lPlayerNames.Contains(sUserName))
+				{
+					sAction = "join";
+					sStatus = "This game hasn't started yet. Hit the join button below to join in the fun!";
+				}
+				else
+				{
+					sAction = "waiting";
+					sStatus = "You have joined this game! Waiting for the game to start...";
+				}
+			}
+			else if (m_sStateStatus == "initial")
+			{
+				if (m_sMaster == sUserName)
+				{
+					sAction = "initial koans";
+					sStatus = "The game has started, and you are the master! Create your rule and build the initial koans!";
+				}
+				else
+				{
+					sAction = "waiting";
+					sStatus = "The game has started, waiting for the master to create his rule and submit the initial koans...";
+				}
+			}
+			else if (m_sStateStatus == "open")
+			{
+				if (m_sMaster == sUserName)
+				{
+					sAction = "waiting";
+					sStatus = "Waiting for a student to build a koan or guess...";
+				}
+				else
+				{
+					sAction = "build";
+					sStatus = "Build a koan and call either master or mondo!";
+					// TODO: way to display initial koans if those were the only koans so far?
+				}
+			}
+			else if (m_sStateStatus == "pending master")
+			{
+				if (m_sMaster == sUserName)
+				{
+					sAction = "judge";
+					sStatus = m_pPendingKoan.User + " has built a koan. Decide if it has the buddha-nature or not!";
+					// TODO: display koan
+				}
+				else
+				{
+					if (!m_bMondo)
+					{
+						sAction = "waiting";
+						sStatus = "Waiting for the master to decide if " + m_pPendingKoan.User + "'s koan has the buddha-nature...";
+						// TODO: display koan
+					}
+					else
+					{
+						if (!m_dMondoPredictions.Keys.Contains(sUserName))
+						{
+							sAction = "predict";
+							sStatus = m_pPendingKoan.User + " called mondo on their koan, but the master can now analyze it. Hurry and submit your prediction!";
+						}
+						else
+						{
+							sAction = "predict";
+							string sPhrase = (m_dMondoPredictions[sUserName]) ? "has" : "does not have";
+							sStatus = "You predicted that the master will say this koan " + sPhrase + " the buddha-nature. Waiting for the master to decide...";
+						}
+					}
+				}
+			}
+			else if (m_sStateStatus == "pending students")
+			{
+				if (m_sMaster == sUserName)
+				{
+					sAction = "waiting";
+					sStatus = m_pPendingKoan.User + " called mondo on their koan. Waiting for students to submit their predictions...";
+					// TODO: display koan
+				}
+				else
+				{
+					// TODO: display koan
+					if (!m_dMondoPredictions.Keys.Contains(sUserName))
+					{
+						sAction = "predict";
+						sStatus = m_pPendingKoan.User + " called mondo on their koan. Predict whether the master will decide this has the buddha-nature or not!";
+					}
+					else
+					{
+						sAction = "predict";
+						string sPhrase = (m_dMondoPredictions[sUserName]) ? "has" : "does not have";
+						sStatus = "You predicted that the master will say this koan " + sPhrase + " the buddha-nature.";
+					}
+				}
+			}
+			else if (m_sStateStatus == "pending disproval")
+			{
+				if (m_sMaster == sUserName)
+				{
+					sAction = "disprove";
+					sStatus = m_pPendingGuess.User + " submitted a guess: " + m_pPendingGuess.Guess + "\nDisprove their guess or grant them enlightenment!";
+				}
+				else
+				{
+					sAction = "waiting";
+					sStatus = "Waiting for the master to attempt to disprove " + m_pPendingGuess.User + "'s guess: " + m_pPendingGuess.Guess + "...";
+				}
+			}
+			else if (m_sStateStatus == "final")
+			{
+				sAction = "final";
+				string sPhrase = (m_sWinningUser != null && m_sWinningUser != "") ? m_sWinningUser + " attained enlightenment!" : "the students voted to give up, and no one has reached enlightenment. :(";
+				sStatus = "Game over, " + sPhrase;
+			}
+
 			return "";
 		}
 
