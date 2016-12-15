@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
         Title="MainWindow" Height="400" Width="650"
-		Background="#333333" TextOptions.TextFormattingMode="Display">
+		Background="#222222" TextOptions.TextFormattingMode="Display">
     <Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="200" />

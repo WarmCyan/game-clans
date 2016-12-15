@@ -109,6 +109,51 @@
                 </ScrollView>
             </LinearLayout>
             <Button
+                android:id="@+id/btnPreviousGuesses"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:layout_margin="10dp"
+                android:text="Previous Guesses" />
+            <TextView
+                android:id="@+id/txtMaster"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:textSize="25dp"
+                android:text="Master - " />
+            <LinearLayout
+                android:id="@+id/boxPlayers"
+                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="0dp"
+                android:orientation="vertical"
+                android:background="#555555">
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:textSize="20dp"
+                    android:text="Players"
+                    android:textColor="#000000"
+                    android:background="#CCCCCC" />
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="2dp"
+                    android:background="#BBBBBB" />
+                <ScrollView
+                    android:id="@+id/scrlPlayers"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+                    <LinearLayout
+                        android:id="@+id/lstKoans"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </ScrollView>
+            </LinearLayout>
+            <Button
                 android:id="@+id/btnZendoRules"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

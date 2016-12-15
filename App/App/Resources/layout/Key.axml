@@ -6,7 +6,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Please enter your password. If you have already joined any clans before, please use that password in order to retain access to your user accounts in those clans."
+        android:text="Please enter your password. If you have already joined any clans before on a different device, please use that password in order to retain access to your user accounts in those clans."
         android:layout_margin="10dp" />
     <EditText
         android:id="@+id/txtUserPassword"

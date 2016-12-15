@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: MainWindow.xaml.cs
 //  Date created: 12/8/2016
-//  Date edited: 12/10/2016
+//  Date edited: 12/15/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: This windows has all the clans and clan stuff on it. Games will open in a new window
@@ -21,6 +21,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
 
 using DWL.Utility;
 
@@ -35,6 +36,23 @@ namespace Client
 		{
 			InitializeComponent();
 			_hidden.InitializeWeb();
+
+			// make sure necessary files exist
+			if (!File.Exists(Master.GetBaseDir() + "_clans.dat")) { File.Create(Master.GetBaseDir() + "_clans.dat").Dispose(); }
+			if (!File.Exists(Master.GetBaseDir() + "_key.dat"))
+			{
+				Password pPassWindow = new Password();
+				pPassWindow.ShowDialog();
+			}
+			else { Master.SetKey(File.ReadAllText(Master.GetBaseDir() + "_key.dat")); }
+
+			// set data if a persistant clan thing was saved (persists active clan between application closing/opening)
+			if (File.Exists(Master.GetBaseDir() + "_active.dat"))
+			{
+				string[] aLines = File.ReadAllLines(Master.GetBaseDir() + "_active.dat");
+				Master.SetActiveClan(aLines[0]);
+				Master.SetActiveUserName(aLines[1]);
+			}
 		}
 
 		private void btnJoin_Click(object sender, RoutedEventArgs e)
