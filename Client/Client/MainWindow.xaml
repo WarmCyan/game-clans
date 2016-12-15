@@ -48,6 +48,13 @@
 				</StackPanel>
 
 				<StackPanel Grid.Column="1">
+					<StackPanel>
+						<Label Content="Active Games" Padding="5" Margin="10,5,10,0" Foreground="Black" Background="#CCCCCC" />
+						<ScrollViewer VerticalScrollBarVisibility="Hidden" Margin="10,0,10,10" Background="#333333" MinHeight="100">
+							<StackPanel Name="stkActiveGames">
+							</StackPanel>
+						</ScrollViewer>
+					</StackPanel>
 				</StackPanel>
 			</Grid>
 		</ScrollViewer>

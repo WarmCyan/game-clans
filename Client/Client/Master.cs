@@ -41,6 +41,9 @@ namespace Client
 		public static string CleanResponse(string sResponse) { return sResponse.Trim('\"').Replace("\\\"", "\"").Replace("\\r", "\r").Replace("\\n", "\n").Replace("\\t", "\t").Replace("\\\\", "\\"); }
 		public static string EncodeXML(string sXML) { return sXML.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "&quot;").Replace("'", "&apos;"); }
 
+		public static string BuildCommonBody() { return BuildCommonBody(""); } 
+		public static string BuildCommonBody(string sOtherXML) { return "<params><param name='sClanName'>" + s_sActiveClan + "</param><param name='sUserName'>" + s_sActiveUserName + "</param><param name='sUserPassPhrase'>" + s_sKey + "</param>" + sOtherXML + "</params>"; }
+
 		public static XElement ReadResponse(string sResponse)
 		{
 			XElement pResponse = null;

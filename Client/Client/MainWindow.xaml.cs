@@ -22,8 +22,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
+using System.Xml.Linq;
 
 using DWL.Utility;
+
+using Client.GameWindows;
 
 namespace Client
 {
@@ -35,6 +38,9 @@ namespace Client
 		// member variables
 		private Dictionary<string, string> m_dClanStack;
 		private Dictionary<string, Border> m_dClanStackLabels;
+
+		private List<string> m_lGames;
+		private List<string> m_lGameIDs;
 	
 		public MainWindow()
 		{
@@ -63,6 +69,51 @@ namespace Client
 
 			this.RefreshClanStack();
 		}
+		
+		public void BuildDashboard()
+		{
+			stkActiveGames.Children.Clear();
+			if (Master.GetActiveClan() == "") { return; }
+
+			string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer/ClanServer/ListActiveGames", Master.BuildCommonBody(), true);
+			XElement pResponse = Master.ReadResponse(sResponse);
+
+			m_lGames = new List<string>();
+			m_lGameIDs = new List<string>();
+
+			if (pResponse.Element("Data").Element("Games") != null)
+			{
+				foreach (XElement pGame in pResponse.Element("Data").Element("Games").Elements("Game"))
+				{
+					m_lGameIDs.Add(pGame.Value);
+					m_lGames.Add(pGame.Attribute("GameType").Value);
+				}
+			}
+
+			for (int i = 0; i < m_lGames.Count; i++) 
+			{
+				int iIndex = i;
+				Label pLabel = new Label();
+				pLabel.Padding = new Thickness(10);
+				pLabel.Margin = new Thickness(2, 2, 2, 0);
+				pLabel.Background = Master.BUTTON_NORMAL;
+				pLabel.Foreground = new SolidColorBrush(Colors.White);
+				pLabel.Content = m_lGames[i];
+
+				pLabel.MouseEnter += delegate { pLabel.Background = Master.BUTTON_HOVER; };
+				pLabel.MouseLeave += delegate { pLabel.Background = Master.BUTTON_NORMAL; };
+				pLabel.MouseUp += delegate
+				{
+					if (m_lGames[iIndex] == "Zendo")
+					{
+						Zendo pWindow = new Zendo(m_lGames[iIndex]);
+						pWindow.Show();
+					}
+				};
+
+				stkActiveGames.Children.Add(pLabel);
+			}
+		}
 
 		public void ChangeActiveClan(string sClanText) // NOTE: clantext includes both clan name and username
 		{
@@ -82,6 +133,8 @@ namespace Client
 					else { pBorder.Background = new SolidColorBrush(Color.FromArgb(100, 40, 40, 40)); }
 				}
 			}
+
+			this.BuildDashboard();
 		}
 
 		private void RefreshClanStack()
