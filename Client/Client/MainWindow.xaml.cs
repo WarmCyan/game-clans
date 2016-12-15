@@ -32,10 +32,17 @@ namespace Client
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		// member variables
+		private Dictionary<string, string> m_dClanStack;
+		private Dictionary<string, Border> m_dClanStackLabels;
+	
 		public MainWindow()
 		{
 			InitializeComponent();
 			_hidden.InitializeWeb();
+
+			m_dClanStack = new Dictionary<string, string>();
+			m_dClanStackLabels = new Dictionary<string, Border>();
 
 			// make sure necessary files exist
 			if (!File.Exists(Master.GetBaseDir() + "_clans.dat")) { File.Create(Master.GetBaseDir() + "_clans.dat").Dispose(); }
@@ -53,6 +60,64 @@ namespace Client
 				Master.SetActiveClan(aLines[0]);
 				Master.SetActiveUserName(aLines[1]);
 			}
+
+			this.RefreshClanStack();
+		}
+
+		public void ChangeActiveClan(string sClanText) // NOTE: clantext includes both clan name and username
+		{
+			string sClanName = sClanText.Substring(0, sClanText.IndexOf("|"));
+			string sUserName = sClanText.Substring(sClanText.IndexOf("|") + 1);
+
+			Master.SetActiveClan(sClanName);
+			Master.SetActiveUserName(sUserName);
+
+			// highlight label in sidebar
+			foreach (Border pBorder in stkClanStack.Children)
+			{
+				if (pBorder.Child is Grid)
+				{
+					TextBlock pTxtLabel = (TextBlock)((Grid)pBorder.Child).Children[0];
+					if (pTxtLabel.Text == sClanName + " - " + sUserName) { pBorder.Background = new SolidColorBrush(Color.FromArgb(255, 69, 186, 255)); }
+					else { pBorder.Background = new SolidColorBrush(Color.FromArgb(100, 40, 40, 40)); }
+				}
+			}
+		}
+
+		private void RefreshClanStack()
+		{
+			string[] aClans = File.ReadAllLines(Master.GetBaseDir() + "_clans.dat");
+			for (int i = 0; i < aClans.Length; i++) { this.AddClanToStack(aClans[i]); }
+		}
+		private void AddClanToStack(string sClanText) // NOTE: clantext includes both clan name and username
+		{
+
+			//string sClanName = sClanText.Substring(0, sClanText.IndexOf("|"));
+			string sClanName = sClanText.Replace("|", " - ");
+
+			// border container
+			Border pBorder = new Border();
+			pBorder.BorderThickness = new Thickness(0, 0, 0, 1);
+			pBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(100, 70, 70, 70));
+			pBorder.Background = new SolidColorBrush(Color.FromArgb(100, 40, 40, 40));
+			pBorder.MouseEnter += delegate { if (sClanName != Master.GetActiveClan() + " - " + Master.GetActiveUserName()) { pBorder.Background = new SolidColorBrush(Color.FromArgb(100, 60, 60, 60)); } };
+			pBorder.MouseLeave += delegate { if (sClanName != Master.GetActiveClan() + " - " + Master.GetActiveUserName()) { pBorder.Background = new SolidColorBrush(Color.FromArgb(100, 40, 40, 40)); } };
+
+			Grid pGrid = new Grid();
+
+			// query label
+			TextBlock pTxtLabel = new TextBlock();
+			pTxtLabel.Text = sClanName;
+			pTxtLabel.Foreground = new SolidColorBrush(Colors.White);
+			pTxtLabel.Padding = new Thickness(10);
+			pTxtLabel.HorizontalAlignment = HorizontalAlignment.Stretch;
+			pTxtLabel.MouseUp += delegate { this.ChangeActiveClan(sClanText); }; // NOTE: this is here because if on border, and user clicks on exit, it registers for both exit AND border!
+
+			// add all the things!
+			pGrid.Children.Add(pTxtLabel);
+			pBorder.Child = pGrid;
+			stkClanStack.Children.Add(pBorder);
+			m_dClanStackLabels.Add(sClanText, pBorder);
 		}
 
 		private void btnJoin_Click(object sender, RoutedEventArgs e)
@@ -94,30 +159,17 @@ namespace Client
 			blkLog.Text += sResponse + "\n";*/
 		}
 
+		private void btnJoinClan_MouseEnter(object sender, MouseEventArgs e) { btnJoinClan.Background = Master.BUTTON_HOVER; }
+		private void btnJoinClan_MouseLeave(object sender, MouseEventArgs e) { btnJoinClan.Background = Master.BUTTON_NORMAL; }
+		
 		private void btnJoinClan_MouseUp(object sender, MouseButtonEventArgs e)
 		{
-
+			JoinClan pJoinClan = new JoinClan();
+			pJoinClan.ShowDialog();
 		}
-
-		private void btnJoinClan_MouseEnter(object sender, MouseEventArgs e)
-		{
-
-		}
-
-		private void btnJoinClan_MouseLeave(object sender, MouseEventArgs e)
-		{
-
-		}
-
-		private void btnCreateClan_MouseLeave(object sender, MouseEventArgs e)
-		{
-
-		}
-
-		private void btnCreateClan_MouseEnter(object sender, MouseEventArgs e)
-		{
-
-		}
+		
+		private void btnCreateClan_MouseEnter(object sender, MouseEventArgs e) { btnCreateClan.Background = Master.BUTTON_HOVER; }
+		private void btnCreateClan_MouseLeave(object sender, MouseEventArgs e) { btnCreateClan.Background = Master.BUTTON_NORMAL; }
 
 		private void btnCreateClan_MouseUp(object sender, MouseButtonEventArgs e)
 		{

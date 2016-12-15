@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 using System.Windows.Media;
 
@@ -39,6 +40,19 @@ namespace Client
 	
 		public static string CleanResponse(string sResponse) { return sResponse.Trim('\"').Replace("\\\"", "\"").Replace("\\r", "\r").Replace("\\n", "\n").Replace("\\t", "\t").Replace("\\\\", "\\"); }
 		public static string EncodeXML(string sXML) { return sXML.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "&quot;").Replace("'", "&apos;"); }
+
+		public static XElement ReadResponse(string sResponse)
+		{
+			XElement pResponse = null;
+			try { pResponse = XElement.Parse(CleanResponse(sResponse)); }
+			catch (Exception e)
+			{
+				sResponse = "<Message Type='Error'><Text>" + e.Message + "</Text><Data /></Message>";
+				pResponse = XElement.Parse(sResponse);
+			}
+
+			return pResponse;
+		}
 	}
 
 }

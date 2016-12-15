@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="400" Width="650"
+        Title="MainWindow" Height="600" Width="800"
 		Background="#222222" TextOptions.TextFormattingMode="Display">
     <Grid>
 		<Grid.ColumnDefinitions>
@@ -36,16 +36,20 @@
 			</Grid>
 		</Border>
 
-		<!--<StackPanel>
-			<TextBox Name="txtUserName" />
-			<TextBox Name="txtPassword" />
-			<Button Name="btnListGames" Click="btnListGames_Click">ListGames</Button>
-			<TextBox Name="txtGameID" />
-			<Button Name="btnJoin" Click="btnJoin_Click">Join</Button>
-			<Button Name="btnStartGame" Click="btnStartGame_Click">Start</Button>
-			<TextBox Name="txtInput"></TextBox>
-			<TextBox Name="txtInput2"></TextBox>
-			<TextBox Name="blkLog" Height="100" TextWrapping="Wrap"></TextBox>
-		</StackPanel>-->
+		<!-- dashboard -->
+		<ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Hidden">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="3*" />
+					<ColumnDefinition Width="2*" />
+				</Grid.ColumnDefinitions>
+
+				<StackPanel Grid.Column="0">
+				</StackPanel>
+
+				<StackPanel Grid.Column="1">
+				</StackPanel>
+			</Grid>
+		</ScrollViewer>
     </Grid>
 </Window>

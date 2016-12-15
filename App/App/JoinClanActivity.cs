@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: JoinClanActivity.cs
 //  Date created: 12/11/2016
-//  Date edited: 12/12/2016
+//  Date edited: 12/15/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -49,10 +49,15 @@ namespace App
 				XElement pResponse = Master.ReadResponse(sResponse);
 				
 				//Master.Popup(this, pResponse.Element("Text").Value);
-				string sResponseMssage = pResponse.Element("Text").Value;
+				string sResponseMessage = pResponse.Element("Text").Value;
+
+
+				// TODO: even if user is already part of clan, need to check local clans file and make sure the data is there (and add it if not)
+
+				
 
 				var pBuilder = new AlertDialog.Builder(this);
-				pBuilder.SetMessage(sResponseMssage);
+				pBuilder.SetMessage(sResponseMessage);
 
 				if (pResponse.Attribute("Type").Value == "Error" || pResponse.Element("Data").Element("ClanStub") == null)
 				{
