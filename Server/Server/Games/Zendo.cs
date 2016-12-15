@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Zendo.cs
 //  Date created: 11/28/2016
-//  Date edited: 12/14/2016
+//  Date edited: 12/15/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: My implementation of the awesome game of Zendo!
@@ -703,13 +703,19 @@ namespace GameClansServer.Games
 
 		// message format:
 		// <Status></Status>
-		// <Action></Action> (join [join game], disabled [joined], initial koans [master only], disabled [waiting for initial koans, for students], build koan, predict koan, judge koan [master only], disabled [waiting for master judgement], disabled [waiting for master disproval], disabled [game over]
-		// <Event Log>
+		// <Action></Action> (join, waiting, initial, open, build, judge, predcit, disprove, final)
+		// <NumGuesses></NumGuesses>
+		// <Master></Master>
+		// <Players>
+		//		<Player>...
+		// </Players>
+		// <Events>
 		//		<Event>...
-		// </Event Log>
+		// </Events>
 		// <Koans>
 		//		<Koan>...
 		// </Koans>
+		// this function should be called for obtaining the game-dashboard. All pertinent game data is contained, as well as suggested/possible client action
 		public string GetUserBoard(string sGameID, string sClanName, string sUserName, string sUserPassPhrase)
 		{
 			string sResult = this.Prepare(sGameID, sClanName, sUserName, sUserPassPhrase, AuthenticationType.All);
@@ -717,6 +723,7 @@ namespace GameClansServer.Games
 
 			string sAction = "";
 			string sStatus = "";
+			string sStatusData = "";
 
 			// switches based on the game status and whether this player is playing or not and what their role is
 			if (m_sStateStatus == "setup")
@@ -737,7 +744,7 @@ namespace GameClansServer.Games
 			{
 				if (m_sMaster == sUserName)
 				{
-					sAction = "initial koans";
+					sAction = "initial";
 					sStatus = "The game has started, and you are the master! Create your rule and build the initial koans!";
 				}
 				else
@@ -757,16 +764,18 @@ namespace GameClansServer.Games
 				{
 					sAction = "build";
 					sStatus = "Build a koan and call either master or mondo!";
-					// TODO: way to display initial koans if those were the only koans so far?
+
+					// if only dealing with the initial two koans, display them to students
+					if (m_lKoans.Count == 2) { sStatusData += m_lKoans[0].Xml.ToString() + m_lKoans[1].Xml.ToString(); }
 				}
 			}
 			else if (m_sStateStatus == "pending master")
 			{
+				sStatusData = m_pPendingKoan.Xml.ToString();
 				if (m_sMaster == sUserName)
 				{
 					sAction = "judge";
 					sStatus = m_pPendingKoan.User + " has built a koan. Decide if it has the buddha-nature or not!";
-					// TODO: display koan
 				}
 				else
 				{
@@ -774,7 +783,6 @@ namespace GameClansServer.Games
 					{
 						sAction = "waiting";
 						sStatus = "Waiting for the master to decide if " + m_pPendingKoan.User + "'s koan has the buddha-nature...";
-						// TODO: display koan
 					}
 					else
 					{
@@ -794,15 +802,14 @@ namespace GameClansServer.Games
 			}
 			else if (m_sStateStatus == "pending students")
 			{
+				sStatusData = m_pPendingKoan.Xml.ToString(); 
 				if (m_sMaster == sUserName)
 				{
 					sAction = "waiting";
 					sStatus = m_pPendingKoan.User + " called mondo on their koan. Waiting for students to submit their predictions...";
-					// TODO: display koan
 				}
 				else
 				{
-					// TODO: display koan
 					if (!m_dMondoPredictions.Keys.Contains(sUserName))
 					{
 						sAction = "predict";
@@ -836,12 +843,27 @@ namespace GameClansServer.Games
 				sStatus = "Game over, " + sPhrase;
 			}
 
-			return "";
+			// return ze data
+			string sAllData = "<Status><Text>" + sStatus + "</Text><Data>" + sStatusData + "</Data></Status><Action>" + sAction + "</Action>" + this.GetKoansXml().ToString() + this.GetLogXml().ToString();
+			return Master.MessagifyData(sAllData);
 		}
 
-		//public string GetKoans(string s)
 
 		// inner methods
+
+		private XElement GetKoansXml()
+		{
+			XElement pKoans = new XElement("Koans");
+			foreach (ZendoKoan pKoan in m_lKoans) { pKoans.Add(pKoan.Xml); }
+			return pKoans;
+		}
+
+		private XElement GetLogXml()
+		{
+			XElement pLog = new XElement("Events");
+			foreach (ZendoLogEvent pEvent in m_lEventLog) { pLog.Add(pEvent.Xml); }
+			return pLog;
+		}
 
 		private void GameOver()
 		{
