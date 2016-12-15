@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: BaseActivity.cs
 //  Date created: 12/9/2016
-//  Date edited: 12/13/2016
+//  Date edited: 12/15/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: Base activity that other activities should extend to the same drawer layouts
@@ -24,7 +24,7 @@ using Android.Support.V4.Widget;
 namespace App
 {
 	[Activity(Label = "BaseActivity")]
-	public class BaseActivity : Activity
+	public class BaseActivity : Activity, ScrollView.IOnScrollChangeListener
 	{
 
 		private List<string> m_lNavTitles;
@@ -79,6 +79,14 @@ namespace App
 				this.Finish();
 				StartActivity(pIntent);
 			};
+		}
+
+		// enables the pull-down-to-refresh ONLY when scroll is all the way at the top of the page
+		public void OnScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY)
+		{
+			SwipeRefreshLayout pRefresher = FindViewById<SwipeRefreshLayout>(Resource.Id.refresher);
+			if (scrollY == 0) { pRefresher.Enabled = true; }
+			else { pRefresher.Enabled = false; }
 		}
 	}
 }

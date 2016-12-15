@@ -35,12 +35,14 @@ namespace App
 
 			base.CreateDrawer();
 
-			//refresher = FindViewById
-			SwipeRefreshLayout refresh = FindViewById<SwipeRefreshLayout>(Resource.Id.refresher);
-			refresh.Refresh += delegate
+			ScrollView pMainScroll = FindViewById<ScrollView>(Resource.Id.scrlZendoMain);
+			pMainScroll.SetOnScrollChangeListener(this);
+
+			SwipeRefreshLayout pRefresher = FindViewById<SwipeRefreshLayout>(Resource.Id.refresher);
+			pRefresher.Refresh += delegate
 			{
 				// do things here!
-				refresh.Refreshing = false;
+				pRefresher.Refreshing = false;
 			};
 		}
 	}
