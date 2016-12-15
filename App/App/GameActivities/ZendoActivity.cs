@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: ZendoActivity.cs
 //  Date created: 12/13/2016
-//  Date edited: 12/14/2016
+//  Date edited: 12/15/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -19,6 +19,8 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
+using Android.Support.V4.Widget;
+
 namespace App
 {
 	[Activity(Label = "Zendo Game")]
@@ -32,6 +34,14 @@ namespace App
 			// Create your application here
 
 			base.CreateDrawer();
+
+			//refresher = FindViewById
+			SwipeRefreshLayout refresh = FindViewById<SwipeRefreshLayout>(Resource.Id.refresher);
+			refresh.Refresh += delegate
+			{
+				// do things here!
+				refresh.Refreshing = false;
+			};
 		}
 	}
 }

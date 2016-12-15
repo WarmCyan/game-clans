@@ -72,12 +72,15 @@ namespace Client
 		
 		public void BuildDashboard()
 		{
+			// clear everything out from the games panel
 			stkActiveGames.Children.Clear();
 			if (Master.GetActiveClan() == "") { return; }
 
+			// query the server
 			string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer/ClanServer/ListActiveGames", Master.BuildCommonBody(), true);
 			XElement pResponse = Master.ReadResponse(sResponse);
 
+			// handle the games list
 			m_lGames = new List<string>();
 			m_lGameIDs = new List<string>();
 
@@ -89,7 +92,6 @@ namespace Client
 					m_lGames.Add(pGame.Attribute("GameType").Value);
 				}
 			}
-
 			for (int i = 0; i < m_lGames.Count; i++) 
 			{
 				int iIndex = i;
@@ -117,9 +119,11 @@ namespace Client
 
 		public void ChangeActiveClan(string sClanText) // NOTE: clantext includes both clan name and username
 		{
+			// determine parts of the text
 			string sClanName = sClanText.Substring(0, sClanText.IndexOf("|"));
 			string sUserName = sClanText.Substring(sClanText.IndexOf("|") + 1);
 
+			// set currently active components
 			Master.SetActiveClan(sClanName);
 			Master.SetActiveUserName(sUserName);
 
