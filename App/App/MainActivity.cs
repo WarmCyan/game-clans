@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: MainActivity.cs
 //  Date created: 12/9/2016
-//  Date edited: 12/13/2016
+//  Date edited: 12/16/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -66,7 +66,8 @@ namespace App
 		private void BuildHomeDashboard()
 		{
 			// get the scoreboard from the server
-			string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer/ClanServer/GetClanLeaderboard", Master.BuildCommonBody(), true);
+			//string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer/ClanServer/GetClanLeaderboard", Master.BuildCommonBody(), true);
+			string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetServerURL() + "GetClanLeaderboard", Master.BuildCommonBody(), true);
 			XElement pResponse = Master.ReadResponse(sResponse);
 
 			if (pResponse.Element("Data").Element("Leaderboard") != null)

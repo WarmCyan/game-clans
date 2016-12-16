@@ -44,7 +44,8 @@ namespace App
 				_hidden.InitializeWeb();
 				string sUserPass = File.ReadAllText(Master.GetBaseDir() + "_key.dat");
 				string sBody = "<params><param name='sClanName'>" + pClan.Text.ToString() + "</param><param name='sClanPassPhrase'>" + pPass.Text.ToString() + "</param><param name='sUserName'>" + pUser.Text.ToString() + "</param><param name='sUserPassPhrase'>" + sUserPass +  "</param></params>";
-				string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer/ClanServer/JoinClan", sBody, true);
+				//string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer/ClanServer/JoinClan", sBody, true);
+				string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetServerURL() + "JoinClan", sBody, true);
 
 				XElement pResponse = Master.ReadResponse(sResponse);
 				

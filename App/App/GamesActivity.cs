@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: GamesActivity.cs
 //  Date created: 12/13/2016
-//  Date edited: 12/14/2016
+//  Date edited: 12/16/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -38,7 +38,8 @@ namespace App
 			// get the games list
 			if (Master.GetActiveClan() != "")
 			{
-				string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer/ClanServer/ListActiveGames", Master.BuildCommonBody(), true);
+				//string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer/ClanServer/ListActiveGames", Master.BuildCommonBody(), true);
+				string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetServerURL() + "ListActiveGames", Master.BuildCommonBody(), true);
 				XElement pResponse = Master.ReadResponse(sResponse);
 
 				List<string> lGames = new List<string>();

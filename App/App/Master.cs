@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: Master.cs
 //  Date created: 12/9/2016
-//  Date edited: 12/13/2016
+//  Date edited: 12/16/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -41,6 +41,10 @@ namespace App
 			return s_sBaseDir + "/";
 		}
 
+		public static string GetBaseURL() { return "http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/"; }
+		public static string GetServerURL() { return "GameClansServer/ClanServer/"; }
+		public static string GetGameURL(string sGame) { return "GameClansServer.Games/" + sGame + "/"; }
+
 		public static void SetActiveClan(string sClanName) { s_sActiveClan = sClanName; } 
 		public static string GetActiveClan() { return s_sActiveClan; }
 
@@ -65,6 +69,8 @@ namespace App
 		{
 			return "<params><param name='sClanName'>" + s_sActiveClan + "</param><param name='sUserName'>" + s_sActiveUserName + "</param><param name='sUserPassPhrase'>" + s_sKey + "</param>" + sOtherXML + "</params>";
 		}
+
+		public static string BuildGameIDBodyPart(string sGameID) { return "<param name='sGameID'>" + sGameID + "</param>"; }
 
 		public static XElement ReadResponse(string sResponse)
 		{

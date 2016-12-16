@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Zendo.cs
 //  Date created: 11/28/2016
-//  Date edited: 12/15/2016
+//  Date edited: 12/16/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: My implementation of the awesome game of Zendo!
@@ -843,8 +843,20 @@ namespace GameClansServer.Games
 				sStatus = "Game over, " + sPhrase;
 			}
 
+			// get number of guessing stones
+			int iNumStones = 0;
+			foreach (ZendoUser pUser in m_lStudents)
+			{
+				if (pUser.UserName == sUserName) { iNumStones = pUser.GuessingStones; }
+			}
+
+			// build players list
+			string sPlayers = "<Players>";
+			foreach (string sPlayer in m_lPlayerNames) { sPlayers += "<Player>" + sPlayer + "</Player>"; }
+			sPlayers += "</Players>";
+
 			// return ze data
-			string sAllData = "<Status><Text>" + sStatus + "</Text><Data>" + sStatusData + "</Data></Status><Action>" + sAction + "</Action>" + this.GetKoansXml().ToString() + this.GetLogXml().ToString();
+			string sAllData = "<Status><Text>" + sStatus + "</Text><Data>" + sStatusData + "</Data></Status><Action>" + sAction + "</Action><Master>" + m_sMaster + "</Master><NumGuesses>" + iNumStones.ToString() + "</NumGuesses>" + sPlayers + this.GetKoansXml().ToString() + this.GetLogXml().ToString();
 			return Master.MessagifyData(sAllData);
 		}
 

@@ -74,30 +74,33 @@
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
-    <AndroidResource Include="Resources\layout\ListViewItemRow.axml">
+    <AndroidResource Include="Resources\layout\ListViewItemRow.xml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\Groups.axml">
+    <AndroidResource Include="Resources\layout\Groups.xml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\JoinGroup.axml">
+    <AndroidResource Include="Resources\layout\JoinGroup.xml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\Key.axml">
+    <AndroidResource Include="Resources\layout\Key.xml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\ScoreRow.axml">
+    <AndroidResource Include="Resources\layout\ScoreRow.xml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\Games.axml">
+    <AndroidResource Include="Resources\layout\Games.xml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\Game_Zendo.axml">
+    <AndroidResource Include="Resources\layout\Game_Zendo.xml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\DataRow.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\Main.axml" />
+    <AndroidResource Include="Resources\layout\Main.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />
