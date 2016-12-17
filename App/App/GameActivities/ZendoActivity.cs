@@ -56,6 +56,18 @@ namespace App
 
 			m_sGameID = this.Intent.Action;
 			this.GetUserBoard();
+
+
+			Button pStartButton = FindViewById<Button>(Resource.Id.btnStart);
+			pStartButton.Click += delegate
+			{
+				//string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID));
+				string sBody = "<params><param name='sGameID'>" + m_sGameID + "</param></params>";
+				string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "StartGame", sBody, true);
+
+				// TODO: handle response message
+				this.GetUserBoard();
+			};
 		}
 
 		private void GetUserBoard()
@@ -102,30 +114,38 @@ namespace App
 			else if (sAction == "initial")
 			{
 				pActionButton.Text = "Create Initial Koans";
-
-				Intent pIntent = new Intent(this, (new ZendoCreateRuleActivity()).Class);
-				this.StartActivityForResult(pIntent, 0);
+				pActionButton.Click += delegate
+				{
+					Intent pIntent = new Intent(this, (new ZendoCreateRuleActivity()).Class);
+					this.StartActivityForResult(pIntent, 0);
+				};
 			}
 			else if (sAction == "open")
 			{
 				pActionButton.Text = "Build Koan";
-
-				Intent pIntent = new Intent(this, (new ZendoBuildKoanActivity()).Class);
-				this.StartActivityForResult(pIntent, 0);
+				pActionButton.Click += delegate
+				{
+					Intent pIntent = new Intent(this, (new ZendoBuildKoanActivity()).Class);
+					this.StartActivityForResult(pIntent, 0);
+				};
 			}
 			else if (sAction == "judge")
 			{
 				pActionButton.Text = "Analyze Koan";
-
-				Intent pIntent = new Intent(this, (new ZendoJudgeKoanActivity()).Class);
-				this.StartActivityForResult(pIntent, 0);
+				pActionButton.Click += delegate
+				{
+					Intent pIntent = new Intent(this, (new ZendoJudgeKoanActivity()).Class);
+					this.StartActivityForResult(pIntent, 0);
+				};
 			}
 			else if (sAction == "predict")
 			{
 				pActionButton.Text = "Predict Master's Analysis";
-
-				Intent pIntent = new Intent(this, (new ZendoPredictActivity()).Class);
-				this.StartActivityForResult(pIntent, 0);
+				pActionButton.Click += delegate
+				{
+					Intent pIntent = new Intent(this, (new ZendoPredictActivity()).Class);
+					this.StartActivityForResult(pIntent, 0);
+				};
 			}
 			else if (sAction == "disprove")
 			{

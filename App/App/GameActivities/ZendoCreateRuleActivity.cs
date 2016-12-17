@@ -27,8 +27,16 @@ namespace App
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
+			this.SetContentView(Resource.Layout.Game_ZendoCreateRule);
 
 			// Create your application here
+
+			LinearLayout pImageRow = FindViewById<LinearLayout>(Resource.Id.lstKoanImages);
+
+			ImageView pView1 = new ImageView(this);
+			pView1.SetImageResource(Resource.Drawable.BD);
+
+			pImageRow.AddView(pView1);
 		}
 	}
 }

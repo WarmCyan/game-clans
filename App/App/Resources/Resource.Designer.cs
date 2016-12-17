@@ -45,7 +45,85 @@ namespace App
 		{
 			
 			// aapt resource value: 0x7f020000
-			public const int Icon = 2130837504;
+			public const int BD = 2130837504;
+			
+			// aapt resource value: 0x7f020001
+			public const int BL = 2130837505;
+			
+			// aapt resource value: 0x7f020002
+			public const int BR = 2130837506;
+			
+			// aapt resource value: 0x7f020003
+			public const int BU = 2130837507;
+			
+			// aapt resource value: 0x7f020004
+			public const int F = 2130837508;
+			
+			// aapt resource value: 0x7f020005
+			public const int GD = 2130837509;
+			
+			// aapt resource value: 0x7f020006
+			public const int GL = 2130837510;
+			
+			// aapt resource value: 0x7f020007
+			public const int GR = 2130837511;
+			
+			// aapt resource value: 0x7f020008
+			public const int GU = 2130837512;
+			
+			// aapt resource value: 0x7f020009
+			public const int Icon = 2130837513;
+			
+			// aapt resource value: 0x7f02000a
+			public const int OD = 2130837514;
+			
+			// aapt resource value: 0x7f02000b
+			public const int OL = 2130837515;
+			
+			// aapt resource value: 0x7f02000c
+			public const int OR = 2130837516;
+			
+			// aapt resource value: 0x7f02000d
+			public const int OU = 2130837517;
+			
+			// aapt resource value: 0x7f02000e
+			public const int PD = 2130837518;
+			
+			// aapt resource value: 0x7f02000f
+			public const int PL = 2130837519;
+			
+			// aapt resource value: 0x7f020010
+			public const int PR = 2130837520;
+			
+			// aapt resource value: 0x7f020011
+			public const int PU = 2130837521;
+			
+			// aapt resource value: 0x7f020012
+			public const int RD = 2130837522;
+			
+			// aapt resource value: 0x7f020013
+			public const int RL = 2130837523;
+			
+			// aapt resource value: 0x7f020014
+			public const int RR = 2130837524;
+			
+			// aapt resource value: 0x7f020015
+			public const int RU = 2130837525;
+			
+			// aapt resource value: 0x7f020016
+			public const int T = 2130837526;
+			
+			// aapt resource value: 0x7f020017
+			public const int YD = 2130837527;
+			
+			// aapt resource value: 0x7f020018
+			public const int YL = 2130837528;
+			
+			// aapt resource value: 0x7f020019
+			public const int YR = 2130837529;
+			
+			// aapt resource value: 0x7f02001a
+			public const int YU = 2130837530;
 			
 			static Drawable()
 			{
@@ -63,8 +141,8 @@ namespace App
 			// aapt resource value: 0x7f050002
 			public const int appDrawerLayout = 2131034114;
 			
-			// aapt resource value: 0x7f050015
-			public const int appDrawerList = 2131034133;
+			// aapt resource value: 0x7f050016
+			public const int appDrawerList = 2131034134;
 			
 			// aapt resource value: 0x7f050008
 			public const int boxGameLog = 2131034120;
@@ -87,44 +165,50 @@ namespace App
 			// aapt resource value: 0x7f050007
 			public const int btnGuess = 2131034119;
 			
-			// aapt resource value: 0x7f050017
-			public const int btnJoin = 2131034135;
+			// aapt resource value: 0x7f050019
+			public const int btnJoin = 2131034137;
 			
 			// aapt resource value: 0x7f05000e
 			public const int btnPreviousGuesses = 2131034126;
 			
-			// aapt resource value: 0x7f050020
-			public const int btnSetPassword = 2131034144;
+			// aapt resource value: 0x7f050022
+			public const int btnSetPassword = 2131034146;
 			
-			// aapt resource value: 0x7f05001d
-			public const int btnSubmitJoin = 2131034141;
+			// aapt resource value: 0x7f050015
+			public const int btnStart = 2131034133;
+			
+			// aapt resource value: 0x7f05001f
+			public const int btnSubmitJoin = 2131034143;
 			
 			// aapt resource value: 0x7f050013
 			public const int btnZendoRules = 2131034131;
 			
-			// aapt resource value: 0x7f050019
-			public const int clansList = 2131034137;
+			// aapt resource value: 0x7f05001b
+			public const int clansList = 2131034139;
 			
-			// aapt resource value: 0x7f050016
-			public const int gamesList = 2131034134;
-			
-			// aapt resource value: 0x7f050023
-			public const int lblMyStatsName = 2131034147;
-			
-			// aapt resource value: 0x7f050024
-			public const int lblMyStatsPlace = 2131034148;
+			// aapt resource value: 0x7f050018
+			public const int gamesList = 2131034136;
 			
 			// aapt resource value: 0x7f050025
-			public const int lblMyStatsScore = 2131034149;
+			public const int lblMyStatsName = 2131034149;
 			
-			// aapt resource value: 0x7f050028
-			public const int lblScoreName = 2131034152;
+			// aapt resource value: 0x7f050026
+			public const int lblMyStatsPlace = 2131034150;
 			
-			// aapt resource value: 0x7f050029
-			public const int lblScorePlace = 2131034153;
+			// aapt resource value: 0x7f050027
+			public const int lblMyStatsScore = 2131034151;
 			
 			// aapt resource value: 0x7f05002a
-			public const int lblScoreScore = 2131034154;
+			public const int lblScoreName = 2131034154;
+			
+			// aapt resource value: 0x7f05002b
+			public const int lblScorePlace = 2131034155;
+			
+			// aapt resource value: 0x7f05002c
+			public const int lblScoreScore = 2131034156;
+			
+			// aapt resource value: 0x7f050017
+			public const int lstKoanImages = 2131034135;
 			
 			// aapt resource value: 0x7f05000d
 			public const int lstKoans = 2131034125;
@@ -135,14 +219,14 @@ namespace App
 			// aapt resource value: 0x7f050012
 			public const int lstPlayers = 2131034130;
 			
-			// aapt resource value: 0x7f050027
-			public const int lstScoreBoard = 2131034151;
+			// aapt resource value: 0x7f050029
+			public const int lstScoreBoard = 2131034153;
 			
 			// aapt resource value: 0x7f050001
 			public const int refresher = 2131034113;
 			
-			// aapt resource value: 0x7f050021
-			public const int relativeLayoutThing = 2131034145;
+			// aapt resource value: 0x7f050023
+			public const int relativeLayoutThing = 2131034147;
 			
 			// aapt resource value: 0x7f05000c
 			public const int scrlKoans = 2131034124;
@@ -153,26 +237,26 @@ namespace App
 			// aapt resource value: 0x7f050011
 			public const int scrlPlayers = 2131034129;
 			
-			// aapt resource value: 0x7f050026
-			public const int scrlScoreBoard = 2131034150;
+			// aapt resource value: 0x7f050028
+			public const int scrlScoreBoard = 2131034152;
 			
 			// aapt resource value: 0x7f050003
 			public const int scrlZendoMain = 2131034115;
 			
-			// aapt resource value: 0x7f050022
-			public const int textViewName = 2131034146;
+			// aapt resource value: 0x7f050024
+			public const int textViewName = 2131034148;
 			
-			// aapt resource value: 0x7f05001a
-			public const int txtClanName = 2131034138;
+			// aapt resource value: 0x7f05001c
+			public const int txtClanName = 2131034140;
 			
-			// aapt resource value: 0x7f05001b
-			public const int txtClanPassword = 2131034139;
+			// aapt resource value: 0x7f05001d
+			public const int txtClanPassword = 2131034141;
 			
 			// aapt resource value: 0x7f050005
 			public const int txtGameStatus = 2131034117;
 			
-			// aapt resource value: 0x7f050018
-			public const int txtLabel = 2131034136;
+			// aapt resource value: 0x7f05001a
+			public const int txtLabel = 2131034138;
 			
 			// aapt resource value: 0x7f05000f
 			public const int txtMaster = 2131034127;
@@ -180,14 +264,14 @@ namespace App
 			// aapt resource value: 0x7f050000
 			public const int txtText = 2131034112;
 			
-			// aapt resource value: 0x7f05001c
-			public const int txtUserName = 2131034140;
-			
 			// aapt resource value: 0x7f05001e
-			public const int txtUserPassword = 2131034142;
+			public const int txtUserName = 2131034142;
 			
-			// aapt resource value: 0x7f05001f
-			public const int txtUserPassword2 = 2131034143;
+			// aapt resource value: 0x7f050020
+			public const int txtUserPassword = 2131034144;
+			
+			// aapt resource value: 0x7f050021
+			public const int txtUserPassword2 = 2131034145;
 			
 			static Id()
 			{
@@ -209,25 +293,28 @@ namespace App
 			public const int Game_Zendo = 2130903041;
 			
 			// aapt resource value: 0x7f030002
-			public const int Games = 2130903042;
+			public const int Game_ZendoCreateRule = 2130903042;
 			
 			// aapt resource value: 0x7f030003
-			public const int Groups = 2130903043;
+			public const int Games = 2130903043;
 			
 			// aapt resource value: 0x7f030004
-			public const int JoinGroup = 2130903044;
+			public const int Groups = 2130903044;
 			
 			// aapt resource value: 0x7f030005
-			public const int Key = 2130903045;
+			public const int JoinGroup = 2130903045;
 			
 			// aapt resource value: 0x7f030006
-			public const int ListViewItemRow = 2130903046;
+			public const int Key = 2130903046;
 			
 			// aapt resource value: 0x7f030007
-			public const int Main = 2130903047;
+			public const int ListViewItemRow = 2130903047;
 			
 			// aapt resource value: 0x7f030008
-			public const int ScoreRow = 2130903048;
+			public const int Main = 2130903048;
+			
+			// aapt resource value: 0x7f030009
+			public const int ScoreRow = 2130903049;
 			
 			static Layout()
 			{
