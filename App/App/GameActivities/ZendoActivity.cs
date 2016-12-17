@@ -102,18 +102,30 @@ namespace App
 			else if (sAction == "initial")
 			{
 				pActionButton.Text = "Create Initial Koans";
+
+				Intent pIntent = new Intent(this, (new ZendoCreateRuleActivity()).Class);
+				this.StartActivityForResult(pIntent, 0);
 			}
 			else if (sAction == "open")
 			{
 				pActionButton.Text = "Build Koan";
+
+				Intent pIntent = new Intent(this, (new ZendoBuildKoanActivity()).Class);
+				this.StartActivityForResult(pIntent, 0);
 			}
 			else if (sAction == "judge")
 			{
 				pActionButton.Text = "Analyze Koan";
+
+				Intent pIntent = new Intent(this, (new ZendoJudgeKoanActivity()).Class);
+				this.StartActivityForResult(pIntent, 0);
 			}
 			else if (sAction == "predict")
 			{
 				pActionButton.Text = "Predict Master's Analysis";
+
+				Intent pIntent = new Intent(this, (new ZendoPredictActivity()).Class);
+				this.StartActivityForResult(pIntent, 0);
 			}
 			else if (sAction == "disprove")
 			{
@@ -153,6 +165,62 @@ namespace App
 				pDataText.Text = sPlayer;
 
 				pPlayersLayout.AddView(pDataRow);
+			}
+		}
+
+		protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+		{
+			base.OnActivityResult(requestCode, resultCode, data);
+			if (resultCode == Result.Ok)
+			{
+				// TODO: HANDLE EXTRA HERE
+				string sType = data.GetStringExtra("Type");
+
+				if (sType == "initial")
+				{
+					string sRule = data.GetStringExtra("Rule");
+					string sInitialCorrectKoan = data.GetStringExtra("CorrectKoan");
+					string sInitialIncorrectKoan = data.GetStringExtra("IncorrectKoan");
+
+					string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='sRule'>" + sRule + "</param><param name='sBuddhaNatureKoan'>" + sInitialCorrectKoan + "</param><param name='sNonBuddhaNatureKoan'>" + sInitialIncorrectKoan + "</param>");
+					string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitInitialKoans", sBody, true);
+					if (sResponse != "") { XElement pResponse = Master.ReadResponse(sResponse); } // what is this on success??
+
+					this.GetUserBoard();
+				}
+				else if (sType == "build")
+				{
+					string sKoan = data.GetStringExtra("Koan");
+					bool bMondo = data.GetBooleanExtra("Mondo", false);
+
+					string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='sKoan'>" + sKoan + "</param>");
+
+					string sResponse = "";
+					if (!bMondo) { sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitKoan", sBody, true); }
+					if (sResponse != "") { XElement pResponse = Master.ReadResponse(sResponse); }
+
+					this.GetUserBoard();
+				}
+				else if (sType == "analysis")
+				{
+					bool bHasBuddhaNature = data.GetBooleanExtra("HasBuddhaNature", false);
+
+					string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='bHasBuddhaNature'>" + bHasBuddhaNature + "</param>");
+					string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitPendingKoanAnalysis", sBody, true);
+					if (sResponse != "") { XElement pResponse = Master.ReadResponse(sResponse); }
+
+					this.GetUserBoard();
+				}
+				else if (sType == "predict")
+				{
+					bool bPrediction = data.GetBooleanExtra("Prediction", false);
+
+					string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='bPrediction'>" + bPrediction + "</param>");
+					string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitMondoPrediction", sBody, true);
+					if (sResponse != "") { XElement pResponse = Master.ReadResponse(sResponse); }
+
+					this.GetUserBoard();
+				}
 			}
 		}
 	}
