@@ -89,7 +89,7 @@ namespace App
 			else if (sName == "YD") { return Resource.Drawable.YD; }
 			else if (sName == "YL") { return Resource.Drawable.YL; }
 			else if (sName == "YR") { return Resource.Drawable.YR; }
-			else if (sName == "YD") { return Resource.Drawable.YD; }
+			else if (sName == "YU") { return Resource.Drawable.YU; }
 			else if (sName == "T") { return Resource.Drawable.T; }
 			else if (sName == "F") { return Resource.Drawable.F; }
 

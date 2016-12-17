@@ -40,13 +40,6 @@
                 android:layout_margin="20dp"
                 android:textSize="15dp"
                 android:text="Create an example koan that follows your rule (has buddha-nature)" />
-        <!--<LinearLayout
-                android:id="@+id/lstKoanImagesGood"
-                android:layout_margin="5dp"
-                android:layout_marginBottom="0dp"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />-->
             <app.FlowLayout
                 android:id="@+id/lstKoanImagesGood"
                 android:layout_margin="5dp"
@@ -67,7 +60,7 @@
                 android:layout_margin="20dp"
                 android:textSize="15dp"
                 android:text="Create an example koan that does NOT follow your rule (does not have buddha-nature)" />
-            <LinearLayout
+            <app.FlowLayout
                 android:id="@+id/lstKoanImagesBad"
                 android:layout_margin="5dp"
                 android:layout_marginBottom="0dp"
