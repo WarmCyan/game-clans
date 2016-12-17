@@ -11,11 +11,82 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <LinearLayout
-                android:id="@+id/lstKoanImages"
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:textSize="15dp"
+                android:text="Type in your rule that determines whether a koan has buddha-nature or not. Don't make it too complex! A rule is always harder to figure out than you think! Hit the button below for examples/suggestions." />
+            <EditText
+                android:id="@+id/txtRule"
+                android:layout_margin="10dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/btnExampleRules"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="Example Rules" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:textSize="15dp"
+                android:text="Reminder: every part of a koan consists of [color letter][direction letter], so BU represents a blue arrow pointing up." />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:textSize="15dp"
+                android:text="Create an example koan that follows your rule (has buddha-nature)" />
+        <!--<LinearLayout
+                android:id="@+id/lstKoanImagesGood"
+                android:layout_margin="5dp"
+                android:layout_marginBottom="0dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />-->
+            <app.FlowLayout
+                android:id="@+id/lstKoanImagesGood"
+                android:layout_margin="5dp"
+                android:layout_marginBottom="0dp"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/txtGoodKoan"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="5dp" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:textSize="15dp"
+                android:text="Create an example koan that does NOT follow your rule (does not have buddha-nature)" />
+            <LinearLayout
+                android:id="@+id/lstKoanImagesBad"
+                android:layout_margin="5dp"
+                android:layout_marginBottom="0dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/txtBadKoan"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="5dp" />
+            <Button
+                android:id="@+id/btnSubmitInitial"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="Submit" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

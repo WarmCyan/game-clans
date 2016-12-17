@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="BaseActivity.cs" />
     <Compile Include="DrawerItemCustomAdapter.cs" />
+    <Compile Include="FlowLayout.cs" />
     <Compile Include="GameActivities\ZendoBuildKoanActivity.cs" />
     <Compile Include="GameActivities\ZendoCreateRuleActivity.cs" />
     <Compile Include="GameActivities\ZendoActivity.cs" />

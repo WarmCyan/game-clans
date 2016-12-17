@@ -24,6 +24,13 @@ namespace App
 	[Activity(Label = "CreateRule")]
 	public class ZendoCreateRuleActivity : Activity
 	{
+		// member variables
+		private EditText m_pGoodKoan;
+		private EditText m_pBadKoan;
+
+		private FlowLayout m_pImageRowGood;
+		private LinearLayout m_pImageRowBad;
+		
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
@@ -31,12 +38,47 @@ namespace App
 
 			// Create your application here
 
-			LinearLayout pImageRow = FindViewById<LinearLayout>(Resource.Id.lstKoanImages);
+			EditText pRule = FindViewById<EditText>(Resource.Id.txtRule);
+			
+			m_pImageRowGood = FindViewById<FlowLayout>(Resource.Id.lstKoanImagesGood);
+			m_pGoodKoan = FindViewById<EditText>(Resource.Id.txtGoodKoan);
+			
+			/*ImageView pViewGood1 = new ImageView(this);
+			pViewGood1.SetImageResource(Resource.Drawable.T);
+			pImageRowGood.AddView(pViewGood1);*/
 
-			ImageView pView1 = new ImageView(this);
-			pView1.SetImageResource(Resource.Drawable.BD);
+			m_pImageRowBad = FindViewById<LinearLayout>(Resource.Id.lstKoanImagesBad);
+			m_pBadKoan = FindViewById<EditText>(Resource.Id.txtBadKoan);
+			
+			/*ImageView pViewBad1 = new ImageView(this);
+			pViewBad1.SetImageResource(Resource.Drawable.F);
+			pImageRowBad.AddView(pViewBad1);*/
+			
+			m_pGoodKoan.TextChanged += delegate { this.FillGoodKoan(); };
 
-			pImageRow.AddView(pView1);
+			this.FillGoodKoan();
+		}
+
+		private void FillGoodKoan()
+		{
+			// clear current koan
+			m_pImageRowGood.RemoveAllViews();
+			
+			string sKoan = "T" + m_pGoodKoan.Text;
+
+			// TODO: display if there's an error
+
+			// get the list of pieces and for each one insert the image into the layout
+			List<string> lPieces = Master.GetPieceParts(sKoan);
+			foreach (string sPiece in lPieces)
+			{
+				int iRes = Master.GetPieceImage(sPiece);
+				if (iRes == 0) { continue; }
+				
+				ImageView pView = new ImageView(this);
+				pView.SetImageResource(iRes);
+				m_pImageRowGood.AddView(pView);
+			}
 		}
 	}
 }

@@ -64,6 +64,59 @@ namespace App
 			pBuilder.Create().Show();
 		}
 
+		public static int GetPieceImage(string sName)
+		{
+			if (sName == "BD") { return Resource.Drawable.BD; }
+			else if (sName == "BL") { return Resource.Drawable.BL; }
+			else if (sName == "BR") { return Resource.Drawable.BR; }
+			else if (sName == "BU") { return Resource.Drawable.BU; }
+			else if (sName == "GD") { return Resource.Drawable.GD; }
+			else if (sName == "GL") { return Resource.Drawable.GL; }
+			else if (sName == "GR") { return Resource.Drawable.GR; }
+			else if (sName == "GU") { return Resource.Drawable.GU; }
+			else if (sName == "OD") { return Resource.Drawable.OD; }
+			else if (sName == "OL") { return Resource.Drawable.OL; }
+			else if (sName == "OR") { return Resource.Drawable.OR; }
+			else if (sName == "OU") { return Resource.Drawable.OU; }
+			else if (sName == "PD") { return Resource.Drawable.PD; }
+			else if (sName == "PL") { return Resource.Drawable.PL; }
+			else if (sName == "PR") { return Resource.Drawable.PR; }
+			else if (sName == "PU") { return Resource.Drawable.PU; }
+			else if (sName == "RD") { return Resource.Drawable.RD; }
+			else if (sName == "RL") { return Resource.Drawable.RL; }
+			else if (sName == "RR") { return Resource.Drawable.RR; }
+			else if (sName == "RU") { return Resource.Drawable.RU; }
+			else if (sName == "YD") { return Resource.Drawable.YD; }
+			else if (sName == "YL") { return Resource.Drawable.YL; }
+			else if (sName == "YR") { return Resource.Drawable.YR; }
+			else if (sName == "YD") { return Resource.Drawable.YD; }
+			else if (sName == "T") { return Resource.Drawable.T; }
+			else if (sName == "F") { return Resource.Drawable.F; }
+
+			return 0;
+		}
+
+		public static List<string> GetPieceParts(string sText)
+		{
+			sText = sText.ToUpper();
+			List<string> lParts = new List<string>();
+
+			if (sText.StartsWith("T") || sText.StartsWith("F"))
+			{
+				lParts.Add(sText[0].ToString());
+				if (sText.Length > 1) { sText = sText.Substring(1); }
+			}
+
+			for (int i = 0; i < sText.Length; i += 2)
+			{
+				if (i + 1 >= sText.Length) { break; }
+				string sPiece = sText[i].ToString() + sText[i + 1].ToString();
+				lParts.Add(sPiece);
+			}
+
+			return lParts;
+		}
+
 		public static string BuildCommonBody() { return BuildCommonBody(""); }
 		public static string BuildCommonBody(string sOtherXML)
 		{
