@@ -204,7 +204,15 @@ namespace App
 
 					string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='sRule'>" + sRule + "</param><param name='sBuddhaNatureKoan'>" + sInitialCorrectKoan + "</param><param name='sNonBuddhaNatureKoan'>" + sInitialIncorrectKoan + "</param>");
 					string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitInitialKoans", sBody, true);
-					if (sResponse != "") { XElement pResponse = Master.ReadResponse(sResponse); } // what is this on success??
+					if (sResponse != "") 
+					{ 
+						XElement pResponse = Master.ReadResponse(sResponse);
+						var pBuilder = new AlertDialog.Builder(this);
+						pBuilder.SetMessage(pResponse.Element("Text").Value);
+						pBuilder.SetPositiveButton("Ok", (e, s) => { return; });
+						pBuilder.Show();
+						return;
+					} 
 
 					this.GetUserBoard();
 				}

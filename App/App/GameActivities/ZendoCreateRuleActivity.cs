@@ -39,24 +39,43 @@ namespace App
 			// Create your application here
 
 			EditText pRule = FindViewById<EditText>(Resource.Id.txtRule);
+			Button pSubmit = FindViewById<Button>(Resource.Id.btnSubmitInitial);
 			
+			// get the good koan elements
 			m_pImageRowGood = FindViewById<FlowLayout>(Resource.Id.lstKoanImagesGood);
 			m_pGoodKoan = FindViewById<EditText>(Resource.Id.txtGoodKoan);
 			
-			/*ImageView pViewGood1 = new ImageView(this);
-			pViewGood1.SetImageResource(Resource.Drawable.T);
-			pImageRowGood.AddView(pViewGood1);*/
-
+			// get the bad koan elements
 			m_pImageRowBad = FindViewById<FlowLayout>(Resource.Id.lstKoanImagesBad);
 			m_pBadKoan = FindViewById<EditText>(Resource.Id.txtBadKoan);
 			
-			/*ImageView pViewBad1 = new ImageView(this);
-			pViewBad1.SetImageResource(Resource.Drawable.F);
-			pImageRowBad.AddView(pViewBad1);*/
-			
+			// add element event handlers
 			m_pGoodKoan.TextChanged += delegate { this.FillGoodKoan(); };
 			m_pBadKoan.TextChanged += delegate { this.FillBadKoan(); };
 
+			pSubmit.Click += delegate
+			{
+				if (m_pGoodKoan.Text == "" || m_pBadKoan.Text == "" || pRule.Text == "")
+				{
+					var pBuilder = new AlertDialog.Builder(this);
+					pBuilder.SetMessage("No fields can be blank.");
+					pBuilder.SetPositiveButton("Ok", (e, s) => { return; });
+					pBuilder.Show();
+				}
+				else
+				{
+					Intent pIntent = new Intent(this, typeof(ZendoActivity));
+					pIntent.PutExtra("Type", "initial");
+					pIntent.PutExtra("Rule", pRule.Text);
+					pIntent.PutExtra("CorrectKoan", "T" + m_pGoodKoan.Text.ToUpper());
+					pIntent.PutExtra("IncorrectKoan", "F" + m_pBadKoan.Text.ToUpper());
+					SetResult(Result.Ok, pIntent);
+					this.Finish();
+				}
+			};
+			
+
+			// put the initial truth/false stones
 			this.FillGoodKoan();
 			this.FillBadKoan();
 		}
@@ -65,11 +84,9 @@ namespace App
 		{
 			// clear current koan
 			m_pImageRowGood.RemoveAllViews();
-			m_pGoodKoan.SetBackgroundColor(Android.Graphics.Color.Transparent);
+			m_pGoodKoan.SetBackgroundColor(Android.Graphics.Color.Gray);
 			
 			string sKoan = "T" + m_pGoodKoan.Text;
-
-			// TODO: display if there's an error
 
 			// get the list of pieces and for each one insert the image into the layout
 			List<string> lPieces = Master.GetPieceParts(sKoan);
@@ -92,12 +109,9 @@ namespace App
 		{
 			// clear current koan
 			m_pImageRowBad.RemoveAllViews();
-			m_pBadKoan.SetBackgroundColor(Android.Graphics.Color.Transparent);
+			m_pBadKoan.SetBackgroundColor(Android.Graphics.Color.Gray);
 
 			string sKoan = "F" + m_pBadKoan.Text;
-			m_pBadKoan.SetBackgroundColor(Android.Graphics.Color.Transparent);
-
-			// TODO: display if there's an error
 
 			// get the list of pieces and for each one insert the image into the layout
 			List<string> lPieces = Master.GetPieceParts(sKoan);
