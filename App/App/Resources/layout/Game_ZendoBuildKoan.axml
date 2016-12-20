@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:textSize="15dp"
+                android:text="Reminder: every part of a koan consists of [color letter][direction letter], so BU represents a blue arrow pointing up." />
+            <app.FlowLayout
+                android:id="@+id/lstKoanImages"
+                android:layout_margin="5dp"
+                android:layout_marginBottom="0dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/txtKoanBuilder"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="5dp" />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btnSubmitMaster"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="20dp"
+                    android:layout_margin="10dp"
+                    android:text="Master!" />
+                <Button
+                    android:id="@+id/btnSubmitMondo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="20dp"
+                    android:layout_margin="10dp"
+                    android:text="Mondo!" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/boxKoans"
+                android:layout_width="fill_parent"
+                android:layout_height="300dp"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="0dp"
+                android:orientation="vertical"
+                android:background="#555555">
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:textSize="20dp"
+                    android:text="Current Koans"
+                    android:textColor="#000000"
+                    android:background="#CCCCCC" />
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="2dp"
+                    android:background="#BBBBBB" />
+                <ScrollView
+                    android:id="@+id/scrlKoans"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+                    <LinearLayout
+                        android:id="@+id/lstKoans"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </ScrollView>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

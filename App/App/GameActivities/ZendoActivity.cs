@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: ZendoActivity.cs
 //  Date created: 12/13/2016
-//  Date edited: 12/16/2016
+//  Date edited: 12/20/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -120,12 +120,13 @@ namespace App
 					this.StartActivityForResult(pIntent, 0);
 				};
 			}
-			else if (sAction == "open")
+			else if (sAction == "build")
 			{
 				pActionButton.Text = "Build Koan";
 				pActionButton.Click += delegate
 				{
 					Intent pIntent = new Intent(this, (new ZendoBuildKoanActivity()).Class);
+					pIntent.PutExtra("Koans", pKoansXml.ToString());
 					this.StartActivityForResult(pIntent, 0);
 				};
 			}
@@ -186,6 +187,56 @@ namespace App
 
 				pPlayersLayout.AddView(pDataRow);
 			}
+
+			// fill log event box
+			LinearLayout pLogLayout = FindViewById<LinearLayout>(Resource.Id.lstLog);
+			pLogLayout.RemoveAllViews();
+			//foreach (XElement pEvent in pEventsXml.Elements("LogEvent"))
+			List<XElement> pEventsXmlChildren = pEventsXml.Elements("LogEvent").ToList();
+			for (int i = pEventsXmlChildren.Count - 1; i >= 0; i--)
+			{
+				XElement pEvent = pEventsXmlChildren[i];
+				string sMsg = pEvent.Element("Message").Value;
+				XElement pData = pEvent.Element("Data");
+				if (pData.Value == "")
+				{
+					// TODO: do thing here
+				}
+
+				View pDataRow = LayoutInflater.From(this).Inflate(Resource.Layout.DataRow, pLogLayout, false);
+
+				TextView pDataText = pDataRow.FindViewById<TextView>(Resource.Id.txtText);
+				pDataText.Text = sMsg;
+
+				pLogLayout.AddView(pDataRow);
+			}
+
+			// fill koans box
+			LinearLayout pKoansLayout = FindViewById<LinearLayout>(Resource.Id.lstKoans);
+			pKoansLayout.RemoveAllViews();
+			List<XElement> pKoansXmlChildren = pKoansXml.Elements("Koan").ToList();
+			for (int i = pKoansXmlChildren.Count - 1; i >= 0; i--)
+			{
+				XElement pKoan = pKoansXmlChildren[i];
+
+				View pView = LayoutInflater.From(this).Inflate(Resource.Layout.Game_ZendoKoanRow, pKoansLayout, false);
+
+				FlowLayout pFlow = pView.FindViewById<FlowLayout>(Resource.Id.lstKoanImages);
+
+				string sKoanText = pKoan.Value;
+				List<string> lPieces = Master.GetPieceParts(sKoanText);
+				foreach (string sPiece in lPieces)
+				{
+					int iRes = Master.GetPieceImage(sPiece);
+					if (iRes == 0) { continue; } // TODO: error handling?Jk;lw
+
+					ImageView pKoanView = new ImageView(this);
+					pKoanView.SetImageResource(iRes);
+					pFlow.AddView(pKoanView);
+				}
+
+				pKoansLayout.AddView(pView);
+			}
 		}
 
 		protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
@@ -204,7 +255,7 @@ namespace App
 
 					string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='sRule'>" + sRule + "</param><param name='sBuddhaNatureKoan'>" + sInitialCorrectKoan + "</param><param name='sNonBuddhaNatureKoan'>" + sInitialIncorrectKoan + "</param>");
 					string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitInitialKoans", sBody, true);
-					if (sResponse != "") 
+					if (Master.CleanResponse(sResponse) != "") 
 					{ 
 						XElement pResponse = Master.ReadResponse(sResponse);
 						var pBuilder = new AlertDialog.Builder(this);
@@ -225,7 +276,7 @@ namespace App
 
 					string sResponse = "";
 					if (!bMondo) { sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitKoan", sBody, true); }
-					if (sResponse != "") { XElement pResponse = Master.ReadResponse(sResponse); }
+					if (Master.CleanResponse(sResponse) != "") { XElement pResponse = Master.ReadResponse(sResponse); }
 
 					this.GetUserBoard();
 				}
@@ -235,7 +286,7 @@ namespace App
 
 					string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='bHasBuddhaNature'>" + bHasBuddhaNature + "</param>");
 					string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitPendingKoanAnalysis", sBody, true);
-					if (sResponse != "") { XElement pResponse = Master.ReadResponse(sResponse); }
+					if (Master.CleanResponse(sResponse) != "") { XElement pResponse = Master.ReadResponse(sResponse); }
 
 					this.GetUserBoard();
 				}
@@ -245,7 +296,7 @@ namespace App
 
 					string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='bPrediction'>" + bPrediction + "</param>");
 					string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitMondoPrediction", sBody, true);
-					if (sResponse != "") { XElement pResponse = Master.ReadResponse(sResponse); }
+					if (Master.CleanResponse(sResponse) != "") { XElement pResponse = Master.ReadResponse(sResponse); }
 
 					this.GetUserBoard();
 				}

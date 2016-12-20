@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Zendo.cs
 //  Date created: 11/28/2016
-//  Date edited: 12/16/2016
+//  Date edited: 12/20/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: My implementation of the awesome game of Zendo!
@@ -147,7 +147,10 @@ namespace GameClansServer.Games
 				XElement pXml = new XElement("LogEvent");
 				pXml.SetAttributeValue("Time", this.Time.ToString());
 				pXml.SetElementValue("Message", this.Message);
-				pXml.SetElementValue("Data", this.Data);
+
+				XElement pData = new XElement("Data");
+				if (this.Data != "") { pData.Add(XElement.Parse(this.Data)); }
+				pXml.Add(pData);
 				return pXml;
 			}
 			set
@@ -474,7 +477,7 @@ namespace GameClansServer.Games
 			// send notifications to all the students and add to the event log
 			//foreach (string sUser in m_lStudents) { m_pServer.AddNotification(m_sClanName, sUser, "The game has started and the master has built the initial koans!"); }
 			foreach (ZendoUser pUser in m_lStudents) { m_pServer.AddNotification(m_sClanName, pUser.UserName, "The game has started and the master has built the initial koans!"); }
-			m_lEventLog.Add(new ZendoLogEvent("The master has built the initial koans", pBuddhaKoan.Xml.ToString() + pNonBuddhaKoan.Xml.ToString()));
+			m_lEventLog.Add(new ZendoLogEvent("The master has built the initial koans", ""));
 
 			this.Save();
 			return "";

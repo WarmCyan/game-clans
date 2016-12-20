@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: ZendoCreateRuleActivity.cs
 //  Date created: 12/16/2016
-//  Date edited: 12/17/2016
+//  Date edited: 12/20/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: Note, this activity should also handle the creation of the two initial koans. (since the server handles it all in one request)
@@ -84,7 +84,7 @@ namespace App
 		{
 			// clear current koan
 			m_pImageRowGood.RemoveAllViews();
-			m_pGoodKoan.SetBackgroundColor(Android.Graphics.Color.Gray);
+			m_pGoodKoan.SetBackgroundColor(Android.Graphics.Color.DarkGray);
 			
 			string sKoan = "T" + m_pGoodKoan.Text;
 
@@ -109,7 +109,7 @@ namespace App
 		{
 			// clear current koan
 			m_pImageRowBad.RemoveAllViews();
-			m_pBadKoan.SetBackgroundColor(Android.Graphics.Color.Gray);
+			m_pBadKoan.SetBackgroundColor(Android.Graphics.Color.DarkGray);
 
 			string sKoan = "F" + m_pBadKoan.Text;
 

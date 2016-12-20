@@ -16,34 +16,46 @@ namespace GameClansServer
 		{
 			Console.WriteLine("Hello world!\n");
 
-			/*string sMsg = CreateClan();
-			Console.WriteLine(sMsg);*/
+			/*string sMsg = CreateClan();*/
 
-			/*string sMsg = JoinClan("WildfireXIII", "password");
-			Console.WriteLine(sMsg);*/
+			/*string sMsg = JoinClan("WildfireXIII", "password");*/
 
-			/*string sMsg = urlJoinClan("WildfireXIII", "password");
-			Console.WriteLine(sMsg);*/
+			/*string sMsg = urlJoinClan("WildfireXIII", "password");*/
 
-			/*string sMsg = JoinClan("Dude", "testing");
-			Console.WriteLine(sMsg);
+			/*string sMsg = JoinClan("Dude", "testing");*/
 
-			string sMsg = JoinClan("SomeGuy", "testing");
-			Console.WriteLine(sMsg);*/
+			//string sMsg = JoinClan("SomeGuy", "testing");
 
 			string sMsg = CreateZendoGame();
+
+			/*string sMsg = JoinGame("WildfireXIII", "password", "g_Zendo_636167986558817917");*/
+
+			/*string sMsg = GetClanLeaderboard("WildfireXIII", "testing");*/
+
+			/*string sMsg = StartZendoGame();*/
+
+			//string sMsg = GetGameBoard();
+
 			Console.WriteLine(sMsg);
-
-			/*string sMsg = JoinGame("WildfireXIII", "password", "g_Zendo_636167986558817917");
-			Console.WriteLine(sMsg);*/
-
-			/*string sMsg = GetClanLeaderboard("WildfireXIII", "testing");
-			Console.WriteLine(sMsg);*/
-
+			
 			Console.WriteLine("\nComplete!");
 			Console.Read();
 		}
 
+		static string GetGameBoard()
+		{
+			Zendo z = new Zendo();
+			ClanServer cs = new ClanServer();
+			return z.GetUserBoard("g_Zendo_636178400449774608", "Testing Clan", "WildfireXIII", cs.Sha256Hash("testing"));
+		}
+
+
+		static string StartZendoGame()
+		{
+			Zendo z = new Zendo();
+			return z.StartGame("g_Zendo_636178400449774608");
+		}
+		
 		static string CreateZendoGame()
 		{
 			Zendo z = new Zendo();
