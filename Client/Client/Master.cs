@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Master.cs
 //  Date created: 12/8/2016
-//  Date edited: 12/15/2016
+//  Date edited: 12/19/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -37,12 +37,19 @@ namespace Client
 		public static string GetKey() { return s_sKey; }
 
 		public static string GetBaseDir() { return AppDomain.CurrentDomain.BaseDirectory; } // NOTE: assuming this has the trailing slash?
-	
+
+		public static string GetBaseURL() { return "http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/"; }
+		public static string GetServerURL() { return "GameClansServer/ClanServer/"; }
+		public static string GetGameURL(string sGame) { return "GameClansServer.Games/" + sGame + "/"; }
+
+
 		public static string CleanResponse(string sResponse) { return sResponse.Trim('\"').Replace("\\\"", "\"").Replace("\\r", "\r").Replace("\\n", "\n").Replace("\\t", "\t").Replace("\\\\", "\\"); }
 		public static string EncodeXML(string sXML) { return sXML.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "&quot;").Replace("'", "&apos;"); }
 
 		public static string BuildCommonBody() { return BuildCommonBody(""); } 
 		public static string BuildCommonBody(string sOtherXML) { return "<params><param name='sClanName'>" + s_sActiveClan + "</param><param name='sUserName'>" + s_sActiveUserName + "</param><param name='sUserPassPhrase'>" + s_sKey + "</param>" + sOtherXML + "</params>"; }
+		public static string BuildGameIDBodyPart(string sGameID) { return "<param name='sGameID'>" + sGameID + "</param>"; }
+
 
 		public static XElement ReadResponse(string sResponse)
 		{

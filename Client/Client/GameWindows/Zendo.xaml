@@ -5,8 +5,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client.GameWindows"
         mc:Ignorable="d"
-        Title="Zendo" Height="300" Width="450" Background="#222222" TextOptions.TextFormattingMode="Display">
+        Title="Zendo" Height="600" Width="800" Background="#222222" TextOptions.TextFormattingMode="Display">
 	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+
+			<!-- koan builder thing in upper right -->
+
+		</Grid.ColumnDefinitions>
+		<StackPanel Margin="10" Grid.Column="0">
+			<Label FontSize="18" Content="This is a test" Foreground="#FFFFFF" Margin="10" Padding="10"/>
+
+			<!-- reconfigurable thing goes here based on action -->
+			<StackPanel Orientation="Horizontal">
+			</StackPanel>
+	   </StackPanel>
+
+		<StackPanel Margin="10" Grid.Column="1">
+			<Label FontSize="14" Content="Master - " Foreground="#AAAAAA" Margin="10" Padding="10"/>
+			<StackPanel>
+				<Label Content="Players" Padding="5" Margin="10,5,10,0" Foreground="Black" Background="#CCCCCC" />
+				<ScrollViewer VerticalScrollBarVisibility="Hidden" Margin="10,0,10,10" Background="#333333" MinHeight="100">
+					<StackPanel Name="stkPlayers">
+					</StackPanel>
+				</ScrollViewer>
+			</StackPanel>
+		</StackPanel>
         
     </Grid>
 </Window>
