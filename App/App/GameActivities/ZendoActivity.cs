@@ -70,6 +70,14 @@ namespace App
 			};
 		}
 
+		private void ForceRestart()
+		{
+			Intent pIntent = new Intent(this, typeof(ZendoActivity));
+			pIntent.SetAction(m_sGameID);
+			StartActivity(pIntent);
+			this.Finish();
+		}
+
 		private void GetUserBoard()
 		{
 			// send the request to the server
@@ -92,6 +100,23 @@ namespace App
 			pGameStatusText.Text = pStatusXml.Element("Text").Value;
 
 			// TODO: handle data tag in status
+			FlowLayout pFlow = FindViewById<FlowLayout>(Resource.Id.flowStatusKoan);
+			if (pStatusXml.Element("Data").Value != "")
+			{
+				string sKoan = pStatusXml.Element("Data").Element("Koan").Value;
+
+				Master.FillKoanDisplay(this, pFlow, sKoan);
+				LinearLayout.LayoutParams pParams = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(LayoutParams.FillParent, LayoutParams.WrapContent));
+				pParams.SetMargins(30, 0, 30, 30);
+				pFlow.LayoutParameters = pParams;
+			}
+			else
+			{
+				pFlow.RemoveAllViews();
+				LinearLayout.LayoutParams pParams = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(LayoutParams.FillParent, LayoutParams.WrapContent));
+				pParams.SetMargins(0, 0, 0, 0);
+				pFlow.LayoutParameters = pParams;
+			}
 
 			// set the action button accordingly
 			Button pActionButton = FindViewById<Button>(Resource.Id.btnAction);
@@ -136,6 +161,8 @@ namespace App
 				pActionButton.Click += delegate
 				{
 					Intent pIntent = new Intent(this, (new ZendoJudgeKoanActivity()).Class);
+					pIntent.PutExtra("Koan", pStatusXml.Element("Data").Element("Koan").Value);
+					pIntent.PutExtra("Rule", pMasterXml.Attribute("Rule").Value);
 					this.StartActivityForResult(pIntent, 0);
 				};
 			}
@@ -197,17 +224,28 @@ namespace App
 			{
 				XElement pEvent = pEventsXmlChildren[i];
 				string sMsg = pEvent.Element("Message").Value;
-				XElement pData = pEvent.Element("Data");
-				if (pData.Value == "")
-				{
-					// TODO: do thing here
-				}
 
+				// make the datarow layout
 				View pDataRow = LayoutInflater.From(this).Inflate(Resource.Layout.DataRow, pLogLayout, false);
 
 				TextView pDataText = pDataRow.FindViewById<TextView>(Resource.Id.txtText);
 				pDataText.Text = sMsg;
+				
+				// check the data tag
+				XElement pData = pEvent.Element("Data");
+				if (pData.Value != "")
+				{
+					string sKoanContents = pEvent.Element("Data").Element("Koan").Value;
 
+					FlowLayout pDataRowFlow = pDataRow.FindViewById<FlowLayout>(Resource.Id.flowDataRowKoan);
+					Master.FillKoanDisplay(this, pDataRowFlow, sKoanContents);
+					
+					LinearLayout.LayoutParams pParams = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(LayoutParams.FillParent, LayoutParams.WrapContent));
+					pParams.SetMargins(20, 0, 20, 20);
+					pDataRowFlow.LayoutParameters = pParams;
+				}
+
+				// add the data row
 				pLogLayout.AddView(pDataRow);
 			}
 
@@ -221,10 +259,11 @@ namespace App
 
 				View pView = LayoutInflater.From(this).Inflate(Resource.Layout.Game_ZendoKoanRow, pKoansLayout, false);
 
-				FlowLayout pFlow = pView.FindViewById<FlowLayout>(Resource.Id.lstKoanImages);
+				FlowLayout pKoanBoxFlow = pView.FindViewById<FlowLayout>(Resource.Id.lstKoanImages);
 
 				string sKoanText = pKoan.Value;
-				List<string> lPieces = Master.GetPieceParts(sKoanText);
+				Master.FillKoanDisplay(this, pKoanBoxFlow, sKoanText);
+				/*List<string> lPieces = Master.GetPieceParts(sKoanText);
 				foreach (string sPiece in lPieces)
 				{
 					int iRes = Master.GetPieceImage(sPiece);
@@ -233,7 +272,7 @@ namespace App
 					ImageView pKoanView = new ImageView(this);
 					pKoanView.SetImageResource(iRes);
 					pFlow.AddView(pKoanView);
-				}
+				}*/
 
 				pKoansLayout.AddView(pView);
 			}
@@ -247,6 +286,10 @@ namespace App
 				// TODO: HANDLE EXTRA HERE
 				string sType = data.GetStringExtra("Type");
 
+				XElement pResponse = null;
+				bool bRestartRequested = false;
+			
+
 				if (sType == "initial")
 				{
 					string sRule = data.GetStringExtra("Rule");
@@ -255,17 +298,8 @@ namespace App
 
 					string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='sRule'>" + sRule + "</param><param name='sBuddhaNatureKoan'>" + sInitialCorrectKoan + "</param><param name='sNonBuddhaNatureKoan'>" + sInitialIncorrectKoan + "</param>");
 					string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitInitialKoans", sBody, true);
-					if (Master.CleanResponse(sResponse) != "") 
-					{ 
-						XElement pResponse = Master.ReadResponse(sResponse);
-						var pBuilder = new AlertDialog.Builder(this);
-						pBuilder.SetMessage(pResponse.Element("Text").Value);
-						pBuilder.SetPositiveButton("Ok", (e, s) => { return; });
-						pBuilder.Show();
-						return;
-					} 
+					if (Master.CleanResponse(sResponse) != "") { pResponse = Master.ReadResponse(sResponse); } 
 
-					this.GetUserBoard();
 				}
 				else if (sType == "build")
 				{
@@ -276,9 +310,8 @@ namespace App
 
 					string sResponse = "";
 					if (!bMondo) { sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitKoan", sBody, true); }
-					if (Master.CleanResponse(sResponse) != "") { XElement pResponse = Master.ReadResponse(sResponse); }
-
-					this.GetUserBoard();
+					if (Master.CleanResponse(sResponse) != "") { pResponse = Master.ReadResponse(sResponse); }
+					bRestartRequested = true;
 				}
 				else if (sType == "analysis")
 				{
@@ -286,9 +319,7 @@ namespace App
 
 					string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='bHasBuddhaNature'>" + bHasBuddhaNature + "</param>");
 					string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitPendingKoanAnalysis", sBody, true);
-					if (Master.CleanResponse(sResponse) != "") { XElement pResponse = Master.ReadResponse(sResponse); }
-
-					this.GetUserBoard();
+					if (Master.CleanResponse(sResponse) != "") { pResponse = Master.ReadResponse(sResponse); }
 				}
 				else if (sType == "predict")
 				{
@@ -296,10 +327,19 @@ namespace App
 
 					string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='bPrediction'>" + bPrediction + "</param>");
 					string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitMondoPrediction", sBody, true);
-					if (Master.CleanResponse(sResponse) != "") { XElement pResponse = Master.ReadResponse(sResponse); }
-
-					this.GetUserBoard();
+					if (Master.CleanResponse(sResponse) != "") { pResponse = Master.ReadResponse(sResponse); }
 				}
+
+
+				if (pResponse != null)
+				{
+					var pBuilder = new AlertDialog.Builder(this);
+					pBuilder.SetMessage(pResponse.Element("Text").Value);
+					pBuilder.SetPositiveButton("Ok", (e, s) => { return; });
+					pBuilder.Show();
+				}
+				else if (bRestartRequested) { this.ForceRestart(); }
+				else { this.GetUserBoard(); }
 			}
 		}
 	}

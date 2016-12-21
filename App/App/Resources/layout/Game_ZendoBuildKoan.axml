@@ -76,6 +76,7 @@
                 <ScrollView
                     android:id="@+id/scrlKoans"
                     android:layout_width="fill_parent"
+                    android:nestedScrollingEnabled="true"
                     android:layout_height="fill_parent">
                     <LinearLayout
                         android:id="@+id/lstKoans"

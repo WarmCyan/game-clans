@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: Master.cs
 //  Date created: 12/9/2016
-//  Date edited: 12/16/2016
+//  Date edited: 12/20/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -115,6 +115,30 @@ namespace App
 			}
 
 			return lParts;
+		}
+
+		// returns true if koan valid, false if koan invalid. NOTE: Takes care of toupper
+		public static bool FillKoanDisplay(Context pContext, FlowLayout pFlow, string sKoan)
+		{
+			bool bValid = true;
+
+			// reset layout
+			pFlow.RemoveAllViews();
+		
+			// get the image for each piece and add it
+			List<string> lPieces = GetPieceParts(sKoan);
+			foreach (string sPiece in lPieces)
+			{
+				int iRes = GetPieceImage(sPiece);
+				if (iRes == 0) { bValid = false; continue; }
+
+				ImageView pImageView = new ImageView(pContext);
+				pImageView.SetImageResource(iRes);
+				pFlow.AddView(pImageView);
+			}
+		
+			// return whether koan was valid or naw
+			return bValid;
 		}
 
 		public static string BuildCommonBody() { return BuildCommonBody(""); }

@@ -17,6 +17,11 @@
             android:textSize="18dp"
             android:padding="10dp"
             android:text="This is text" />
+        <App.FlowLayout
+            android:id="@+id/flowDataRowKoan"
+            android:layout_margin="0dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
     <!-- image thing goes here -->
         <View
             android:layout_width="fill_parent"

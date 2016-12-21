@@ -61,6 +61,7 @@
                     android:background="#BBBBBB" />
                 <ScrollView
                     android:id="@+id/scrlScoreBoard"
+					android:nestedScrollingEnabled="true"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent">
                     <LinearLayout

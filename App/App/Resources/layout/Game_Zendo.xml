@@ -18,6 +18,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
                 <LinearLayout
+					android:orientation="vertical"
                     android:id="@+id/boxGameStatus"
                     android:layout_margin="10dp"
                     android:layout_marginBottom="0dp"
@@ -32,6 +33,11 @@
                         android:textColor="#ffffff"
                         android:textSize="20dp"
                         android:text="Game status goes here" />
+					<App.FlowLayout
+						android:id="@+id/flowStatusKoan"
+						android:layout_margin="0dp"
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content" />
                 <!-- image views would go here -->
                 </LinearLayout>
                 <Button
@@ -72,7 +78,9 @@
                         android:layout_height="2dp"
                         android:background="#BBBBBB" />
                     <ScrollView
+						android:orientation="vertical"
                         android:id="@+id/scrlLog"
+						android:nestedScrollingEnabled="true"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent">
                         <LinearLayout
@@ -104,6 +112,7 @@
                         android:background="#BBBBBB" />
                     <ScrollView
                         android:id="@+id/scrlKoans"
+						android:nestedScrollingEnabled="true"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent">
                         <LinearLayout
@@ -149,6 +158,7 @@
                         android:background="#BBBBBB" />
                     <ScrollView
                         android:id="@+id/scrlPlayers"
+						android:nestedScrollingEnabled="true"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent">
                         <LinearLayout

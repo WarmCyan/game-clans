@@ -126,18 +126,24 @@ namespace GameClansServer.Games
 		{
 			this.Message = sMsg;
 			this.Time = DateTime.Now;
-			this.Data = "";
+			this.Data = null;
 		}
 		public ZendoLogEvent(string sMsg, string sData)
 		{
 			this.Message = sMsg;
-			this.Data = sData;
+			this.Data = XElement.Parse(sData);
+			this.Time = DateTime.Now;
+		}
+		public ZendoLogEvent(string sMsg, XElement pData)
+		{
+			this.Message = sMsg;
+			this.Data = pData;
 			this.Time = DateTime.Now;
 		}
 		
 		// properties
 		public string Message { get; set; } 
-		public string Data { get; set; }
+		public XElement Data { get; set; }
 		public DateTime Time { get; set; }
 
 		public XElement Xml
@@ -149,7 +155,11 @@ namespace GameClansServer.Games
 				pXml.SetElementValue("Message", this.Message);
 
 				XElement pData = new XElement("Data");
-				if (this.Data != "") { pData.Add(XElement.Parse(this.Data)); }
+				if (this.Data != null) 
+				{
+					if (this.Data.Name == "Data") { pData = this.Data; }
+					else { pData.Add(this.Data); }
+				}
 				pXml.Add(pData);
 				return pXml;
 			}
@@ -157,7 +167,7 @@ namespace GameClansServer.Games
 			{
 				this.Time = DateTime.Parse(value.Attribute("Time").Value);
 				this.Message = value.Element("Message").Value;
-				this.Data = value.Element("Data").Value;
+				this.Data = value.Element("Data");
 			}
 		}
 
@@ -477,7 +487,7 @@ namespace GameClansServer.Games
 			// send notifications to all the students and add to the event log
 			//foreach (string sUser in m_lStudents) { m_pServer.AddNotification(m_sClanName, sUser, "The game has started and the master has built the initial koans!"); }
 			foreach (ZendoUser pUser in m_lStudents) { m_pServer.AddNotification(m_sClanName, pUser.UserName, "The game has started and the master has built the initial koans!"); }
-			m_lEventLog.Add(new ZendoLogEvent("The master has built the initial koans", ""));
+			m_lEventLog.Add(new ZendoLogEvent("The master has built the initial koans"));
 
 			this.Save();
 			return "";
@@ -499,9 +509,12 @@ namespace GameClansServer.Games
 
 			m_pPendingKoan = new ZendoKoan(m_lKoans.Count, sKoan, sUserName);
 
+			// set the game status
+			m_sStateStatus = "pending master";
+
 			// send a notification to the master and add to the event log
 			m_pServer.AddNotification(m_sClanName, m_sMaster, "A student has built a new koan for you to analyze.");
-			m_lEventLog.Add(new ZendoLogEvent(sUserName + " has built a new koan", m_pPendingKoan.Xml.ToString()));
+			m_lEventLog.Add(new ZendoLogEvent(sUserName + " has built a new koan", m_pPendingKoan.Xml));
 
 			this.Save();
 			return "";
@@ -535,13 +548,13 @@ namespace GameClansServer.Games
 				if (pUser.UserName == sUserName) { continue; }
 				m_pServer.AddNotification(m_sClanName, pUser.UserName, sUserName + " has called mondo on a koan. Hurry and make your prediction!");
 			}
-			m_lEventLog.Add(new ZendoLogEvent(sUserName + " has called mondo on their koan", m_pPendingKoan.Xml.ToString()));
+			m_lEventLog.Add(new ZendoLogEvent(sUserName + " has called mondo on their koan", m_pPendingKoan.Xml));
 
 			this.Save();
 			return "";
 		}
 
-		public string SubmitMondoPrediction(string sGameID, string sClanName, string sUserName, string sUserPassPhrase, bool bPrediciton)
+		public string SubmitMondoPrediction(string sGameID, string sClanName, string sUserName, string sUserPassPhrase, bool bPrediction)
 		{
 			string sResult = this.Prepare(sGameID, sClanName, sUserName, sUserPassPhrase, AuthenticationType.Student);
 			if (sResult != "") { return sResult; }
@@ -549,7 +562,7 @@ namespace GameClansServer.Games
 			// make sure a mondo has actually been called!
 			if (!m_bMondo) { return Master.MessagifyError("No mondo has been called"); }
 
-			m_dMondoPredictions[sUserName] = bPrediciton;
+			m_dMondoPredictions[sUserName] = bPrediction;
 
 			// if half of the students have made their predictions, move the game state to pending master 
 			if (m_dMondoPredictions.Count >= Math.Ceiling((double)m_lStudents.Count / 2))
@@ -563,9 +576,17 @@ namespace GameClansServer.Games
 			return "";
 		}
 
-		public string SubmitPendingKoanAnalysis(string sGameId, string sClanName, string sUserName, string sUserPassPhrase, bool bHasBuddhaNature)
+		public string GetMasterRule(string sGameID, string sClanName, string sUserName, string sUserPassPhrase)
 		{
-			string sResult = this.Prepare(sGameId, sClanName, sUserName, sUserPassPhrase, AuthenticationType.Master);
+			string sResult = this.Prepare(sGameID, sClanName, sUserName, sUserPassPhrase, AuthenticationType.Master);
+			if (sResult != "") { return sResult; }
+
+			return Master.MessagifySimple(m_sRule);
+		}
+
+		public string SubmitPendingKoanAnalysis(string sGameID, string sClanName, string sUserName, string sUserPassPhrase, bool bHasBuddhaNature)
+		{
+			string sResult = this.Prepare(sGameID, sClanName, sUserName, sUserPassPhrase, AuthenticationType.Master);
 			if (sResult != "") { return sResult; }
 
 			// make sure the state is 'pending master'
@@ -576,6 +597,7 @@ namespace GameClansServer.Games
 
 			// set the koans buddha-nature and add it to the list
 			pKoan.HasBuddhaNature = bHasBuddhaNature;
+			pKoan.Koan = pKoan.StringKoan;
 			m_lKoans.Add(pKoan);
 
 			// handle if the koan was a mondo		
@@ -597,13 +619,12 @@ namespace GameClansServer.Games
 			}
 
 			// clear the pending koan and set the status back to open
-			m_pPendingKoan = null;
 			m_sStateStatus = "open";
 
 			// notify the user who submitted the koan and add this to the event log
 			string sKeyPhrase = (bHasBuddhaNature) ? "has" : "does not have";
 			m_pServer.AddNotification(m_sClanName, pKoan.User, "The master has declared that your koan " + sKeyPhrase + " the buddha-nature");
-			m_lEventLog.Add(new ZendoLogEvent("The master has declared that this koan " + sKeyPhrase + " the buddha-nature", pKoan.Xml.ToString()));
+			m_lEventLog.Add(new ZendoLogEvent("The master has declared that this koan " + sKeyPhrase + " the buddha-nature", pKoan.Xml));
 
 			this.Save();
 			return "";
@@ -658,7 +679,7 @@ namespace GameClansServer.Games
 
 			// notify the user who submitted the guess and add an event log
 			m_pServer.AddNotification(sClanName, m_pPendingGuess.User, "The master has disproven your guess");
-			m_lEventLog.Add(new ZendoLogEvent("The master has disproven " + m_pPendingGuess.User + "'s guess", pKoan.Xml.ToString()));
+			m_lEventLog.Add(new ZendoLogEvent("The master has disproven " + m_pPendingGuess.User + "'s guess", pKoan.Xml));
 
 			this.Save();
 			return "";
@@ -858,8 +879,13 @@ namespace GameClansServer.Games
 			foreach (string sPlayer in m_lPlayerNames) { sPlayers += "<Player>" + sPlayer + "</Player>"; }
 			sPlayers += "</Players>";
 
+			// master stuff
+			string sMaster = "<Master";
+			if (m_sMaster == sUserName) { sMaster += " Rule='" + m_sRule + "'"; }
+			sMaster += ">" + m_sMaster + "</Master>";
+
 			// return ze data
-			string sAllData = "<Status><Text>" + sStatus + "</Text><Data>" + sStatusData + "</Data></Status><Action>" + sAction + "</Action><Master>" + m_sMaster + "</Master><NumGuesses>" + iNumStones.ToString() + "</NumGuesses>" + sPlayers + this.GetKoansXml().ToString() + this.GetLogXml().ToString();
+			string sAllData = "<Status><Text>" + sStatus + "</Text><Data>" + sStatusData + "</Data></Status><Action>" + sAction + "</Action>" + sMaster + "<NumGuesses>" + iNumStones.ToString() + "</NumGuesses>" + sPlayers + this.GetKoansXml().ToString() + this.GetLogXml().ToString();
 			return Master.MessagifyData(sAllData);
 		}
 
