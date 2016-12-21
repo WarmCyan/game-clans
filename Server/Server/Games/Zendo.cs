@@ -837,7 +837,7 @@ namespace GameClansServer.Games
 					if (!m_dMondoPredictions.Keys.Contains(sUserName))
 					{
 						sAction = "predict";
-						sStatus = m_pPendingKoan.User + " called mondo on their koan. Predict whether the master will decide this has the buddha-nature or not!";
+						sStatus = m_pPendingKoan.User + " called mondo on their koan. Predict whether the master will say this has the buddha-nature or not!";
 					}
 					else
 					{

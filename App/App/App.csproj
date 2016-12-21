@@ -115,6 +115,9 @@
     <AndroidResource Include="Resources\layout\Game_ZendoAnalyzeKoan.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\Game_ZendoPredict.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Main.xml" />

@@ -172,6 +172,8 @@ namespace App
 				pActionButton.Click += delegate
 				{
 					Intent pIntent = new Intent(this, (new ZendoPredictActivity()).Class);
+					pIntent.PutExtra("Koan", pStatusXml.Element("Data").Element("Koan").Value);
+					pIntent.PutExtra("Koans", pKoansXml.ToString());
 					this.StartActivityForResult(pIntent, 0);
 				};
 			}
@@ -310,6 +312,7 @@ namespace App
 
 					string sResponse = "";
 					if (!bMondo) { sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitKoan", sBody, true); }
+					else { sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitMondo", sBody, true); }
 					if (Master.CleanResponse(sResponse) != "") { pResponse = Master.ReadResponse(sResponse); }
 					bRestartRequested = true;
 				}
@@ -328,8 +331,8 @@ namespace App
 					string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='bPrediction'>" + bPrediction + "</param>");
 					string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitMondoPrediction", sBody, true);
 					if (Master.CleanResponse(sResponse) != "") { pResponse = Master.ReadResponse(sResponse); }
+					bRestartRequested = true;
 				}
-
 
 				if (pResponse != null)
 				{
