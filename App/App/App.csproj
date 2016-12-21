@@ -62,6 +62,8 @@
     <Compile Include="GameActivities\ZendoBuildKoanActivity.cs" />
     <Compile Include="GameActivities\ZendoCreateRuleActivity.cs" />
     <Compile Include="GameActivities\ZendoActivity.cs" />
+    <Compile Include="GameActivities\ZendoDisproveActivity.cs" />
+    <Compile Include="GameActivities\ZendoGuessActivity.cs" />
     <Compile Include="GameActivities\ZendoJudgeKoanActivity.cs" />
     <Compile Include="GameActivities\ZendoPredictActivity.cs" />
     <Compile Include="GamesActivity.cs" />
@@ -116,6 +118,12 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\Game_ZendoPredict.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\Game_ZendoGuess.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\Game_ZendoDisprove.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>

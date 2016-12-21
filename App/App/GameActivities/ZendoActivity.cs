@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: ZendoActivity.cs
 //  Date created: 12/13/2016
-//  Date edited: 12/20/2016
+//  Date edited: 12/21/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -29,10 +29,8 @@ namespace App
 	[Activity(Label = "Zendo Game")]
 	public class ZendoActivity : BaseActivity
 	{
-
 		// member variables
 		private string m_sGameID;
-
 	
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
@@ -68,6 +66,7 @@ namespace App
 				// TODO: handle response message
 				this.GetUserBoard();
 			};
+
 		}
 
 		private void ForceRestart()
@@ -180,6 +179,13 @@ namespace App
 			else if (sAction == "disprove")
 			{
 				pActionButton.Text = "Disprove Guess";
+				pActionButton.Click += delegate
+				{
+					Intent pIntent = new Intent(this, typeof(ZendoDisproveActivity));
+					pIntent.PutExtra("Guess", pStatusXml.Attribute("Guess").Value);
+					pIntent.PutExtra("Rule", pMasterXml.Attribute("Rule").Value);
+					this.StartActivityForResult(pIntent, 0);
+				};
 			}
 			else if (sAction == "final")
 			{
@@ -198,6 +204,12 @@ namespace App
 			pGuessButton.Text = "Guess (" + iNumGuesses.ToString() + " guess tokens)";
 			if (iNumGuesses > 0) { pGuessButton.Enabled = true; }
 			else { pGuessButton.Enabled = false; }
+			pGuessButton.Click += delegate
+			{
+				Intent pIntent = new Intent(this, typeof(ZendoGuessActivity));
+				pIntent.PutExtra("Koans", pKoansXml.ToString());
+				this.StartActivityForResult(pIntent, 0);
+			};
 
 			// set master label
 			string sMaster = pMasterXml.Value;
@@ -290,7 +302,7 @@ namespace App
 
 				XElement pResponse = null;
 				bool bRestartRequested = false;
-			
+
 
 				if (sType == "initial")
 				{
@@ -300,7 +312,7 @@ namespace App
 
 					string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='sRule'>" + sRule + "</param><param name='sBuddhaNatureKoan'>" + sInitialCorrectKoan + "</param><param name='sNonBuddhaNatureKoan'>" + sInitialIncorrectKoan + "</param>");
 					string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitInitialKoans", sBody, true);
-					if (Master.CleanResponse(sResponse) != "") { pResponse = Master.ReadResponse(sResponse); } 
+					if (Master.CleanResponse(sResponse) != "") { pResponse = Master.ReadResponse(sResponse); }
 
 				}
 				else if (sType == "build")
@@ -332,6 +344,24 @@ namespace App
 					string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitMondoPrediction", sBody, true);
 					if (Master.CleanResponse(sResponse) != "") { pResponse = Master.ReadResponse(sResponse); }
 					bRestartRequested = true;
+				}
+				else if (sType == "guess")
+				{
+					string sGuess = data.GetStringExtra("Guess");
+
+					string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='sGuess'>" + Master.EncodeXML(sGuess) + "</param>");
+					string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitGuess", sBody, true);
+					if (Master.CleanResponse(sResponse) != "") { pResponse = Master.ReadResponse(sResponse); }
+					bRestartRequested = true;
+				}
+				else if (sType == "disprove")
+				{
+					string sKoan = data.GetStringExtra("Koan");
+					bool bHasBuddhaNature = data.GetBooleanExtra("HasBuddhaNature", false);
+
+					string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='sKoan'>" + sKoan + "</param><param name='bHasBuddhaNature'>" + bHasBuddhaNature + "</param>");
+					string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "DisproveGuess", sBody, true);
+					if (Master.CleanResponse(sResponse) != "") { pResponse = Master.ReadResponse(sResponse); }
 				}
 
 				if (pResponse != null)

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/txtRule"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:textSize="15dp"
+                android:text="Your rule - ''" />
+            <TextView
+                android:id="@+id/txtRuleGuess"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:textSize="15dp"
+                android:text="Guessed rule - ''" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:textSize="15dp"
+                android:text="Disprove the guess by building a koan with buddha-nature that the guess says shouldn't, or a koan without buddha-nature that the guess says should. If you can't do it, grant the student enlightenment!" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:textSize="15dp"
+                android:text="Reminder: every part of a koan consists of [color letter][direction letter], so BU represents a blue arrow pointing up." />
+            <app.FlowLayout
+                android:id="@+id/lstKoanImages"
+                android:layout_margin="5dp"
+                android:layout_marginBottom="0dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/txtKoanBuilder"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="5dp" />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btnHasBuddhaNature"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="20dp"
+                    android:layout_margin="10dp"
+                    android:drawableLeft="@drawable/T"
+                    android:text="Yup!" />
+                <Button
+                    android:id="@+id/btnHasNotBuddhaNature"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="20dp"
+                    android:layout_margin="10dp"
+                    android:drawableLeft="@drawable/F"
+                    android:text="Nope" />
+            </LinearLayout>
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:layout_margin="10dp"
+                android:text="Grant Enlightenment" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

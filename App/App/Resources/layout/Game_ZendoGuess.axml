@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:textSize="15dp"
+                android:text="What do you think the master's rule is?" />
+            <EditText
+                android:id="@+id/txtGuess"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="5dp" />
+            <Button
+                android:id="@+id/btnGuess"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:layout_margin="10dp"
+                android:text="Guess! (-1 Guessing Stone)" />
+            <LinearLayout
+                android:id="@+id/boxKoans"
+                android:layout_width="fill_parent"
+                android:layout_height="300dp"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="0dp"
+                android:orientation="vertical"
+                android:background="#555555">
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:textSize="20dp"
+                    android:text="Current Koans"
+                    android:textColor="#000000"
+                    android:background="#CCCCCC" />
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="2dp"
+                    android:background="#BBBBBB" />
+                <ScrollView
+                    android:id="@+id/scrlKoans"
+                    android:layout_width="fill_parent"
+                    android:nestedScrollingEnabled="true"
+                    android:layout_height="fill_parent">
+                    <LinearLayout
+                        android:id="@+id/lstKoans"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </ScrollView>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

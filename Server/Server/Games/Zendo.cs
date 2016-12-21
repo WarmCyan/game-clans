@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Zendo.cs
 //  Date created: 11/28/2016
-//  Date edited: 12/20/2016
+//  Date edited: 12/21/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: My implementation of the awesome game of Zendo!
@@ -38,6 +38,8 @@ namespace GameClansServer.Games
 		{
 			this.Guess = sGuess;
 			this.User = sUserName;
+			this.Time = DateTime.MinValue;
+			this.Disproval = new ZendoKoan();
 		}
 
 		// properties
@@ -644,9 +646,16 @@ namespace GameClansServer.Games
 				return Master.MessagifyError("The game is not currently accepting koan submissions");
 			}
 
+			// make the guess
 			ZendoGuess pGuess = new ZendoGuess(sGuess, sUserName);
 			pGuess.Time = DateTime.Now;
 			m_pPendingGuess = pGuess;
+
+			// take away a guessing stone
+			foreach (ZendoUser pUser in m_lStudents)
+			{
+				if (pUser.UserName == sUserName) { pUser.GuessingStones--; break; }
+			}
 
 			// set the status, add an event log and notify the master
 			m_sStateStatus = "pending disproval";
@@ -852,12 +861,12 @@ namespace GameClansServer.Games
 				if (m_sMaster == sUserName)
 				{
 					sAction = "disprove";
-					sStatus = m_pPendingGuess.User + " submitted a guess: " + m_pPendingGuess.Guess + "\nDisprove their guess or grant them enlightenment!";
+					sStatus = m_pPendingGuess.User + " submitted a guess: '" + m_pPendingGuess.Guess + "'\nDisprove their guess or grant them enlightenment!";
 				}
 				else
 				{
 					sAction = "waiting";
-					sStatus = "Waiting for the master to attempt to disprove " + m_pPendingGuess.User + "'s guess: " + m_pPendingGuess.Guess + "...";
+					sStatus = "Waiting for the master to attempt to disprove " + m_pPendingGuess.User + "'s guess: '" + m_pPendingGuess.Guess + "'...";
 				}
 			}
 			else if (m_sStateStatus == "final")
@@ -884,8 +893,13 @@ namespace GameClansServer.Games
 			if (m_sMaster == sUserName) { sMaster += " Rule='" + m_sRule + "'"; }
 			sMaster += ">" + m_sMaster + "</Master>";
 
+			// if pending guess
+			string sEntireStatus = "<Status";
+			if (m_sStateStatus == "pending disproval" && m_sMaster == sUserName) { sEntireStatus += " Guess='" + m_pPendingGuess.Guess + "'"; }
+			sEntireStatus += "><Text>" + sStatus + "</Text><Data>" + sStatusData + "</Data></Status>";
+
 			// return ze data
-			string sAllData = "<Status><Text>" + sStatus + "</Text><Data>" + sStatusData + "</Data></Status><Action>" + sAction + "</Action>" + sMaster + "<NumGuesses>" + iNumStones.ToString() + "</NumGuesses>" + sPlayers + this.GetKoansXml().ToString() + this.GetLogXml().ToString();
+			string sAllData = sEntireStatus + "<Action>" + sAction + "</Action>" + sMaster + "<NumGuesses>" + iNumStones.ToString() + "</NumGuesses>" + sPlayers + this.GetKoansXml().ToString() + this.GetLogXml().ToString();
 			return Master.MessagifyData(sAllData);
 		}
 

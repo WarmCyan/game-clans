@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: Master.cs
 //  Date created: 12/9/2016
-//  Date edited: 12/20/2016
+//  Date edited: 12/21/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -56,6 +56,8 @@ namespace App
 
 		// common functions
 		public static string CleanResponse(string sResponse) { return sResponse.Trim('\"').Replace("\\\"", "\"").Replace("\\r", "\r").Replace("\\n", "\n").Replace("\\t", "\t").Replace("\\\\", "\\"); }
+		public static string EncodeXML(string sXML) { return sXML.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "&quot;").Replace("'", "&apos;"); }
+
 		public static void Popup(Context pContext, string sMsg)
 		{
 			var pBuilder = new AlertDialog.Builder(pContext);
@@ -156,6 +158,7 @@ namespace App
 			catch (Exception e)
 			{
 				sResponse = "<Message Type='Error'><Text>" + e.Message + "</Text><Data /></Message>";
+				//sResponse = "<Message Type='Error'><Text>" + EncodeXML(CleanResponse(sResponse)) + "</Text><Data /></Message>";
 				pResponse = XElement.Parse(sResponse);
 			}
 
