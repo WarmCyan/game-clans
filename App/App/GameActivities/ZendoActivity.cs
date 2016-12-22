@@ -74,6 +74,8 @@ namespace App
 				this.GetUserBoard();
 			};
 
+			Button pGiveUp = FindViewById<Button>(Resource.Id.btnGiveUp);
+			pGiveUp.Click += delegate { WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "VoteToGiveUp", Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID)), true); this.GetUserBoard(); };
 		}
 
 		private void ForceRestart()

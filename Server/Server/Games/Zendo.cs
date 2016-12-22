@@ -442,6 +442,47 @@ namespace GameClansServer.Games
 			this.Initialize();
 			this.Load(sGameID);
 
+			if (this.m_sStateStatus == "final") // make the next game with all the same people and stuff
+			{
+				// add a number to the game name
+
+				string sCurrentName = m_sGameName;
+				string sNewName = "";
+				string sNameWithoutNum = sCurrentName;
+				
+				int iLastSpace = sCurrentName.LastIndexOf(' ');
+				int iNum = 1;
+				if (iLastSpace != -1)
+				{
+					string sNumAtEnd = sCurrentName.Substring(iLastSpace + 1);
+					try 
+					{ 
+						iNum = Convert.ToInt32(sNumAtEnd);
+						sNameWithoutNum = sCurrentName.Substring(0, iLastSpace);
+					}
+					catch (Exception e) { iNum = 1; }
+				}
+				iNum++;
+
+				sNewName = sNameWithoutNum + " " + iNum.ToString();
+
+				// retain old winner and players
+				string sPrevWinner = m_sWinningUser;
+				List<string> lOldPlayers = new List<string>();
+				foreach (string sPlayer in m_lPlayerNames) { lOldPlayers.Add(sPlayer); }
+				
+				this.InitializeNewGame(m_sClanName, sNewName);
+
+				// set the new master
+				if (sPrevWinner != "") { this.SetMaster(sPrevWinner); }
+				m_lPlayerNames = lOldPlayers;
+				
+				// add active game to the server
+				m_pServer.AddActiveGame(m_sClanName, m_sGameID, "Zendo", sNewName);
+				
+				this.Save();
+				return "";
+			}
 			if (this.m_sStateStatus != "setup") { return Master.MessagifyError("The game has already been started."); }
 
 			// choose a master if one wasn't already chosen
@@ -663,7 +704,7 @@ namespace GameClansServer.Games
 			// set the status, add an event log and notify the master
 			m_sStateStatus = "pending disproval";
 			m_lEventLog.Add(new ZendoLogEvent(sUserName + " has made a guess: '" + sGuess + "'"));
-			m_pServer.AddNotification(sClanName, sUserName, sUserName + " has submitted a guess. Go disprove it!", m_sGameID, m_sGameName);
+			m_pServer.AddNotification(sClanName, m_sMaster, sUserName + " has submitted a guess. Go disprove it!", m_sGameID, m_sGameName);
 
 			this.Save();
 			return "";
@@ -928,13 +969,45 @@ namespace GameClansServer.Games
 		{
 			m_sStateStatus = "final";
 
-			if (m_sWinningUser == "" && m_sWinningUser != null)
+			if (m_sWinningUser != "" && m_sWinningUser != null) // actual winner
 			{
-				// winner
+				// count up the number of koans and how much each person built
+				int iNumKoans = 0;
+				Dictionary<string, int> dKoanCounts = new Dictionary<string, int>();
+
+				foreach (ZendoKoan pKoan in m_lKoans)
+				{
+					if (pKoan.User == m_sMaster) { continue; }
+					dKoanCounts[pKoan.User]++;
+					iNumKoans++;
+				}
+				
+				// game ended notifications
+				foreach (string sPlayer in m_lPlayerNames)
+				{
+					// determine this user's score
+					int iScore = 0;
+					if (sPlayer != m_sMaster)
+					{
+						iScore = (int)(dKoanCounts[sPlayer] / iNumKoans);
+						if (sPlayer == m_sWinningUser) { iScore = 15; }
+					}
+					else { iScore = (int)(iNumKoans / 2); }
+					m_pServer.UpdateUserScore(m_sClanName, sPlayer, "Zendo", iScore);
+				
+					m_pServer.AddNotification(m_sClanName, sPlayer, "The game has ended, " + m_sWinningUser + " has reached enlightenment! (You have receieved " + iScore + " points)", m_sGameID, m_sGameName);
+				}
+				m_lEventLog.Add(new ZendoLogEvent("The game has ended, " + m_sWinningUser + " has reached enlightenment!", m_pPendingKoan.Xml));
 			}
-			else
+			else // they gave up
 			{
-				// given up
+				// given up (nobody gets points)
+				foreach (ZendoUser pUser in m_lStudents)
+				{
+					m_pServer.AddNotification(m_sClanName, pUser.UserName, "All the students have voted to give up. The game has ended.", m_sGameID, m_sGameName);
+				}
+				m_lEventLog.Add(new ZendoLogEvent("All the students have voted to giv eup. The game has ended.", m_pPendingKoan.Xml));
+
 			}
 		}
 

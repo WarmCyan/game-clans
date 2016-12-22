@@ -113,6 +113,7 @@ namespace GameClansServer
 
 			TableQuery<GameTableEntity> pQuery = new TableQuery<GameTableEntity>().Where("PartitionKey eq'" + Master.BuildGamePartitionKey(sClanName) + "' and Active eq true");
 			List<GameTableEntity> lGames = this.Table.ExecuteQuery(pQuery).ToList();
+			lGames.Reverse();
 
 			string sResponse = "<Games>";
 			foreach (GameTableEntity pGame in lGames) { sResponse += "<Game GameType='" + pGame.GameType + "' GameName='" + pGame.GameName + "'>" + pGame.RowKey + "</Game>"; }
@@ -296,6 +297,19 @@ namespace GameClansServer
 			pNotif.Seen = false;
 			pNotif.Read = false;
 			this.Table.Execute(TableOperation.Insert(pNotif));
+		}
+
+		public void UpdateUserScore(string sClanName, string sUserName, string sGameType, int iScore)
+		{
+			// get the requested user row from the table
+			TableOperation pUserRetrieveOp = TableOperation.Retrieve<UserTableEntity>(Master.BuildUserPartitionKey(sClanName), sUserName);
+			TableResult pUserRetrieveResult = this.Table.Execute(pUserRetrieveOp);
+
+			if (pUserRetrieveResult.Result == null) { return; }
+			UserTableEntity pUser = (UserTableEntity)pUserRetrieveResult.Result;
+
+			if (sGameType == "Zendo") { pUser.ZendoScore += iScore; }
+			this.Table.Execute(TableOperation.Replace(pUser));
 		}
 
 		public void SaveGame(XElement pStateXml, string sGameID)

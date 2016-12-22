@@ -24,7 +24,7 @@ using DWL.Utility;
 
 namespace App
 {
-	[Activity(Label = "GamesActivity")]
+	[Activity(Label = "Games")]
 	public class GamesActivity : BaseActivity
 	{
 		protected override void OnCreate(Bundle savedInstanceState)
