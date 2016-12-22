@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Zendo.cs
 //  Date created: 11/28/2016
-//  Date edited: 12/21/2016
+//  Date edited: 12/22/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: My implementation of the awesome game of Zendo!
@@ -256,6 +256,7 @@ namespace GameClansServer.Games
 		private List<string> m_lPlayerNames;
 		
 		private string m_sGameID;
+		private string m_sGameName;
 
 		private string m_sMaster;
 		private List<ZendoUser> m_lStudents;
@@ -282,6 +283,7 @@ namespace GameClansServer.Games
 			{
 				XElement pXml = new XElement("Game");
 				pXml.SetAttributeValue("ID", m_sGameID);
+				pXml.SetAttributeValue("Name", m_sGameName);
 				pXml.SetAttributeValue("ClanName", m_sClanName);
 				pXml.SetAttributeValue("Master", m_sMaster);
 				pXml.SetAttributeValue("StateStatus", m_sStateStatus);
@@ -351,6 +353,7 @@ namespace GameClansServer.Games
 			{
 				// base stuff
 				m_sGameID = value.Attribute("ID").Value;
+				m_sGameName = value.Attribute("Name").Value;
 				m_sClanName = value.Attribute("ClanName").Value;
 				m_sMaster = value.Attribute("Master").Value;
 				m_sStateStatus = value.Attribute("StateStatus").Value;
@@ -406,16 +409,16 @@ namespace GameClansServer.Games
 
 		// outward facing methods
 
-		public string CreateNewGame(string sClanName, string sUserName, string sUserPassPhrase)
+		public string CreateNewGame(string sClanName, string sUserName, string sUserPassPhrase, string sGameName)
 		{
 			this.Initialize();
 
 			// verify user can create new game (part of this clan and valid password)
 			if (!m_pServer.VerifyUserPassPhrase(sClanName, sUserName, sUserPassPhrase)) { return Master.MessagifyError("Invalid login."); }
 
-			this.InitializeNewGame(sClanName);
+			this.InitializeNewGame(sClanName, sGameName);
 
-			m_pServer.AddActiveGame(sClanName, m_sGameID, "Zendo");
+			m_pServer.AddActiveGame(sClanName, m_sGameID, "Zendo", sGameName);
 
 			this.Save();
 			return Master.MessagifySimple("Successfully started a new game of Zendo!");
@@ -951,10 +954,11 @@ namespace GameClansServer.Games
 			return "";
 		}
 
-		private void InitializeNewGame(string sClanName)
+		private void InitializeNewGame(string sClanName, string sGameName)
 		{
 			m_sGameID = "g_Zendo_" + DateTime.Now.Ticks.ToString();
 			m_sClanName = sClanName;
+			m_sGameName = sGameName;
 			m_sStateStatus = "setup";
 
 			m_lPlayerNames = new List<string>();

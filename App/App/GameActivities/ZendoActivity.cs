@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: ZendoActivity.cs
 //  Date created: 12/13/2016
-//  Date edited: 12/21/2016
+//  Date edited: 12/22/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -40,6 +40,9 @@ namespace App
 			// Create your application here
 
 			base.CreateDrawer();
+
+			string sGameName = this.Intent.GetStringExtra("GameName");
+			this.Title = "Zendo - " + sGameName;
 
 			ScrollView pMainScroll = FindViewById<ScrollView>(Resource.Id.scrlZendoMain);
 			pMainScroll.SetOnScrollChangeListener(this);

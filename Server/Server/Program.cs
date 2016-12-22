@@ -60,7 +60,7 @@ namespace GameClansServer
 		{
 			Zendo z = new Zendo();
 			ClanServer cs = new ClanServer();
-			return z.CreateNewGame("Testing Clan", "WildfireXIII", cs.Sha256Hash("testing"));
+			return z.CreateNewGame("Testing Clan", "WildfireXIII", cs.Sha256Hash("testing"), "Testing game");
 		}
 		
 		static string JoinGame(string sUserName, string sPassword, string sGameID)

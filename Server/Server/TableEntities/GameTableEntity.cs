@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: GameTableEntity
 //  Date created: 12/8/2016
-//  Date edited: 12/8/2016
+//  Date edited: 12/22/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -30,5 +30,6 @@ namespace GameClansServer.TableEntities
 
 		public bool Active { get; set; }
 		public string GameType { get; set; }
+		public string GameName { get; set; }
 	}
 }

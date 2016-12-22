@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: ClanServer.cs
 //  Date created: 11/28/2016
-//  Date edited: 12/13/2016
+//  Date edited: 12/22/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: Main server that has all the outward facing REST API functions
@@ -106,7 +106,7 @@ namespace GameClansServer
 			List<GameTableEntity> lGames = this.Table.ExecuteQuery(pQuery).ToList();
 
 			string sResponse = "<Games>";
-			foreach (GameTableEntity pGame in lGames) { sResponse += "<Game GameType='" + pGame.GameType + "'>" + pGame.RowKey + "</Game>"; }
+			foreach (GameTableEntity pGame in lGames) { sResponse += "<Game GameType='" + pGame.GameType + "' GameName='" + pGame.GameName + "'>" + pGame.RowKey + "</Game>"; }
 			sResponse += "</Games>";
 
 			return Master.MessagifyData(sResponse);
@@ -211,11 +211,12 @@ namespace GameClansServer
 			return pStateXml;
 		}
 
-		public void AddActiveGame(string sClanName, string sGameID, string sGameName)
+		public void AddActiveGame(string sClanName, string sGameID, string sGameType, string sGameName)
 		{
 			GameTableEntity pGame = new GameTableEntity(sClanName, sGameID);
 			pGame.Active = true;
-			pGame.GameType = sGameName;
+			pGame.GameName = sGameName;
+			pGame.GameType = sGameType;
 			this.Table.Execute(TableOperation.Insert(pGame));
 		}
 

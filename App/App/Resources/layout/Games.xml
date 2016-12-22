@@ -12,6 +12,12 @@
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
+			<Button
+				android:id="@+id/btnNewGame"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:padding="20dp" 
+				android:text="New Game" />
             <ListView
                 android:id="@+id/gamesList"
                 android:layout_width="fill_parent"
