@@ -38,7 +38,7 @@
                 android:textSize="15dp"
                 android:text="Reminder: every part of a koan consists of [color letter][direction letter], so BU represents a blue arrow pointing up." />
             <app.FlowLayout
-                android:id="@+id/lstKoanImages"
+                android:id="@+id/flowKoan"
                 android:layout_margin="5dp"
                 android:layout_marginBottom="0dp"
                 android:orientation="horizontal"
@@ -51,6 +51,12 @@
                 android:layout_margin="10dp"
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="5dp" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:textSize="15dp"
+                android:text="Does your koan-of-disproving have the buddha-nature?" />
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -76,6 +82,7 @@
                     android:text="Nope" />
             </LinearLayout>
             <Button
+                android:id="@+id/btnGrantEnlightenment"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:padding="20dp"

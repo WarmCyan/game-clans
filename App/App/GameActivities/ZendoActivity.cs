@@ -356,12 +356,21 @@ namespace App
 				}
 				else if (sType == "disprove")
 				{
-					string sKoan = data.GetStringExtra("Koan");
-					bool bHasBuddhaNature = data.GetBooleanExtra("HasBuddhaNature", false);
+					bool bSuccessfullyDisproved = data.GetBooleanExtra("Disprove", false);
+					if (!bSuccessfullyDisproved)
+					{
+						string sAltResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "GrantEnlightenment", Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID)), true);
+						if (Master.CleanResponse(sAltResponse) != "") { pResponse = Master.ReadResponse(sAltResponse); }
+					}
+					else
+					{
+						string sKoan = data.GetStringExtra("Koan");
+						bool bHasBuddhaNature = data.GetBooleanExtra("HasBuddhaNature", false);
 
-					string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='sKoan'>" + sKoan + "</param><param name='bHasBuddhaNature'>" + bHasBuddhaNature + "</param>");
-					string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "DisproveGuess", sBody, true);
-					if (Master.CleanResponse(sResponse) != "") { pResponse = Master.ReadResponse(sResponse); }
+						string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='sKoan'>" + sKoan + "</param><param name='bHasBuddhaNature'>" + bHasBuddhaNature + "</param>");
+						string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "DisproveGuess", sBody, true);
+						if (Master.CleanResponse(sResponse) != "") { pResponse = Master.ReadResponse(sResponse); }
+					}
 				}
 
 				if (pResponse != null)

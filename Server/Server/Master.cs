@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Master.cs
 //  Date created: 11/28/2016
-//  Date edited: 12/8/2016
+//  Date edited: 12/21/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: Superclass of static functions and properties
@@ -23,9 +23,11 @@ namespace GameClansServer
 		public const string MSGTYPE_DATA = "Data"; // data only
 		public const string MSGTYPE_BOTH = "Both"; // data and message
 		public const string MSGTYPE_ERROR = "Error"; // error message (can include data)
-	
+
 		// methods
-		
+
+		public static string EncodeXML(string sXML) { return sXML.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "&quot;").Replace("'", "&apos;"); }
+
 		public static string BuildUserPartitionKey(string sClanName) { return sClanName + "|USER"; }
 		public static string BuildUserNotifPartitionKey(string sClanName, string sUserName) { return sClanName + "|" + sUserName + "|NOTIF"; }
 		public static string BuildGamePartitionKey(string sClanName) { return sClanName + "|GAME"; }

@@ -49,6 +49,41 @@ namespace App
 
 			m_pKoanTextEditor.TextChanged += delegate { this.FillKoan(); };
 
+			Button pYes = FindViewById<Button>(Resource.Id.btnHasBuddhaNature);
+			Button pNo = FindViewById<Button>(Resource.Id.btnHasNotBuddhaNature);
+			Button pGrant = FindViewById<Button>(Resource.Id.btnGrantEnlightenment);
+
+			pYes.Click += delegate
+			{
+				Intent pIntent = new Intent(this, typeof(ZendoActivity));
+				pIntent.PutExtra("Type", "disprove");
+				pIntent.PutExtra("Koan", m_pKoanTextEditor.Text.ToUpper());
+				pIntent.PutExtra("HasBuddhaNature", true);
+				pIntent.PutExtra("Disprove", true);
+				this.SetResult(Result.Ok, pIntent);
+				this.Finish();
+			};
+			
+			pNo.Click += delegate
+			{
+				Intent pIntent = new Intent(this, typeof(ZendoActivity));
+				pIntent.PutExtra("Type", "disprove");
+				pIntent.PutExtra("Koan", m_pKoanTextEditor.Text.ToUpper());
+				pIntent.PutExtra("HasBuddhaNature", false);
+				pIntent.PutExtra("Disprove", true);
+				this.SetResult(Result.Ok, pIntent);
+				this.Finish();
+			};
+
+			pGrant.Click += delegate
+			{
+				Intent pIntent = new Intent(this, typeof(ZendoActivity));
+				pIntent.PutExtra("Type", "disprove");
+				pIntent.PutExtra("Disprove", false);
+				this.SetResult(Result.Ok, pIntent);
+				this.Finish();
+			};
+
 			FillKoan();
 		}
 
@@ -58,7 +93,8 @@ namespace App
 			m_pKoanTextEditor.SetBackgroundColor(Android.Graphics.Color.DarkGray);
 
 			string sKoan = m_pKoanTextEditor.Text;
-			Master.FillKoanDisplay(this, m_pKoanDisplay, sKoan.ToUpper());
+			bool bValid = Master.FillKoanDisplay(this, m_pKoanDisplay, sKoan.ToUpper());
+			if (!bValid) { m_pKoanTextEditor.SetBackgroundColor(Android.Graphics.Color.Red); }
 
 			// get list of pieces and insert image into layout for each one
 			/*List<string> lPieces = Master.GetPieceParts(sKoan);

@@ -676,6 +676,7 @@ namespace GameClansServer.Games
 
 			// add the koan disprovivng the guess
 			ZendoKoan pKoan = new ZendoKoan(m_lKoans.Count, sKoan, "master");
+			pKoan.Koan = pKoan.StringKoan;
 			pKoan.HasBuddhaNature = bHasBuddhaNature;
 			m_pPendingGuess.Disproval = pKoan;
 
@@ -696,7 +697,7 @@ namespace GameClansServer.Games
 
 		public string GrantEnlightenment(string sGameID, string sClanName, string sUserName, string sUserPassPhrase)
 		{
-			string sResult = this.Prepare(sGameID, sClanName, sUserName, sUserName, AuthenticationType.Master);
+			string sResult = this.Prepare(sGameID, sClanName, sUserName, sUserPassPhrase, AuthenticationType.Master);
 			if (sResult != "") { return sResult; }
 
 			// make sure the state was right
@@ -895,7 +896,7 @@ namespace GameClansServer.Games
 
 			// if pending guess
 			string sEntireStatus = "<Status";
-			if (m_sStateStatus == "pending disproval" && m_sMaster == sUserName) { sEntireStatus += " Guess='" + m_pPendingGuess.Guess + "'"; }
+			if (m_sStateStatus == "pending disproval" && m_sMaster == sUserName) { sEntireStatus += " Guess='" + Master.EncodeXML(m_pPendingGuess.Guess) + "'"; }
 			sEntireStatus += "><Text>" + sStatus + "</Text><Data>" + sStatusData + "</Data></Status>";
 
 			// return ze data
