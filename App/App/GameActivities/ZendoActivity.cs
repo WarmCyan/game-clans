@@ -129,6 +129,8 @@ namespace App
 
 			// set the action button accordingly
 			Button pActionButton = FindViewById<Button>(Resource.Id.btnAction);
+			Button pGiveUpButton = FindViewById<Button>(Resource.Id.btnGiveUp);
+			pGiveUpButton.Enabled = true;
 			pActionButton.Enabled = true;
 			string sAction = pActionXml.Value;
 			if (sAction == "join")
@@ -201,6 +203,7 @@ namespace App
 			{
 				pActionButton.Text = "Game Over!";
 				pActionButton.Enabled = false;
+				pGiveUpButton.Enabled = false;
 			}
 			else if (sAction == "waiting")
 			{
@@ -212,7 +215,7 @@ namespace App
 			int iNumGuesses = Convert.ToInt32(pNumGuessesXml.Value);
 			Button pGuessButton = FindViewById<Button>(Resource.Id.btnGuess);
 			pGuessButton.Text = "Guess (" + iNumGuesses.ToString() + " guess tokens)";
-			if (iNumGuesses > 0) { pGuessButton.Enabled = true; }
+			if (iNumGuesses > 0 && sAction == "build") { pGuessButton.Enabled = true; }
 			else { pGuessButton.Enabled = false; }
 			pGuessButton.Click += delegate
 			{

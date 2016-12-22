@@ -749,7 +749,7 @@ namespace GameClansServer.Games
 
 			// notify the user that they won and add an event log
 			m_pServer.AddNotification(sClanName, m_pPendingGuess.User, "The master was unable to disprove your guess. You have reached enlightenment!", m_sGameID, m_sGameName);
-			m_lEventLog.Add(new ZendoLogEvent("The maser was unable to disprove " + m_pPendingGuess.User + "'s guess. " + m_pPendingGuess.User + " has become enlightened!"));
+			m_lEventLog.Add(new ZendoLogEvent("The master was unable to disprove " + m_pPendingGuess.User + "'s guess. " + m_pPendingGuess.User + " has become enlightened!"));
 
 			m_sWinningUser = m_pPendingGuess.User;
 			this.GameOver();
@@ -977,7 +977,8 @@ namespace GameClansServer.Games
 
 				foreach (ZendoKoan pKoan in m_lKoans)
 				{
-					if (pKoan.User == m_sMaster) { continue; }
+					if (pKoan.User == m_sMaster || pKoan.User == "master") { continue; }
+					if (!dKoanCounts.ContainsKey(pKoan.User)) { dKoanCounts.Add(pKoan.User, 0); }
 					dKoanCounts[pKoan.User]++;
 					iNumKoans++;
 				}
@@ -989,7 +990,7 @@ namespace GameClansServer.Games
 					int iScore = 0;
 					if (sPlayer != m_sMaster)
 					{
-						iScore = (int)(dKoanCounts[sPlayer] / iNumKoans);
+						iScore = (int)(((float)dKoanCounts[sPlayer] / (float)iNumKoans) * 10);
 						if (sPlayer == m_sWinningUser) { iScore = 15; }
 					}
 					else { iScore = (int)(iNumKoans / 2); }
@@ -997,7 +998,7 @@ namespace GameClansServer.Games
 				
 					m_pServer.AddNotification(m_sClanName, sPlayer, "The game has ended, " + m_sWinningUser + " has reached enlightenment! (You have receieved " + iScore + " points)", m_sGameID, m_sGameName);
 				}
-				m_lEventLog.Add(new ZendoLogEvent("The game has ended, " + m_sWinningUser + " has reached enlightenment!", m_pPendingKoan.Xml));
+				m_lEventLog.Add(new ZendoLogEvent("The game has ended, " + m_sWinningUser + " has reached enlightenment!"));
 			}
 			else // they gave up
 			{
@@ -1006,7 +1007,7 @@ namespace GameClansServer.Games
 				{
 					m_pServer.AddNotification(m_sClanName, pUser.UserName, "All the students have voted to give up. The game has ended.", m_sGameID, m_sGameName);
 				}
-				m_lEventLog.Add(new ZendoLogEvent("All the students have voted to giv eup. The game has ended.", m_pPendingKoan.Xml));
+				m_lEventLog.Add(new ZendoLogEvent("All the students have voted to give up. The game has ended.", m_pPendingKoan.Xml));
 
 			}
 		}

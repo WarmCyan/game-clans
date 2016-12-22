@@ -36,12 +36,22 @@ namespace GameClansServer
 
 			/*string sMsg = GetGameBoard();*/
 
-			string sMsg = GetLastNotifications();
+			//string sMsg = GetLastNotifications();
+
+			string sMsg = GrantEnlightenment();
 
 			Console.WriteLine(sMsg);
 			
 			Console.WriteLine("\nComplete!");
 			Console.Read();
+		}
+
+		static string GrantEnlightenment()
+		{
+			Zendo z = new Zendo();
+			ClanServer cs = new ClanServer();
+
+			return z.GrantEnlightenment("g_Zendo_636180392774905364", "Testing Clan", "WildfireXIII", cs.Sha256Hash("testing"));
 		}
 
 		static string GetLastNotifications()
