@@ -122,13 +122,13 @@
                             android:orientation="vertical" />
                     </ScrollView>
                 </LinearLayout>
-                <Button
+                <!--<Button
                     android:id="@+id/btnPreviousGuesses"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:padding="20dp"
                     android:layout_margin="10dp"
-                    android:text="Previous Guesses" />
+                    android:text="Previous Guesses" />-->
                 <TextView
                     android:id="@+id/txtMaster"
                     android:layout_width="fill_parent"

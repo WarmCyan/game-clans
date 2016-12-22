@@ -66,10 +66,10 @@ namespace App
 		private void BuildHomeDashboard()
 		{
 			// get the scoreboard from the server
-			//string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer/ClanServer/GetClanLeaderboard", Master.BuildCommonBody(), true);
 			string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetServerURL() + "GetClanLeaderboard", Master.BuildCommonBody(), true);
 			XElement pResponse = Master.ReadResponse(sResponse);
 
+			// build the scoreboard
 			if (pResponse.Element("Data").Element("Leaderboard") != null)
 			{
 				XElement pLeaderboard = pResponse.Element("Data").Element("Leaderboard");
@@ -97,6 +97,23 @@ namespace App
 					pScore.Text = pScoreXml.Attribute("Score").Value;
 
 					pScoreboardLayout.AddView(pScoreRow);
+				}
+			}
+
+			// get the notifcations list from the server
+			sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetServerURL() + "GetUnreadNotifications", Master.BuildCommonBody(), true);
+			pResponse = Master.ReadResponse(sResponse);
+
+			LinearLayout pNotifLayout = FindViewById<LinearLayout>(Resource.Id.lstNotifications);
+			if (pResponse.Element("Data").Element("Notifications") != null)
+			{
+				foreach (XElement pNotif in pResponse.Element("Data").Element("Notifications").Elements("Notification"))
+				{
+					// make the datarow layout
+					View pDataRow = LayoutInflater.From(this).Inflate(Resource.Layout.DataRow, pNotifLayout, false);
+
+					TextView pDataText = pDataRow.FindViewById<TextView>(Resource.Id.txtText);
+					pDataText.Text = pNotif.Attribute("GameName").Value + " - " + pNotif.Value;
 				}
 			}
 		}

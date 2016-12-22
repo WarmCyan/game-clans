@@ -59,6 +59,8 @@ namespace GameClansServer
 		}
 
 		// outward facing methods
+		public string ServerVersion() { return Master.MessagifySimple(Master.SERVER_VERSION); }
+		public string RequiredAppVersion() { return Master.MessagifySimple(Master.APP_VERSION); }
 
 		public string CreateClan(string sClanName, string sClanPassPhrase)
 		{
@@ -112,16 +114,93 @@ namespace GameClansServer
 			return Master.MessagifyData(sResponse);
 		}
 
-		public string GetLastNNotifications(string sClanName, string sUserName, string sUserPassPhrase, int iOffset, int iCount)
+		// only retains the last 20 notifications
+		public string GetLastNNotifications(string sClanName, string sUserName, string sUserPassPhrase)
 		{
 			// make sure the user has permission
 			if (!VerifyUserPassPhrase(sClanName, sUserName, sUserPassPhrase)) { return Master.MessagifyError("Invalid login."); }
+
+			TableQuery<UserNotifTableEntity> pQuery = new TableQuery<UserNotifTableEntity>().Where("PartitionKey eq '" + Master.BuildUserNotifPartitionKey(sClanName, sUserName) + "'");
+			List<UserNotifTableEntity> lUserNotifications = this.Table.ExecuteQuery(pQuery).ToList();
+			lUserNotifications.Reverse();
+
+			// make the xml list of unread notifications (and delete any past 20)
+			TableBatchOperation pBatch = new TableBatchOperation();
+			int iCount = 0;
+			XElement pList = new XElement("Notifications");
+			foreach (UserNotifTableEntity pNotif in lUserNotifications)
+			{
+				iCount++;
+				if (iCount >= 20) { pBatch.Add(TableOperation.Delete(pNotif)); }
+				XElement pNotifXML = new XElement("Notification");
+				pNotifXML.Value = pNotif.Content;
+				pNotifXML.SetAttributeValue("GameID", pNotif.GameID);
+				pNotifXML.SetAttributeValue("GameName", pNotif.GameName);
+				pNotifXML.SetAttributeValue("DateTime", pNotif.Time);
+				pList.Add(pNotifXML);
+			}
+
+			this.Table.ExecuteBatch(pBatch);
 			
+			return Master.MessagifyData(pList.ToString()); ;
+		}
+
+		public string MarkUnreadNotificationsRead(string sClanName, string sUserName, string sUserPassPhrase)
+		{
+			// make sure the user has permission
+			if (!VerifyUserPassPhrase(sClanName, sUserName, sUserPassPhrase)) { return Master.MessagifyError("Invalid login."); }
+
+			// get the list of notification entries for this user
+			TableQuery<UserNotifTableEntity> pQuery = new TableQuery<UserNotifTableEntity>().Where("PartitionKey eq '" + Master.BuildUserNotifPartitionKey(sClanName, sUserName) + "' and Read eq false");
+			List<UserNotifTableEntity> lUserNotifications = this.Table.ExecuteQuery(pQuery).ToList();
+			lUserNotifications.Reverse();
+
+			// set all notifications to seen
+			TableBatchOperation pBatch = new TableBatchOperation();
+			foreach (UserNotifTableEntity pNotif in lUserNotifications) 
+			{ 
+				pNotif.Read = true;
+				pBatch.Add(TableOperation.Replace(pNotif));
+			}
+			this.Table.ExecuteBatch(pBatch);
+
 			return "";
 		}
 
-		// TODO: maybe there should just be the last N notifications function above, and let the client handle ones that aren't read however it needs?
 		public string GetUnreadNotifications(string sClanName, string sUserName, string sUserPassPhrase)
+		{
+			// make sure the user has permission
+			if (!VerifyUserPassPhrase(sClanName, sUserName, sUserPassPhrase)) { return Master.MessagifyError("Invalid login."); }
+
+			// get the list of notification entries for this user
+			TableQuery<UserNotifTableEntity> pQuery = new TableQuery<UserNotifTableEntity>().Where("PartitionKey eq '" + Master.BuildUserNotifPartitionKey(sClanName, sUserName) + "' and Read eq false");
+			List<UserNotifTableEntity> lUserNotifications = this.Table.ExecuteQuery(pQuery).ToList();
+			lUserNotifications.Reverse();
+
+			// set all notifications to seen
+			/*TableBatchOperation pBatch = new TableBatchOperation();
+			foreach (UserNotifTableEntity pNotif in lUserNotifications) 
+			{ 
+				pNotif.Seen = true;
+				pBatch.Add(TableOperation.Replace(pNotif));
+			}
+			this.Table.ExecuteBatch(pBatch);*/
+
+			// make the xml list of unread notifications
+			XElement pList = new XElement("Notifications");
+			foreach (UserNotifTableEntity pNotif in lUserNotifications)
+			{
+				XElement pNotifXML = new XElement("Notification");
+				pNotifXML.Value = pNotif.Content;
+				pNotifXML.SetAttributeValue("GameID", pNotif.GameID);
+				pNotifXML.SetAttributeValue("GameName", pNotif.GameName);
+				pNotifXML.SetAttributeValue("DateTime", pNotif.Time);
+				pList.Add(pNotifXML);
+			}
+			return Master.MessagifyData(pList.ToString());
+		}
+
+		public string GetUnseenNotifications(string sClanName, string sUserName, string sUserPassPhrase)
 		{
 			// make sure the user has permission
 			if (!VerifyUserPassPhrase(sClanName, sUserName, sUserPassPhrase)) { return Master.MessagifyError("Invalid login."); }
@@ -129,6 +208,7 @@ namespace GameClansServer
 			// get the list of notification entries for this user
 			TableQuery<UserNotifTableEntity> pQuery = new TableQuery<UserNotifTableEntity>().Where("PartitionKey eq '" + Master.BuildUserNotifPartitionKey(sClanName, sUserName) + "' and Seen eq false");
 			List<UserNotifTableEntity> lUserNotifications = this.Table.ExecuteQuery(pQuery).ToList();
+			lUserNotifications.Reverse();
 
 			// set all notifications to seen
 			TableBatchOperation pBatch = new TableBatchOperation();
@@ -139,9 +219,18 @@ namespace GameClansServer
 			}
 			this.Table.ExecuteBatch(pBatch);
 
-			// TODO: return the xml list of unread notifications
-		
-			return "";
+			// make the xml list of unread notifications
+			XElement pList = new XElement("Notifications");
+			foreach (UserNotifTableEntity pNotif in lUserNotifications)
+			{
+				XElement pNotifXML = new XElement("Notification");
+				pNotifXML.Value = pNotif.Content;
+				pNotifXML.SetAttributeValue("GameID", pNotif.GameID);
+				pNotifXML.SetAttributeValue("GameName", pNotif.GameName);
+				pNotifXML.SetAttributeValue("DateTime", pNotif.Time);
+				pList.Add(pNotifXML);
+			}
+			return Master.MessagifyData(pList.ToString());
 		}
 
 		// also returns what place passed user is
@@ -189,11 +278,15 @@ namespace GameClansServer
 			
 		}*/
 
-		public void AddNotification(string sClanName, string sUserName, string sContent)
+		public void AddNotification(string sClanName, string sUserName, string sContent, string sGameID, string sGameName)
 		{
 			UserNotifTableEntity pNotif = new UserNotifTableEntity(sClanName, sUserName);
 			pNotif.Time = DateTime.Now;
 			pNotif.Content = sContent;
+			pNotif.GameID = sGameID;
+			pNotif.GameName = sGameName;
+			pNotif.Seen = false;
+			pNotif.Read = false;
 			this.Table.Execute(TableOperation.Insert(pNotif));
 		}
 

@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: UserNotifTableEntity.cs
 //  Date created: 11/29/2016
-//  Date edited: 11/29/2016
+//  Date edited: 11/22/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -33,7 +33,10 @@ namespace GameClansServer.TableEntities
 
 		public string ClanName { get; set; }
 		public string Content { get; set; }
+		public string GameName { get; set; }
+		public string GameID { get; set; }
 		public bool Seen { get; set; } 
+		public bool Read { get; set; }
 		public DateTime Time { get; set; }
 	}
 }

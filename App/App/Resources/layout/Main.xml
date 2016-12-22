@@ -15,7 +15,6 @@
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
-            <!--android:background="#555555" >-->
                 <TextView
                     android:id="@+id/lblMyStatsName"
                     android:layout_width="0dp"
@@ -41,6 +40,7 @@
                     android:textSize="25dp"
                     android:text="1000" />
             </LinearLayout>
+			<!-- Scoreboard -->
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
@@ -71,7 +71,70 @@
                         android:orientation="vertical" />
                 </ScrollView>
             </LinearLayout>
-        </LinearLayout>
+			<!-- Notifications board -->
+			<LinearLayout
+			   android:orientation="vertical"
+			   android:layout_width="fill_parent"
+			   android:layout_height="250dp"
+			   android:layout_margin="10dp"
+			   android:background="#555555">
+				<TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:textSize="20dp"
+                    android:text="Clan Leaderboard"
+                    android:background="#CCCCCC"
+                    android:textColor="#000000" />
+				<View
+                    android:layout_width="fill_parent"
+                    android:layout_height="2dp"
+                    android:background="#BBBBBB" />
+				<ScrollView
+                    android:id="@+id/scrlNotifications"
+					android:nestedScrollingEnabled="true"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+					<LinearLayout
+                        android:id="@+id/lstNotifications"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+				</ScrollView>
+			</LinearLayout>
+			<!-- Active Games -->
+			<!-- <LinearLayout
+			   android:orientation="vertical"
+			   android:layout_width="fill_parent"
+			   android:layout_height="250dp"
+			   android:layout_margin="10dp"
+			   android:background="#555555">
+				<TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:textSize="20dp"
+                    android:text="Clan Leaderboard"
+                    android:background="#CCCCCC"
+                    android:textColor="#000000" />
+				<View
+                    android:layout_width="fill_parent"
+                    android:layout_height="2dp"
+                    android:background="#BBBBBB" />
+				<ScrollView
+                    android:id="@+id/scrlGames"
+					android:nestedScrollingEnabled="true"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+					<ListView
+						android:id="@+id/gamesList"
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:layout_gravity="start"
+						android:choiceMode="singleChoice" />
+				</ScrollView>
+			</LinearLayout>-->
+		</LinearLayout>
     </ScrollView>
     <ListView
         android:id="@+id/appDrawerList"

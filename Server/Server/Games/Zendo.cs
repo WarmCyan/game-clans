@@ -458,7 +458,7 @@ namespace GameClansServer.Games
 			}
 
 			// add event log and notify the master
-			m_pServer.AddNotification(m_sClanName, m_sMaster, "You have been chosen as the master! Create your rule and initial koans!");
+			m_pServer.AddNotification(m_sClanName, m_sMaster, "You have been chosen as the master! Create your rule and initial koans!", m_sGameID, m_sGameName);
 			m_lEventLog.Add(new ZendoLogEvent(m_sMaster + " has been chosen as the master"));
 
 			this.Save();
@@ -491,7 +491,7 @@ namespace GameClansServer.Games
 
 			// send notifications to all the students and add to the event log
 			//foreach (string sUser in m_lStudents) { m_pServer.AddNotification(m_sClanName, sUser, "The game has started and the master has built the initial koans!"); }
-			foreach (ZendoUser pUser in m_lStudents) { m_pServer.AddNotification(m_sClanName, pUser.UserName, "The game has started and the master has built the initial koans!"); }
+			foreach (ZendoUser pUser in m_lStudents) { m_pServer.AddNotification(m_sClanName, pUser.UserName, "The game has started and the master has built the initial koans!", m_sGameID, m_sGameName); }
 			m_lEventLog.Add(new ZendoLogEvent("The master has built the initial koans"));
 
 			this.Save();
@@ -518,7 +518,7 @@ namespace GameClansServer.Games
 			m_sStateStatus = "pending master";
 
 			// send a notification to the master and add to the event log
-			m_pServer.AddNotification(m_sClanName, m_sMaster, "A student has built a new koan for you to analyze.");
+			m_pServer.AddNotification(m_sClanName, m_sMaster, "A student has built a new koan for you to analyze.", m_sGameID, m_sGameName);
 			m_lEventLog.Add(new ZendoLogEvent(sUserName + " has built a new koan", m_pPendingKoan.Xml));
 
 			this.Save();
@@ -551,7 +551,7 @@ namespace GameClansServer.Games
 			foreach (ZendoUser pUser in m_lStudents)
 			{
 				if (pUser.UserName == sUserName) { continue; }
-				m_pServer.AddNotification(m_sClanName, pUser.UserName, sUserName + " has called mondo on a koan. Hurry and make your prediction!");
+				m_pServer.AddNotification(m_sClanName, pUser.UserName, sUserName + " has called mondo on a koan. Hurry and make your prediction!", m_sGameID, m_sGameName);
 			}
 			m_lEventLog.Add(new ZendoLogEvent(sUserName + " has called mondo on their koan", m_pPendingKoan.Xml));
 
@@ -574,7 +574,7 @@ namespace GameClansServer.Games
 			{
 				m_sStateStatus = "pending master";
 				// send a notification to the master 
-				m_pServer.AddNotification(m_sClanName, m_sMaster, "A student has called mondo on a new koan, and the students have made their predictions. The koan is ready for your analysis!");
+				m_pServer.AddNotification(m_sClanName, m_sMaster, "A student has called mondo on a new koan, and the students have made their predictions. The koan is ready for your analysis!", m_sGameID, m_sGameName);
 			}
 
 			this.Save();
@@ -616,9 +616,9 @@ namespace GameClansServer.Games
 						if (pUser == null) { /* fail silently for now, we don't want this to stop execution. */ }
 						pUser.GuessingStones++;
 
-						m_pServer.AddNotification(sClanName, sUser, "The master has answered the mondo, your prediction was correct!");
+						m_pServer.AddNotification(sClanName, sUser, "The master has answered the mondo, your prediction was correct!", m_sGameID, m_sGameName);
 					}
-					else { m_pServer.AddNotification(sClanName, sUser, "The master has answered the mondo, your prediction was incorrect."); }
+					else { m_pServer.AddNotification(sClanName, sUser, "The master has answered the mondo, your prediction was incorrect.", m_sGameID, m_sGameName); }
 				}
 				m_bMondo = false;
 			}
@@ -628,7 +628,7 @@ namespace GameClansServer.Games
 
 			// notify the user who submitted the koan and add this to the event log
 			string sKeyPhrase = (bHasBuddhaNature) ? "has" : "does not have";
-			m_pServer.AddNotification(m_sClanName, pKoan.User, "The master has declared that your koan " + sKeyPhrase + " the buddha-nature");
+			m_pServer.AddNotification(m_sClanName, pKoan.User, "The master has declared that your koan " + sKeyPhrase + " the buddha-nature", m_sGameID, m_sGameName);
 			m_lEventLog.Add(new ZendoLogEvent("The master has declared that this koan " + sKeyPhrase + " the buddha-nature", pKoan.Xml));
 
 			this.Save();
@@ -663,7 +663,7 @@ namespace GameClansServer.Games
 			// set the status, add an event log and notify the master
 			m_sStateStatus = "pending disproval";
 			m_lEventLog.Add(new ZendoLogEvent(sUserName + " has made a guess: '" + sGuess + "'"));
-			m_pServer.AddNotification(sClanName, sUserName, sUserName + " has submitted a guess. Go disprove it!");
+			m_pServer.AddNotification(sClanName, sUserName, sUserName + " has submitted a guess. Go disprove it!", m_sGameID, m_sGameName);
 
 			this.Save();
 			return "";
@@ -691,7 +691,7 @@ namespace GameClansServer.Games
 			m_sStateStatus = "open";
 
 			// notify the user who submitted the guess and add an event log
-			m_pServer.AddNotification(sClanName, m_pPendingGuess.User, "The master has disproven your guess");
+			m_pServer.AddNotification(sClanName, m_pPendingGuess.User, "The master has disproven your guess", m_sGameID, m_sGameName);
 			m_lEventLog.Add(new ZendoLogEvent("The master has disproven " + m_pPendingGuess.User + "'s guess", pKoan.Xml));
 
 			this.Save();
@@ -707,7 +707,7 @@ namespace GameClansServer.Games
 			if (m_sStateStatus != "pending disproval") { return Master.MessagifyError("There is no pending guess right now"); }
 
 			// notify the user that they won and add an event log
-			m_pServer.AddNotification(sClanName, m_pPendingGuess.User, "The master was unable to disprove your guess. You have reached enlightenment!");
+			m_pServer.AddNotification(sClanName, m_pPendingGuess.User, "The master was unable to disprove your guess. You have reached enlightenment!", m_sGameID, m_sGameName);
 			m_lEventLog.Add(new ZendoLogEvent("The maser was unable to disprove " + m_pPendingGuess.User + "'s guess. " + m_pPendingGuess.User + " has become enlightened!"));
 
 			m_sWinningUser = m_pPendingGuess.User;

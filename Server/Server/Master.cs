@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Master.cs
 //  Date created: 11/28/2016
-//  Date edited: 12/21/2016
+//  Date edited: 12/22/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: Superclass of static functions and properties
@@ -23,6 +23,9 @@ namespace GameClansServer
 		public const string MSGTYPE_DATA = "Data"; // data only
 		public const string MSGTYPE_BOTH = "Both"; // data and message
 		public const string MSGTYPE_ERROR = "Error"; // error message (can include data)
+
+		public const string SERVER_VERSION = "1.0.0";
+		public const string APP_VERSION = "1.0.0"; // this is the version of app required in order to work with the current server version
 
 		// methods
 

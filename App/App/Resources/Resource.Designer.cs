@@ -141,8 +141,8 @@ namespace App
 			// aapt resource value: 0x7f050003
 			public const int appDrawerLayout = 2131034115;
 			
-			// aapt resource value: 0x7f050018
-			public const int appDrawerList = 2131034136;
+			// aapt resource value: 0x7f050017
+			public const int appDrawerList = 2131034135;
 			
 			// aapt resource value: 0x7f05000a
 			public const int boxGameLog = 2131034122;
@@ -153,104 +153,101 @@ namespace App
 			// aapt resource value: 0x7f05000d
 			public const int boxKoans = 2131034125;
 			
-			// aapt resource value: 0x7f050012
-			public const int boxPlayers = 2131034130;
+			// aapt resource value: 0x7f050011
+			public const int boxPlayers = 2131034129;
 			
 			// aapt resource value: 0x7f050008
 			public const int btnAction = 2131034120;
 			
-			// aapt resource value: 0x7f050021
-			public const int btnExampleRules = 2131034145;
+			// aapt resource value: 0x7f050020
+			public const int btnExampleRules = 2131034144;
 			
-			// aapt resource value: 0x7f050016
-			public const int btnGiveUp = 2131034134;
+			// aapt resource value: 0x7f050015
+			public const int btnGiveUp = 2131034133;
 			
-			// aapt resource value: 0x7f050028
-			public const int btnGrantEnlightenment = 2131034152;
+			// aapt resource value: 0x7f050027
+			public const int btnGrantEnlightenment = 2131034151;
 			
 			// aapt resource value: 0x7f050009
 			public const int btnGuess = 2131034121;
 			
+			// aapt resource value: 0x7f050019
+			public const int btnHasBuddhaNature = 2131034137;
+			
 			// aapt resource value: 0x7f05001a
-			public const int btnHasBuddhaNature = 2131034138;
+			public const int btnHasNotBuddhaNature = 2131034138;
 			
-			// aapt resource value: 0x7f05001b
-			public const int btnHasNotBuddhaNature = 2131034139;
+			// aapt resource value: 0x7f05002b
+			public const int btnJoin = 2131034155;
 			
-			// aapt resource value: 0x7f05002c
-			public const int btnJoin = 2131034156;
+			// aapt resource value: 0x7f050029
+			public const int btnNewGame = 2131034153;
 			
-			// aapt resource value: 0x7f05002a
-			public const int btnNewGame = 2131034154;
+			// aapt resource value: 0x7f050034
+			public const int btnSetPassword = 2131034164;
 			
-			// aapt resource value: 0x7f050010
-			public const int btnPreviousGuesses = 2131034128;
+			// aapt resource value: 0x7f050016
+			public const int btnStart = 2131034134;
 			
-			// aapt resource value: 0x7f050035
-			public const int btnSetPassword = 2131034165;
+			// aapt resource value: 0x7f050040
+			public const int btnSubmitGame = 2131034176;
 			
-			// aapt resource value: 0x7f050017
-			public const int btnStart = 2131034135;
+			// aapt resource value: 0x7f050025
+			public const int btnSubmitInitial = 2131034149;
 			
-			// aapt resource value: 0x7f05003f
-			public const int btnSubmitGame = 2131034175;
+			// aapt resource value: 0x7f050031
+			public const int btnSubmitJoin = 2131034161;
 			
-			// aapt resource value: 0x7f050026
-			public const int btnSubmitInitial = 2131034150;
-			
-			// aapt resource value: 0x7f050032
-			public const int btnSubmitJoin = 2131034162;
+			// aapt resource value: 0x7f05001e
+			public const int btnSubmitMaster = 2131034142;
 			
 			// aapt resource value: 0x7f05001f
-			public const int btnSubmitMaster = 2131034143;
+			public const int btnSubmitMondo = 2131034143;
 			
-			// aapt resource value: 0x7f050020
-			public const int btnSubmitMondo = 2131034144;
+			// aapt resource value: 0x7f050014
+			public const int btnZendoRules = 2131034132;
 			
-			// aapt resource value: 0x7f050015
-			public const int btnZendoRules = 2131034133;
-			
-			// aapt resource value: 0x7f05002e
-			public const int clansList = 2131034158;
+			// aapt resource value: 0x7f05002d
+			public const int clansList = 2131034157;
 			
 			// aapt resource value: 0x7f050001
 			public const int flowDataRowKoan = 2131034113;
 			
-			// aapt resource value: 0x7f050019
-			public const int flowKoan = 2131034137;
+			// aapt resource value: 0x7f050018
+			public const int flowKoan = 2131034136;
 			
 			// aapt resource value: 0x7f050007
 			public const int flowStatusKoan = 2131034119;
 			
-			// aapt resource value: 0x7f05002b
-			public const int gamesList = 2131034155;
+			// aapt resource value: 0x7f05002a
+			public const int gamesList = 2131034154;
+			
+			// aapt resource value: 0x7f050037
+			public const int lblMyStatsName = 2131034167;
 			
 			// aapt resource value: 0x7f050038
-			public const int lblMyStatsName = 2131034168;
+			public const int lblMyStatsPlace = 2131034168;
 			
 			// aapt resource value: 0x7f050039
-			public const int lblMyStatsPlace = 2131034169;
-			
-			// aapt resource value: 0x7f05003a
-			public const int lblMyStatsScore = 2131034170;
-			
-			// aapt resource value: 0x7f050040
-			public const int lblScoreName = 2131034176;
+			public const int lblMyStatsScore = 2131034169;
 			
 			// aapt resource value: 0x7f050041
-			public const int lblScorePlace = 2131034177;
+			public const int lblScoreName = 2131034177;
 			
 			// aapt resource value: 0x7f050042
-			public const int lblScoreScore = 2131034178;
+			public const int lblScorePlace = 2131034178;
 			
-			// aapt resource value: 0x7f05001d
-			public const int lstKoanImages = 2131034141;
+			// aapt resource value: 0x7f050043
+			public const int lblScoreScore = 2131034179;
 			
-			// aapt resource value: 0x7f050024
-			public const int lstKoanImagesBad = 2131034148;
+			// aapt resource value: 0x7f05001c
+			public const int lstKoanImages = 2131034140;
 			
-			// aapt resource value: 0x7f050022
-			public const int lstKoanImagesGood = 2131034146;
+			// aapt resource value: 0x7f050023
+			public const int lstKoanImagesBad = 2131034147;
+			
+			// aapt resource value: 0x7f050021
+			public const int lstKoanImagesGood = 2131034145;
 			
 			// aapt resource value: 0x7f05000f
 			public const int lstKoans = 2131034127;
@@ -258,17 +255,20 @@ namespace App
 			// aapt resource value: 0x7f05000c
 			public const int lstLog = 2131034124;
 			
-			// aapt resource value: 0x7f050014
-			public const int lstPlayers = 2131034132;
+			// aapt resource value: 0x7f05003d
+			public const int lstNotifications = 2131034173;
 			
-			// aapt resource value: 0x7f05003c
-			public const int lstScoreBoard = 2131034172;
+			// aapt resource value: 0x7f050013
+			public const int lstPlayers = 2131034131;
+			
+			// aapt resource value: 0x7f05003b
+			public const int lstScoreBoard = 2131034171;
 			
 			// aapt resource value: 0x7f050002
 			public const int refresher = 2131034114;
 			
-			// aapt resource value: 0x7f050036
-			public const int relativeLayoutThing = 2131034166;
+			// aapt resource value: 0x7f050035
+			public const int relativeLayoutThing = 2131034165;
 			
 			// aapt resource value: 0x7f05000e
 			public const int scrlKoans = 2131034126;
@@ -276,68 +276,71 @@ namespace App
 			// aapt resource value: 0x7f05000b
 			public const int scrlLog = 2131034123;
 			
-			// aapt resource value: 0x7f050013
-			public const int scrlPlayers = 2131034131;
+			// aapt resource value: 0x7f05003c
+			public const int scrlNotifications = 2131034172;
 			
-			// aapt resource value: 0x7f05003b
-			public const int scrlScoreBoard = 2131034171;
+			// aapt resource value: 0x7f050012
+			public const int scrlPlayers = 2131034130;
+			
+			// aapt resource value: 0x7f05003a
+			public const int scrlScoreBoard = 2131034170;
 			
 			// aapt resource value: 0x7f050004
 			public const int scrlZendoMain = 2131034116;
 			
-			// aapt resource value: 0x7f050037
-			public const int textViewName = 2131034167;
+			// aapt resource value: 0x7f050036
+			public const int textViewName = 2131034166;
 			
-			// aapt resource value: 0x7f050025
-			public const int txtBadKoan = 2131034149;
+			// aapt resource value: 0x7f050024
+			public const int txtBadKoan = 2131034148;
+			
+			// aapt resource value: 0x7f05002e
+			public const int txtClanName = 2131034158;
 			
 			// aapt resource value: 0x7f05002f
-			public const int txtClanName = 2131034159;
+			public const int txtClanPassword = 2131034159;
 			
-			// aapt resource value: 0x7f050030
-			public const int txtClanPassword = 2131034160;
-			
-			// aapt resource value: 0x7f05003d
-			public const int txtGameName = 2131034173;
+			// aapt resource value: 0x7f05003e
+			public const int txtGameName = 2131034174;
 			
 			// aapt resource value: 0x7f050006
 			public const int txtGameStatus = 2131034118;
 			
-			// aapt resource value: 0x7f05003e
-			public const int txtGameType = 2131034174;
+			// aapt resource value: 0x7f05003f
+			public const int txtGameType = 2131034175;
 			
-			// aapt resource value: 0x7f050023
-			public const int txtGoodKoan = 2131034147;
+			// aapt resource value: 0x7f050022
+			public const int txtGoodKoan = 2131034146;
 			
-			// aapt resource value: 0x7f050029
-			public const int txtGuess = 2131034153;
+			// aapt resource value: 0x7f050028
+			public const int txtGuess = 2131034152;
 			
-			// aapt resource value: 0x7f05001e
-			public const int txtKoanBuilder = 2131034142;
+			// aapt resource value: 0x7f05001d
+			public const int txtKoanBuilder = 2131034141;
 			
-			// aapt resource value: 0x7f05002d
-			public const int txtLabel = 2131034157;
+			// aapt resource value: 0x7f05002c
+			public const int txtLabel = 2131034156;
 			
-			// aapt resource value: 0x7f050011
-			public const int txtMaster = 2131034129;
+			// aapt resource value: 0x7f050010
+			public const int txtMaster = 2131034128;
 			
-			// aapt resource value: 0x7f05001c
-			public const int txtRule = 2131034140;
+			// aapt resource value: 0x7f05001b
+			public const int txtRule = 2131034139;
 			
-			// aapt resource value: 0x7f050027
-			public const int txtRuleGuess = 2131034151;
+			// aapt resource value: 0x7f050026
+			public const int txtRuleGuess = 2131034150;
 			
 			// aapt resource value: 0x7f050000
 			public const int txtText = 2131034112;
 			
-			// aapt resource value: 0x7f050031
-			public const int txtUserName = 2131034161;
+			// aapt resource value: 0x7f050030
+			public const int txtUserName = 2131034160;
+			
+			// aapt resource value: 0x7f050032
+			public const int txtUserPassword = 2131034162;
 			
 			// aapt resource value: 0x7f050033
-			public const int txtUserPassword = 2131034163;
-			
-			// aapt resource value: 0x7f050034
-			public const int txtUserPassword2 = 2131034164;
+			public const int txtUserPassword2 = 2131034163;
 			
 			static Id()
 			{
