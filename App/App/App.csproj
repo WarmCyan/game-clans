@@ -73,6 +73,7 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Master.cs" />
     <Compile Include="NewGameActivity.cs" />
+    <Compile Include="NotificationsActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="_hidden.cs" />
@@ -128,6 +129,9 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\NewGame.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\Notifications.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>

@@ -83,7 +83,14 @@ namespace GameClansServer
 
 			// make sure the username doesn't already exist
 			TableOperation pUserRetrieveOp = TableOperation.Retrieve<UserTableEntity>(Master.BuildUserPartitionKey(sClanName), sUserName);
-			if (this.Table.Execute(pUserRetrieveOp).Result != null) { return Master.MessagifyError("User with this name already exists in this clan."); }
+			if (this.Table.Execute(pUserRetrieveOp).Result != null) 
+			{
+				// if just user logging in on a different device
+				if (VerifyUserPassPhrase(sClanName, sUserName, sUserPassPhrase)) { return Master.Messagify("You have successfully logged into " + sClanName + " as " + sUserName, Master.MSGTYPE_BOTH, "<ClanStub ClanName='" + sClanName + "' UserName='" + sUserName + "' />"); }
+			
+				// (password incorrect)
+				return Master.MessagifyError("User with this name already exists in this clan."); 
+			}
 
 			// if we make it to this point, we're good, add a new user!
 			UserTableEntity pUser = new UserTableEntity(sClanName, sUserName);
@@ -140,7 +147,7 @@ namespace GameClansServer
 				pList.Add(pNotifXML);
 			}
 
-			this.Table.ExecuteBatch(pBatch);
+			if (pBatch.Count > 0) { this.Table.ExecuteBatch(pBatch); }
 			
 			return Master.MessagifyData(pList.ToString()); ;
 		}
@@ -160,6 +167,7 @@ namespace GameClansServer
 			foreach (UserNotifTableEntity pNotif in lUserNotifications) 
 			{ 
 				pNotif.Read = true;
+				pNotif.Seen = true;
 				pBatch.Add(TableOperation.Replace(pNotif));
 			}
 			this.Table.ExecuteBatch(pBatch);
@@ -178,13 +186,13 @@ namespace GameClansServer
 			lUserNotifications.Reverse();
 
 			// set all notifications to seen
-			/*TableBatchOperation pBatch = new TableBatchOperation();
+			TableBatchOperation pBatch = new TableBatchOperation();
 			foreach (UserNotifTableEntity pNotif in lUserNotifications) 
 			{ 
 				pNotif.Seen = true;
 				pBatch.Add(TableOperation.Replace(pNotif));
 			}
-			this.Table.ExecuteBatch(pBatch);*/
+			this.Table.ExecuteBatch(pBatch);
 
 			// make the xml list of unread notifications
 			XElement pList = new XElement("Notifications");

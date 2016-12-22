@@ -83,6 +83,7 @@ namespace App
 				pMyPlace.Text = pLeaderboard.Attribute("Place").Value;
 
 				LinearLayout pScoreboardLayout = FindViewById<LinearLayout>(Resource.Id.lstScoreBoard);
+				pScoreboardLayout.RemoveAllViews();
 
 				foreach (XElement pScoreXml in pLeaderboard.Elements("Score"))
 				{
@@ -105,6 +106,7 @@ namespace App
 			pResponse = Master.ReadResponse(sResponse);
 
 			LinearLayout pNotifLayout = FindViewById<LinearLayout>(Resource.Id.lstNotifications);
+			pNotifLayout.RemoveAllViews();
 			if (pResponse.Element("Data").Element("Notifications") != null)
 			{
 				foreach (XElement pNotif in pResponse.Element("Data").Element("Notifications").Elements("Notification"))
@@ -114,8 +116,28 @@ namespace App
 
 					TextView pDataText = pDataRow.FindViewById<TextView>(Resource.Id.txtText);
 					pDataText.Text = pNotif.Attribute("GameName").Value + " - " + pNotif.Value;
+
+					pDataText.Click += delegate
+					{
+						string sGameID = pNotif.Attribute("GameID").Value;
+						Intent pIntent = null;
+						if (sGameID.Contains("Zendo")) { pIntent = new Intent(this, typeof(ZendoActivity)); }
+						pIntent.SetAction(sGameID);
+						pIntent.PutExtra("GameName", pNotif.Attribute("GameName").Value);
+						this.Finish();
+						StartActivity(pIntent);
+					};
+
+					pNotifLayout.AddView(pDataRow);
 				}
 			}
+
+			Button pMarkRead = FindViewById<Button>(Resource.Id.btnMarkRead);
+			pMarkRead.Click += delegate
+			{
+				WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetServerURL() + "MarkUnreadNotificationsRead", Master.BuildCommonBody(), true);
+				this.BuildHomeDashboard();
+			};
 		}
 
 		/*protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)

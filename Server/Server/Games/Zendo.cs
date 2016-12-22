@@ -803,7 +803,7 @@ namespace GameClansServer.Games
 					sStatus = "Build a koan and call either master or mondo!";
 
 					// if only dealing with the initial two koans, display them to students
-					if (m_lKoans.Count == 2) { sStatusData += m_lKoans[0].Xml.ToString() + m_lKoans[1].Xml.ToString(); }
+					//if (m_lKoans.Count == 2) { sStatusData += m_lKoans[0].Xml.ToString() + m_lKoans[1].Xml.ToString(); }
 				}
 			}
 			else if (m_sStateStatus == "pending master")

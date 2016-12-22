@@ -180,6 +180,9 @@ namespace App
 			// aapt resource value: 0x7f05002b
 			public const int btnJoin = 2131034155;
 			
+			// aapt resource value: 0x7f05003e
+			public const int btnMarkRead = 2131034174;
+			
 			// aapt resource value: 0x7f050029
 			public const int btnNewGame = 2131034153;
 			
@@ -189,8 +192,8 @@ namespace App
 			// aapt resource value: 0x7f050016
 			public const int btnStart = 2131034134;
 			
-			// aapt resource value: 0x7f050040
-			public const int btnSubmitGame = 2131034176;
+			// aapt resource value: 0x7f050041
+			public const int btnSubmitGame = 2131034177;
 			
 			// aapt resource value: 0x7f050025
 			public const int btnSubmitInitial = 2131034149;
@@ -231,14 +234,14 @@ namespace App
 			// aapt resource value: 0x7f050039
 			public const int lblMyStatsScore = 2131034169;
 			
-			// aapt resource value: 0x7f050041
-			public const int lblScoreName = 2131034177;
-			
 			// aapt resource value: 0x7f050042
-			public const int lblScorePlace = 2131034178;
+			public const int lblScoreName = 2131034178;
 			
 			// aapt resource value: 0x7f050043
-			public const int lblScoreScore = 2131034179;
+			public const int lblScorePlace = 2131034179;
+			
+			// aapt resource value: 0x7f050044
+			public const int lblScoreScore = 2131034180;
 			
 			// aapt resource value: 0x7f05001c
 			public const int lstKoanImages = 2131034140;
@@ -300,14 +303,14 @@ namespace App
 			// aapt resource value: 0x7f05002f
 			public const int txtClanPassword = 2131034159;
 			
-			// aapt resource value: 0x7f05003e
-			public const int txtGameName = 2131034174;
+			// aapt resource value: 0x7f05003f
+			public const int txtGameName = 2131034175;
 			
 			// aapt resource value: 0x7f050006
 			public const int txtGameStatus = 2131034118;
 			
-			// aapt resource value: 0x7f05003f
-			public const int txtGameType = 2131034175;
+			// aapt resource value: 0x7f050040
+			public const int txtGameType = 2131034176;
 			
 			// aapt resource value: 0x7f050022
 			public const int txtGoodKoan = 2131034146;
@@ -404,7 +407,10 @@ namespace App
 			public const int NewGame = 2130903055;
 			
 			// aapt resource value: 0x7f030010
-			public const int ScoreRow = 2130903056;
+			public const int Notifications = 2130903056;
+			
+			// aapt resource value: 0x7f030011
+			public const int ScoreRow = 2130903057;
 			
 			static Layout()
 			{

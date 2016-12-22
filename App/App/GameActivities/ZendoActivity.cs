@@ -31,6 +31,7 @@ namespace App
 	{
 		// member variables
 		private string m_sGameID;
+		private string m_sGameName;
 	
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
@@ -40,9 +41,6 @@ namespace App
 			// Create your application here
 
 			base.CreateDrawer();
-
-			string sGameName = this.Intent.GetStringExtra("GameName");
-			this.Title = "Zendo - " + sGameName;
 
 			ScrollView pMainScroll = FindViewById<ScrollView>(Resource.Id.scrlZendoMain);
 			pMainScroll.SetOnScrollChangeListener(this);
@@ -54,7 +52,13 @@ namespace App
 				this.GetUserBoard();
 				pRefresher.Refreshing = false;
 			};
+			
+			// get game name
+			string sGameName = this.Intent.GetStringExtra("GameName");
+			m_sGameName = sGameName;
+			this.Title = "Zendo - " + sGameName;
 
+			// get game id
 			m_sGameID = this.Intent.Action;
 			this.GetUserBoard();
 
@@ -76,6 +80,7 @@ namespace App
 		{
 			Intent pIntent = new Intent(this, typeof(ZendoActivity));
 			pIntent.SetAction(m_sGameID);
+			pIntent.PutExtra("GameName", m_sGameName);
 			StartActivity(pIntent);
 			this.Finish();
 		}

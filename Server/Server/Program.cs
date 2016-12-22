@@ -34,12 +34,20 @@ namespace GameClansServer
 
 			/*string sMsg = StartZendoGame();*/
 
-			string sMsg = GetGameBoard();
+			/*string sMsg = GetGameBoard();*/
+
+			string sMsg = GetLastNotifications();
 
 			Console.WriteLine(sMsg);
 			
 			Console.WriteLine("\nComplete!");
 			Console.Read();
+		}
+
+		static string GetLastNotifications()
+		{
+			ClanServer cs = new ClanServer();
+			return cs.GetLastNNotifications("Testing Clan", "Dude", cs.Sha256Hash("testing"));
 		}
 
 		static string GetGameBoard()

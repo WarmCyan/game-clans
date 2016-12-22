@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: BaseActivity.cs
 //  Date created: 12/9/2016
-//  Date edited: 12/15/2016
+//  Date edited: 12/22/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: Base activity that other activities should extend to the same drawer layouts
@@ -60,17 +60,18 @@ namespace App
 				switch (iChoice)
 				{
 					case 0: // home
-						pIntent = new Intent(this, (new MainActivity()).Class);
+						pIntent = new Intent(this, typeof(MainActivity));
 						break;
 					case 1: // games
-						pIntent = new Intent(this, (new GamesActivity()).Class);
+						pIntent = new Intent(this, typeof(GamesActivity));
 						break;
 					case 2: // profile (eventually chats)
 						break;
 					case 3: // notifications	
+						pIntent = new Intent(this, typeof(NotificationsActivity));
 						break;
 					case 4: // groups
-						pIntent = new Intent(this, (new GroupListActivity()).Class);
+						pIntent = new Intent(this, typeof(GroupListActivity));
 						break;
 					case 5: // settings
 						break;

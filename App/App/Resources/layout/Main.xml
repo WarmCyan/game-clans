@@ -83,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:padding="10dp"
                     android:textSize="20dp"
-                    android:text="Clan Leaderboard"
+                    android:text="Unread Notifications"
                     android:background="#CCCCCC"
                     android:textColor="#000000" />
 				<View
@@ -102,6 +102,13 @@
                         android:orientation="vertical" />
 				</ScrollView>
 			</LinearLayout>
+			<Button
+				android:id="@+id/btnMarkRead"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:padding="20dp"
+				android:layout_margin="10dp"
+				android:text="Mark Notifications Read" />
 			<!-- Active Games -->
 			<!-- <LinearLayout
 			   android:orientation="vertical"
