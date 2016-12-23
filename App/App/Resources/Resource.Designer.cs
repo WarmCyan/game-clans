@@ -159,6 +159,9 @@ namespace App
 			// aapt resource value: 0x7f050008
 			public const int btnAction = 2131034120;
 			
+			// aapt resource value: 0x7f050045
+			public const int btnChangePassword = 2131034181;
+			
 			// aapt resource value: 0x7f050020
 			public const int btnExampleRules = 2131034144;
 			
@@ -410,7 +413,13 @@ namespace App
 			public const int Notifications = 2130903056;
 			
 			// aapt resource value: 0x7f030011
-			public const int ScoreRow = 2130903057;
+			public const int Profile = 2130903057;
+			
+			// aapt resource value: 0x7f030012
+			public const int ScoreRow = 2130903058;
+			
+			// aapt resource value: 0x7f030013
+			public const int Settings = 2130903059;
 			
 			static Layout()
 			{

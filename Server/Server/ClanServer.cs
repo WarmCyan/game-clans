@@ -171,7 +171,7 @@ namespace GameClansServer
 				pNotif.Seen = true;
 				pBatch.Add(TableOperation.Replace(pNotif));
 			}
-			this.Table.ExecuteBatch(pBatch);
+			if (pBatch.Count > 0) { this.Table.ExecuteBatch(pBatch); }
 
 			return "";
 		}
@@ -193,7 +193,7 @@ namespace GameClansServer
 				pNotif.Seen = true;
 				pBatch.Add(TableOperation.Replace(pNotif));
 			}
-			this.Table.ExecuteBatch(pBatch);
+			if (pBatch.Count > 0) { this.Table.ExecuteBatch(pBatch); }
 
 			// make the xml list of unread notifications
 			XElement pList = new XElement("Notifications");
@@ -226,7 +226,7 @@ namespace GameClansServer
 				pNotif.Seen = true;
 				pBatch.Add(TableOperation.Replace(pNotif));
 			}
-			this.Table.ExecuteBatch(pBatch);
+			if (pBatch.Count > 0) { this.Table.ExecuteBatch(pBatch); }
 
 			// make the xml list of unread notifications
 			XElement pList = new XElement("Notifications");

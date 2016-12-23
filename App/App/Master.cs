@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: Master.cs
 //  Date created: 12/9/2016
-//  Date edited: 12/21/2016
+//  Date edited: 12/22/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using System.IO;
 
 using Android.App;
 using Android.Content;
@@ -33,6 +34,8 @@ namespace App
 		private static string s_sActiveClan = "";
 		private static string s_sActiveUserName = "";
 		private static string s_sKey = "";
+
+		private static Dictionary<string, string> s_dSettings;
 
 		// properties
 		public static string GetBaseDir()
@@ -163,6 +166,43 @@ namespace App
 			}
 
 			return pResponse;
+		}
+
+		private static void ReadSettings()
+		{
+			// clear old settings
+			s_dSettings = new Dictionary<string, string>();
+
+			// read in settings file
+			List<string> lSettings = File.ReadAllLines(GetBaseDir() + "_settings.dat").ToList();
+			foreach (string sSetting in lSettings)
+			{
+				int iEquals = sSetting.IndexOf('=');
+				string sName = sSetting.Substring(0, iEquals);
+				string sValue = sSetting.Substring(iEquals + 1);
+
+				s_dSettings.Add(sName, sValue);
+			}
+		}
+		private static void WriteSettings()
+		{
+			List<string> lSettings = new List<string>();
+			foreach (string sSetting in s_dSettings.Keys) { lSettings.Add(sSetting + "=" + s_dSettings[sSetting]); }
+			File.WriteAllLines(GetBaseDir() + "_settings.dat", lSettings.ToArray());
+		}
+
+		public static void SetSetting(string sSettingName, string sValue)
+		{
+			ReadSettings();
+			if (s_dSettings.Keys.Contains(sSettingName)) { s_dSettings[sSettingName] = sValue; }
+			else { s_dSettings.Add(sSettingName, sValue); }
+			WriteSettings();
+		}
+		
+		public static string GetSetting(string sSettingName)
+		{
+			ReadSettings();
+			return s_dSettings[sSettingName];
 		}
 	}
 }

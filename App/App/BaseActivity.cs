@@ -40,7 +40,7 @@ namespace App
 
 		protected void CreateDrawer()
 		{
-			m_lNavTitles = new List<string>() { "Home", "Games", /*"Chats",*/ "Profile", "Notifications", "Clans", "Settings" };
+			m_lNavTitles = new List<string>() { "Home", "Games", /*"Chats", "Profile",*/ "Notifications", "Clans", "Settings" };
 			string sActive = Master.GetActiveClan();
 			if (sActive != "") 
 			{ 
@@ -65,15 +65,13 @@ namespace App
 					case 1: // games
 						pIntent = new Intent(this, typeof(GamesActivity));
 						break;
-					case 2: // profile (eventually chats)
-						break;
-					case 3: // notifications	
+					case 2: // notifications	
 						pIntent = new Intent(this, typeof(NotificationsActivity));
 						break;
-					case 4: // groups
+					case 3: // groups
 						pIntent = new Intent(this, typeof(GroupListActivity));
 						break;
-					case 5: // settings
+					case 4: // settings
 						break;
 				}
 				if (pIntent == null) { return; }

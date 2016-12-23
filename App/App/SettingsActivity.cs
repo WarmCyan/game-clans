@@ -1,5 +1,5 @@
 //*************************************************************
-//  File: ProfileActivity.cs
+//  File: SettingsActivity.cs
 //  Date created: 12/22/2016
 //  Date edited: 12/22/2016
 //  Author: Nathan Martindale
@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Xml.Linq;
 
 using Android.App;
 using Android.Content;
@@ -20,18 +19,26 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
-using DWL.Utility;
-
 namespace App
 {
-	[Activity(Label = "Profile")]
-	public class ProfileActivity : Activity
+	[Activity(Label = "Settings")]
+	public class SettingsActivity : BaseActivity
 	{
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
+			this.SetContentView(Resource.Layout.Settings);
+
+			base.CreateDrawer();
 
 			// Create your application here
+
+			Button pPass = FindViewById<Button>(Resource.Id.btnChangePassword);
+			pPass.Click += delegate
+			{
+				Intent pIntent = new Intent(this, typeof(KeyActivity));
+				StartActivity(pIntent);
+			};
 		}
 	}
 }

@@ -37,6 +37,7 @@ namespace App
 
 			// make sure that all the necessary files exist
 			if (!File.Exists(Master.GetBaseDir() + "_clans.dat")) { File.Create(Master.GetBaseDir() + "_clans.dat").Dispose(); }
+			if (!File.Exists(Master.GetBaseDir() + "_settings.dat")) { File.WriteAllText(Master.GetBaseDir() + "_settings.dat", "notifications=on"); }
 			if (!File.Exists(Master.GetBaseDir() + "_key.dat"))
 			{
 				Intent pIntent = new Intent(this, (new KeyActivity().Class));
@@ -61,6 +62,8 @@ namespace App
 				this.Title = Master.GetActiveClan() + " - " + Master.GetActiveUserName();
 				this.BuildHomeDashboard();
 			}
+
+			//StartService(new Intent(this, typeof(NotificationsService)));
 		}
 
 		private void BuildHomeDashboard()
