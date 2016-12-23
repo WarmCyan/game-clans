@@ -115,7 +115,7 @@ namespace Client
 				{
 					if (m_lGames[iIndex] == "Zendo")
 					{
-						Zendo pWindow = new Zendo(m_lGames[iIndex]);
+						Zendo pWindow = new Zendo(m_lGameIDs[iIndex], m_lGameNames[iIndex]);
 						pWindow.Show();
 					}
 				};

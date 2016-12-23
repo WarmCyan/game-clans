@@ -27,6 +27,9 @@ namespace Client
 {
 	public class Master
 	{
+		private static List<string> s_lValidZendoImageNames = new List<string>() { "BD", "BL", "BR", "BU", "F", "GD", "GL", "GR", "GU", "OD", "OL", "OR", "OU", "PD", "PL", "PR", "PU", "RD", "RL", "RR", "RU", "T", "YD", "YL", "YR", "YU" };
+
+	
 		private static string s_sActiveClan = "";
 		private static string s_sActiveUserName = "";
 		private static string s_sKey = "";
@@ -81,6 +84,45 @@ namespace Client
 			pContainer.Width = 30;
 
 			pPanel.Children.Add(pContainer);
+		}
+
+		private static List<string> GetPieceParts(string sText)
+		{
+			sText = sText.ToUpper();
+			List<string> lParts = new List<string>();
+
+			if (sText.StartsWith("T") || sText.StartsWith("F"))
+			{
+				lParts.Add(sText[0].ToString());
+				if (sText.Length > 1) { sText = sText.Substring(1); }
+			}
+
+			for (int i = 0; i < sText.Length; i += 2)
+			{
+				if (i + 1 >= sText.Length) { break; }
+				string sPiece = sText[i].ToString() + sText[i + 1].ToString();
+				lParts.Add(sPiece);
+			}
+
+			return lParts;
+		}
+
+		public static bool FillKoanDisplay(WrapPanel pPanel, string sKoan)
+		{
+			bool bValid = true;
+
+			// empty panel display
+			pPanel.Children.Clear();
+
+			// get the image for each piece and add it
+			List<string> lPieces = GetPieceParts(sKoan);
+			foreach (string sPiece in lPieces)
+			{
+				if (!s_lValidZendoImageNames.Contains(sPiece)) { bValid = false; continue; }
+				AddImageToWrapPanel(pPanel, sPiece);
+			}
+
+			return bValid;
 		}
 	}
 

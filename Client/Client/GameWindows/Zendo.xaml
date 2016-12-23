@@ -14,16 +14,16 @@
 			<!-- koan builder thing in upper right -->
 
 		</Grid.ColumnDefinitions>
-		<DockPanel Margin="10" Grid.Column="0">
-			<Label DockPanel.Dock="Top" Name="lblStatus" FontSize="18" Content="This is a test" Foreground="#FFFFFF" Margin="10" Padding="10"/>
+		<DockPanel Margin="10" Grid.Column="0" LastChildFill="False">
+			<TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Name="lblStatus" FontSize="18" Text="This is a test" Foreground="#FFFFFF" Margin="10" Padding="10"/>
 			<WrapPanel DockPanel.Dock="Top" Name="pnlStatusKoan" Orientation="Horizontal">
 			</WrapPanel>
 
-			<Grid>
+			<Grid DockPanel.Dock="Top">
+				<ScrollViewer VerticalScrollBarVisibility="Hidden">
 				<StackPanel Name="pnlActions">
 					<StackPanel Name="pnlWaiting" Visibility="Collapsed">
 						<Label Margin="20" Name="lblWaitingText" Content="Waiting..." Foreground="White" />
-						<Label Margin="20, 0, 20, 10" Name="lblGuessingStoneCount" Content="You have 0 Guessing Stones" Foreground="White" />
 					</StackPanel>
 				
 					<StackPanel Name="pnlJoin" Visibility="Collapsed">
@@ -33,15 +33,15 @@
 					</StackPanel>
 					
 					<StackPanel Name="pnlRuleDisplay" Visibility="Collapsed">
-						<Label Margin="20, 10" Name="lblRule" Content="This is your rule" Foreground="White" />
-						<Label Margin="20, 0" Name="lblGuessRule" Content="This is the rule they guessed." Foreground="White" />
+						<TextBlock Margin="20, 10" Name="lblRule" Padding="5" TextWrapping="Wrap" Text="This is your rule" Foreground="White" />
+						<TextBlock Margin="20, 0" Name="lblGuessRule" Padding="5" TextWrapping="Wrap" Text="This is the rule they guessed." Foreground="White" />
 					</StackPanel>
 
-					<StackPanel Name="pnlSingleKoanCreator">
-						<Label>Text</Label>
+					<StackPanel Name="pnlSingleKoanCreator" Visibility="Collapsed">
+						<TextBlock Padding="5" Margin="20,0" Foreground="White" TextWrapping="Wrap">Reminder: a symbol in a koan is constructed from two letters, a color and a direction. (B - blue, R - red, G - green, P - purple, Y - yellow, O - orange) (L - left, U - up, D - down, R - right)</TextBlock>
 						<WrapPanel Name="pnlKoanCreatorDisplay"></WrapPanel>
-						<TextBox Name="txtKoanEditor" Margin="20, 0, 20, 0" Padding="5" Foreground="White" Background="#111111" KeyUp="txtKoanEditor_KeyUp" />
-						<Grid>
+						<TextBox Name="txtKoanEditor" Margin="20, 5, 20, 0" Padding="5" Foreground="White" Background="#111111" KeyUp="txtKoanEditor_KeyUp" />
+						<Grid Name="grdSingleKoanSubmissionButtons" Visibility="Collapsed">
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="*" />
 								<ColumnDefinition Width="*" />
@@ -55,17 +55,83 @@
 						</Grid>
 					</StackPanel>
 
-					<StackPanel Name="pnlRuleCreator">
+					<StackPanel Name="pnlRuleCreator" Visibility="Collapsed">
+						<TextBlock Padding="5" Margin="20,0" Foreground="White" TextWrapping="Wrap">Remember, a rule is always harder to guess than you think! Click the button below for example rules.</TextBlock>
+						<Border BorderBrush="#444444" BorderThickness="2" Margin="20">
+							<TextBlock TextAlignment="Center" Name="btnExampleRules" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnExampleRules_MouseLeave" MouseEnter="btnExampleRules_MouseEnter" MouseUp="btnExampleRules_MouseUp">Example Rules</TextBlock>
+						</Border>
+						<Label Margin="20,0" Foreground="White">Rule:</Label>
+						<TextBox Name="txtRule" Margin="20, 0, 20, 5" Padding="5" Foreground="White" Background="#111111" />
+						<Label Margin="20,0" Foreground="White">Koan with buddha-nature:</Label>
+						<WrapPanel Name="pnlKoanRule1"></WrapPanel>
+						<TextBox Name="txtKoanRule1Editor" Margin="20, 5, 20, 5" Padding="5" Foreground="White" Background="#111111" KeyUp="txtKoanRule1Editor_KeyUp" />
+						<Label Margin="20,0" Foreground="White">Koan without buddha-nature:</Label>
+						<WrapPanel Name="pnlKoanRule2"></WrapPanel>
+						<TextBox Name="txtKoanRule2Editor" Margin="20, 5, 20, 5" Padding="5" Foreground="White" Background="#111111" KeyUp="txtKoanRule2Editor_KeyUp" />
+						<Border BorderBrush="#444444" BorderThickness="2" Margin="20">
+							<TextBlock TextAlignment="Center" Name="btnSubmitRule" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnSubmitRule_MouseLeave" MouseEnter="btnSubmitRule_MouseEnter" MouseUp="btnSubmitRule_MouseUp">Submit Rule</TextBlock>
+						</Border>
 					</StackPanel>
 
-					<StackPanel Name="pnlBuddhaNature">
+					<StackPanel Name="pnlBuddhaNature" Visibility="Collapsed">
+						<TextBlock Padding="5" Margin="20,0" Foreground="White" TextWrapping="Wrap">Does this koan have the buddha-nature?</TextBlock>
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*" />
+								<ColumnDefinition Width="*" />
+							</Grid.ColumnDefinitions>
+							<Border Grid.Column="0" Name="brdrHasBuddhaNature" BorderBrush="#444444" BorderThickness="2" Margin="20" Background="#151515" MouseEnter="btnHasBuddhaNature_MouseEnter" MouseLeave="btnHasBuddhaNature_MouseLeave" MouseUp="btnExampleRules_MouseUp">
+								<WrapPanel Name="pnlYesbutton" HorizontalAlignment="Center">
+									<TextBlock TextAlignment="Center" Name="btnHasBuddhaNature" Foreground="White" Padding="10">Yup!</TextBlock>
+								</WrapPanel>
+							</Border>
+							<Border Grid.Column="1" Name="brdrHasNotBuddhaNature" BorderBrush="#444444" BorderThickness="2" Margin="20" Background="#151515" MouseEnter="btnHasNotBuddhaNature_MouseEnter" MouseLeave="btnHasNotBuddhaNature_MouseLeave" MouseUp="btnHasNotBuddhaNature_MouseUp">
+								<WrapPanel Name="pnlNotButton" HorizontalAlignment="Center">
+									<TextBlock TextAlignment="Center" Name="btnHasNotBuddhaNature" Foreground="White" Padding="10">Nope</TextBlock>
+								</WrapPanel>
+							</Border>
+						</Grid>
 					</StackPanel>
 
-					<StackPanel Name="pnlGuess">
+					<StackPanel Name="pnlGuess" Visibility="Collapsed">
+						<Label Margin="20, 0, 20, 10" Name="lblGuessingStoneCount" Content="You have 0 Guessing Stones" Foreground="White" />
+						<StackPanel Name="pnlActualGuess" Visibility="Collapsed">
+							<TextBox Name="txtGuess" Margin="20, 5, 20, 5" Padding="5" Foreground="White" Background="#111111" />
+							<Border BorderBrush="#444444" BorderThickness="2" Margin="20">
+								<TextBlock TextAlignment="Center" Name="btnSubmitGuess" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnSubmitGuess_MouseLeave" MouseEnter="btnSubmitGuess_MouseEnter" MouseUp="btnSubmitGuess_MouseUp">Submit Guess (-1 guessing stone)</TextBlock>
+							</Border>
+						</StackPanel>
+					</StackPanel>
+
+					<StackPanel Name="pnlGrantEnlightenment" Visibility="Collapsed">
+							<TextBlock Padding="5" Margin="20,0" Foreground="White" TextWrapping="Wrap">If you can't disprove the guess, grant the student enlightenment!</TextBlock>
+							<Border BorderBrush="#444444" BorderThickness="2" Margin="20">
+								<TextBlock TextAlignment="Center" Name="btnGrantEnlightenment" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnGrantEnlightenment_MouseLeave" MouseEnter="btnGrantEnlightenment_MouseEnter" MouseUp="btnGrantEnlightenment_MouseUp">Grant Enlightenment</TextBlock>
+							</Border>
+					</StackPanel>
+					
+					<StackPanel Name="pnlRules" Visibility="Collapsed">
+							<Border BorderBrush="#444444" BorderThickness="2" Margin="20">
+								<TextBlock TextAlignment="Center" Name="btnRules" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnRules_MouseLeave" MouseEnter="btnRules_MouseEnter" MouseUp="btnRules_MouseUp">Zendo Rules</TextBlock>
+							</Border>
+					</StackPanel>
+
+					<StackPanel Name="pnlGiveUp" Visibility="Collapsed">
+							<Border BorderBrush="#444444" BorderThickness="2" Margin="20">
+								<TextBlock TextAlignment="Center" Name="btnGiveUp" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnGiveUp_MouseLeave" MouseEnter="btnGiveUp_MouseEnter" MouseUp="btnGiveUp_MouseUp">Give Up (only for the weak!)</TextBlock>
+							</Border>
+					</StackPanel>
+					
+					<StackPanel Name="pnlStartGame" Visibility="Collapsed">
+						<TextBlock Padding="5" Margin="20,0" Foreground="White" TextWrapping="Wrap">Make sure everyone has joined before starting.</TextBlock>
 					</StackPanel>
 				</StackPanel>
+				</ScrollViewer>
 			</Grid>
-	   </DockPanel>
+			<Border DockPanel.Dock="Bottom" BorderBrush="#444444" BorderThickness="2" Margin="20, 10">
+				<TextBlock TextAlignment="Center" Name="btnRefresh" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnRefresh_MouseLeave" MouseEnter="btnRefresh_MouseEnter" MouseUp="btnRefresh_MouseUp">Refresh</TextBlock>
+			</Border>
+		</DockPanel>
 
 		<!--<StackPanel Margin="10" Grid.Column="1">-->
 			<Grid Margin="10" Grid.Column="1">
@@ -76,7 +142,7 @@
 				</Grid.RowDefinitions>
 				
 				<DockPanel Grid.Row="0">
-					<Label DockPanel.Dock="Top" FontSize="14" Content="Master - " Foreground="#AAAAAA" Margin="10" Padding="10"/>
+					<Label DockPanel.Dock="Top" FontSize="14" Name="lblMaster" Content="Master - " Foreground="#AAAAAA" Margin="10" Padding="10"/>
 					<DockPanel LastChildFill="True">
 						<Label DockPanel.Dock="Top" Content="Players" Padding="5" Margin="10,5,10,0" Foreground="Black" Background="#CCCCCC" />
 						<ScrollViewer VerticalScrollBarVisibility="Hidden" Margin="10,0,10,10" Background="#333333">
