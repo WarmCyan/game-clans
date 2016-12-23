@@ -25,9 +25,10 @@ namespace App
 {
 	public class Master
 	{
-
-		public static bool TEMP_RUN = false; 
-
+		public static bool TEMP_RUN = false;
+		
+		public static bool VERSION_CHECKED = false;
+		public static string APP_VERSION = "1.0.0";
 	
 		// member variables
 		private static string s_sBaseDir = "";

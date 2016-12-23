@@ -35,6 +35,8 @@ namespace App
 
 			_RunTempCommands(); // TODO: REMOVE
 
+			if (!this.CheckVersion()) { return; }
+
 			// make sure that all the necessary files exist
 			if (!File.Exists(Master.GetBaseDir() + "_clans.dat")) { File.Create(Master.GetBaseDir() + "_clans.dat").Dispose(); }
 			if (!File.Exists(Master.GetBaseDir() + "_settings.dat")) { File.WriteAllText(Master.GetBaseDir() + "_settings.dat", "notifications=on"); }
@@ -64,6 +66,25 @@ namespace App
 			}
 
 			//StartService(new Intent(this, typeof(NotificationsService)));
+		}
+
+		private bool CheckVersion()
+		{
+			if (!Master.VERSION_CHECKED)
+			{
+				string sResponse = WebCommunications.SendGetRequest(Master.GetBaseURL() + Master.GetServerURL() + "RequiredAppVersion", true);
+				XElement pResponse = Master.ReadResponse(sResponse);
+
+				if (pResponse.Element("Text").Value != Master.APP_VERSION)
+				{
+					var pBuilder = new AlertDialog.Builder(this);
+					pBuilder.SetMessage("You have an outdated version of this app. Please reinstall the app from http://digitalwarriorlabs.com.\n(" + Master.APP_VERSION + " -> " + pResponse.Element("Text").Value + ")");
+					pBuilder.SetPositiveButton("Ok", (e, s) => { System.Environment.Exit(0); });
+					pBuilder.Show();
+					return false;
+				}
+			}
+			return true;
 		}
 
 		private void BuildHomeDashboard()
