@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: ZendoCreateRuleActivity.cs
 //  Date created: 12/16/2016
-//  Date edited: 12/20/2016
+//  Date edited: 12/22/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: Note, this activity should also handle the creation of the two initial koans. (since the server handles it all in one request)
@@ -73,8 +73,15 @@ namespace App
 					this.Finish();
 				}
 			};
-			
 
+			Button pExampleButton = FindViewById<Button>(Resource.Id.btnExampleRules);
+			pExampleButton.Click += delegate
+			{
+				Intent pIntent = new Intent(this, typeof(ZendoExampleRulesActivity));
+				StartActivity(pIntent);
+				this.SetResult(Result.Canceled);
+			};
+			
 			// put the initial truth/false stones
 			this.FillGoodKoan();
 			this.FillBadKoan();

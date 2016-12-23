@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_margin="20dp"
+            android:textSize="18dp"
+            android:text="Example rules: A koan has the buddha-nature if and only if:" />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_margin="20dp"
+            android:textSize="18dp"
+            android:text="- All the pieces are the same color" />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_margin="20dp"
+            android:textSize="18dp"
+            android:text="- It contains at least one red piece" />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_margin="20dp"
+            android:textSize="18dp"
+            android:text="- It contains no green pieces" />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_margin="20dp"
+            android:textSize="18dp"
+            android:text="- It contains at least one of each color" />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_margin="20dp"
+            android:textSize="18dp"
+            android:text="- All the pieces point in the same direction" />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_margin="20dp"
+            android:textSize="18dp"
+            android:text="- No two consecutive pieces point in the same direction" />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_margin="20dp"
+            android:textSize="18dp"
+            android:text="- It contains at least one piece that points up" />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_margin="20dp"
+            android:textSize="18dp"
+            android:text="- It has no more than 5 pieces" />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_margin="20dp"
+            android:textSize="18dp"
+            android:text="- It has two pieces that point towards each other" />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_margin="20dp"
+            android:textSize="18dp"
+            android:text="Note that rules can also be 'negative' as well: 'A koan does NOT have the buddha-nature if it contains exactly three green pieces.'" />
+    </LinearLayout>
+</ScrollView>

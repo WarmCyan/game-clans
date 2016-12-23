@@ -63,9 +63,11 @@
     <Compile Include="GameActivities\ZendoCreateRuleActivity.cs" />
     <Compile Include="GameActivities\ZendoActivity.cs" />
     <Compile Include="GameActivities\ZendoDisproveActivity.cs" />
+    <Compile Include="GameActivities\ZendoExampleRulesActivity.cs" />
     <Compile Include="GameActivities\ZendoGuessActivity.cs" />
     <Compile Include="GameActivities\ZendoJudgeKoanActivity.cs" />
     <Compile Include="GameActivities\ZendoPredictActivity.cs" />
+    <Compile Include="GameActivities\ZendoRulesActivity.cs" />
     <Compile Include="GamesActivity.cs" />
     <Compile Include="GroupListActivity.cs" />
     <Compile Include="JoinClanActivity.cs" />
@@ -141,6 +143,12 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\Settings.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\Game_ZendoExampleRules.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\Game_ZendoRules.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>

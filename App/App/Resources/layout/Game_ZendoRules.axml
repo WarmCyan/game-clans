@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_margin="20dp"
+            android:textSize="18dp"
+            android:text="Zendo is a game of inductive logic in which the master creates a rule and the students attempt to discover it by building 'koans'. The first student to correctly guess the rule wins!" />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_margin="20dp"
+            android:textSize="18dp"
+            android:text="A koan is a series of colored triangles each pointing left, right, up, or down. The master's rule is a statement that determines whether a koan 'has the buddha-nature' or not. A koan has the buddha-nature if it fits the requirements specified by the rule. An example rule might be 'any koan that has two green triangles pointing to the right has the buddha-nature.' Note that koans that have the buddha-nature are marked with a white circle in front of the koan, and koans that do not have the buddha-nature are marked with a black circle in front." />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_margin="20dp"
+            android:textSize="18dp"
+            android:text="At the beginning, a player is randomly chosen to be the master. (If continuing from a previous game, the winner of that game will be the master in the new game.) The master creates the rule, and then constructs two initial koans. One of the koans must follow the rule, it has the buddha-nature, and one of the koans must break the rule, it doesn't have the buddha-nature." />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_margin="20dp"
+            android:textSize="18dp"
+            android:text="Any student can then attempt to create a koan. When a student constructs a koan, they can submit it by calling either 'Master' or 'Mondo'. If they call 'Master', the master will mark it with the white or black stone denoting buddha-nature. If the student calls 'Mondo', students have the opportunity to predict if the new koan has the buddha-nature or not. Once at least half of the students have made their predictions, the master is allowed to officially mark whether it has the buddha-nature or not. Any student who guessed correctly gets a 'guessing stone.'" />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_margin="20dp"
+            android:textSize="18dp"
+            android:text="If a student has any guessing stones, they can spend them to try and guess what the master's rule is. Once the student has submitted the guess, the master must then attempt to disprove the guess by either constructing a koan that has the buddha-nature that your guess says shouldn't, or a koan that does not have the buddha-nature that your guess says should. If the master is unable to disprove your guess, you've achieved enlightenment and have won the game!" />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_margin="20dp"
+            android:textSize="18dp"
+            android:text="Scoring - A student who achieves enlightenment wins 15 points. All other students are awarded 0-10 points based on the percentage of koans they contributed. The master is awarded 0-5 points. If the students unanimously give up, nobody gets points." />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_margin="20dp"
+            android:textSize="18dp"
+            android:text="A note for the master - Start with simple rules! Rules are always harder to figure out than you think! It isn't fun for anyone to try and guess a ridiculous rule, the students will end up getting frustrated and giving up, and then nobody gets any points. Always start with simple things and gradually make it harder." />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_margin="20dp"
+            android:textSize="18dp"
+            android:text="A note on how this differs from the actual Zendo game - since this version of Zendo is designed specifically as a mobile game that can be played without everyone being available at the same time, some differences were introduced: Normally this is a turn-based game. I have redesigned it to be more free for all. If the master doesn't have a koan to analyze, anyone can submit one, at which point everyone else must wait for the master to analyze it. Mondos are also altered: so as to avoid a situation where one person is holding up everyone else, the master is notified to analyze a koan once at least HALF of the students have made predictions, rather than forcing the master to wait for everyone to have made a prediction." />
+    </LinearLayout>
+</ScrollView>

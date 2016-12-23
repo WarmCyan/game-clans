@@ -45,7 +45,7 @@ namespace App
 			if (sActive != "") 
 			{ 
 				m_lNavTitles[0] = sActive;
-				m_lNavTitles[2] = Master.GetActiveUserName() + "'s Profile";
+				//m_lNavTitles[2] = Master.GetActiveUserName() + "'s Profile";
 			}
 
 			m_pDrawerLayout = FindViewById<DrawerLayout>(Resource.Id.appDrawerLayout);
@@ -72,6 +72,7 @@ namespace App
 						pIntent = new Intent(this, typeof(GroupListActivity));
 						break;
 					case 4: // settings
+						pIntent = new Intent(this, typeof(SettingsActivity));
 						break;
 				}
 				if (pIntent == null) { return; }

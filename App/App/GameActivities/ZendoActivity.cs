@@ -76,6 +76,13 @@ namespace App
 
 			Button pGiveUp = FindViewById<Button>(Resource.Id.btnGiveUp);
 			pGiveUp.Click += delegate { WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "VoteToGiveUp", Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID)), true); this.GetUserBoard(); };
+
+			Button pRules = FindViewById<Button>(Resource.Id.btnZendoRules);
+			pRules.Click += delegate
+			{
+				Intent pIntent = new Intent(this, typeof(ZendoRulesActivity));
+				StartActivity(pIntent);
+			};
 		}
 
 		private void ForceRestart()

@@ -380,46 +380,52 @@ namespace App
 			public const int Game_ZendoDisprove = 2130903045;
 			
 			// aapt resource value: 0x7f030006
-			public const int Game_ZendoGuess = 2130903046;
+			public const int Game_ZendoExampleRules = 2130903046;
 			
 			// aapt resource value: 0x7f030007
-			public const int Game_ZendoKoanRow = 2130903047;
+			public const int Game_ZendoGuess = 2130903047;
 			
 			// aapt resource value: 0x7f030008
-			public const int Game_ZendoPredict = 2130903048;
+			public const int Game_ZendoKoanRow = 2130903048;
 			
 			// aapt resource value: 0x7f030009
-			public const int Games = 2130903049;
+			public const int Game_ZendoPredict = 2130903049;
 			
 			// aapt resource value: 0x7f03000a
-			public const int Groups = 2130903050;
+			public const int Game_ZendoRules = 2130903050;
 			
 			// aapt resource value: 0x7f03000b
-			public const int JoinGroup = 2130903051;
+			public const int Games = 2130903051;
 			
 			// aapt resource value: 0x7f03000c
-			public const int Key = 2130903052;
+			public const int Groups = 2130903052;
 			
 			// aapt resource value: 0x7f03000d
-			public const int ListViewItemRow = 2130903053;
+			public const int JoinGroup = 2130903053;
 			
 			// aapt resource value: 0x7f03000e
-			public const int Main = 2130903054;
+			public const int Key = 2130903054;
 			
 			// aapt resource value: 0x7f03000f
-			public const int NewGame = 2130903055;
+			public const int ListViewItemRow = 2130903055;
 			
 			// aapt resource value: 0x7f030010
-			public const int Notifications = 2130903056;
+			public const int Main = 2130903056;
 			
 			// aapt resource value: 0x7f030011
-			public const int Profile = 2130903057;
+			public const int NewGame = 2130903057;
 			
 			// aapt resource value: 0x7f030012
-			public const int ScoreRow = 2130903058;
+			public const int Notifications = 2130903058;
 			
 			// aapt resource value: 0x7f030013
-			public const int Settings = 2130903059;
+			public const int Profile = 2130903059;
+			
+			// aapt resource value: 0x7f030014
+			public const int ScoreRow = 2130903060;
+			
+			// aapt resource value: 0x7f030015
+			public const int Settings = 2130903061;
 			
 			static Layout()
 			{
