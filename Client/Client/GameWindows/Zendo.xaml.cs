@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Zendo.xaml.cs
 //  Date created: 12/15/2016
-//  Date edited: 12/15/2016
+//  Date edited: 12/23/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: Zendo game window
@@ -30,14 +30,19 @@ namespace Client.GameWindows
 	{
 		// member variables
 		private string m_sGameID;
+		private string m_sGameName;
 
-		public Zendo(string sGameID)
+		public Zendo(string sGameID, string sGameName)
 		{
 			InitializeComponent();
 
 			m_sGameID = sGameID;
+			m_sGameName = sGameName;
+
+			this.Title = Master.GetActiveClan() + " - " + m_sGameName;
 
 			//pnlStatusKoan.
+			/*Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
 			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
 			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
 			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
@@ -53,8 +58,38 @@ namespace Client.GameWindows
 			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
 			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
 			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
-			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
-			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
+			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");*/
+		}
+
+		private void btnJoinGame_MouseLeave(object sender, MouseEventArgs e) { btnJoinGame.Background = Master.BUTTON_NORMAL; }
+		private void btnJoinGame_MouseEnter(object sender, MouseEventArgs e) { btnJoinGame.Background = Master.BUTTON_HOVER; }
+		
+		private void btnCallMaster_MouseLeave(object sender, MouseEventArgs e) { btnCallMaster.Background = Master.BUTTON_NORMAL; }
+		private void btnCallMaster_MouseEnter(object sender, MouseEventArgs e) { btnCallMaster.Background = Master.BUTTON_HOVER; }
+		
+		private void btnCallMondo_MouseLeave(object sender, MouseEventArgs e) { btnCallMondo.Background = Master.BUTTON_NORMAL; }
+		private void btnCallMondo_MouseEnter(object sender, MouseEventArgs e) { btnCallMondo.Background = Master.BUTTON_HOVER; }
+
+		private void btnJoinGame_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+
+		}
+
+
+		private void btnCallMaster_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+
+		}
+
+
+		private void btnCallMondo_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+
+		}
+
+		private void txtKoanEditor_KeyUp(object sender, KeyEventArgs e)
+		{
+
 		}
 	}
 }

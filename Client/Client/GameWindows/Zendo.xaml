@@ -14,24 +14,95 @@
 			<!-- koan builder thing in upper right -->
 
 		</Grid.ColumnDefinitions>
-		<StackPanel Margin="10" Grid.Column="0">
-			<Label Name="StatusText" FontSize="18" Content="This is a test" Foreground="#FFFFFF" Margin="10" Padding="10"/>
-
-			<!-- reconfigurable thing goes here based on action -->
-			<WrapPanel Name="pnlStatusKoan" Orientation="Horizontal">
+		<DockPanel Margin="10" Grid.Column="0">
+			<Label DockPanel.Dock="Top" Name="lblStatus" FontSize="18" Content="This is a test" Foreground="#FFFFFF" Margin="10" Padding="10"/>
+			<WrapPanel DockPanel.Dock="Top" Name="pnlStatusKoan" Orientation="Horizontal">
 			</WrapPanel>
-	   </StackPanel>
 
-		<StackPanel Margin="10" Grid.Column="1">
-			<Label FontSize="14" Content="Master - " Foreground="#AAAAAA" Margin="10" Padding="10"/>
-			<StackPanel>
-				<Label Content="Players" Padding="5" Margin="10,5,10,0" Foreground="Black" Background="#CCCCCC" />
-				<ScrollViewer VerticalScrollBarVisibility="Hidden" Margin="10,0,10,10" Background="#333333" MinHeight="100">
-					<StackPanel Name="stkPlayers">
+			<Grid>
+				<StackPanel Name="pnlActions">
+					<StackPanel Name="pnlWaiting" Visibility="Collapsed">
+						<Label Margin="20" Name="lblWaitingText" Content="Waiting..." Foreground="White" />
+						<Label Margin="20, 0, 20, 10" Name="lblGuessingStoneCount" Content="You have 0 Guessing Stones" Foreground="White" />
 					</StackPanel>
-				</ScrollViewer>
-			</StackPanel>
-		</StackPanel>
+				
+					<StackPanel Name="pnlJoin" Visibility="Collapsed">
+						<Border BorderBrush="#444444" BorderThickness="2" Margin="20">
+							<TextBlock TextAlignment="Center" Name="btnJoinGame" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnJoinGame_MouseLeave" MouseEnter="btnJoinGame_MouseEnter" MouseUp="btnJoinGame_MouseUp">Join Game!</TextBlock>
+						</Border>
+					</StackPanel>
+					
+					<StackPanel Name="pnlRuleDisplay" Visibility="Collapsed">
+						<Label Margin="20, 10" Name="lblRule" Content="This is your rule" Foreground="White" />
+						<Label Margin="20, 0" Name="lblGuessRule" Content="This is the rule they guessed." Foreground="White" />
+					</StackPanel>
+
+					<StackPanel Name="pnlSingleKoanCreator">
+						<Label>Text</Label>
+						<WrapPanel Name="pnlKoanCreatorDisplay"></WrapPanel>
+						<TextBox Name="txtKoanEditor" Margin="20, 0, 20, 0" Padding="5" Foreground="White" Background="#111111" KeyUp="txtKoanEditor_KeyUp" />
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*" />
+								<ColumnDefinition Width="*" />
+							</Grid.ColumnDefinitions>
+							<Border BorderBrush="#444444" BorderThickness="2" Margin="20">
+								<TextBlock TextAlignment="Center" Name="btnCallMaster" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnCallMaster_MouseLeave" MouseEnter="btnCallMaster_MouseEnter" MouseUp="btnCallMaster_MouseUp">Call Master</TextBlock>
+							</Border>
+							<Border Grid.Column="1" BorderBrush="#444444" BorderThickness="2" Margin="20">
+								<TextBlock TextAlignment="Center" Name="btnCallMondo" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnCallMondo_MouseLeave" MouseEnter="btnCallMondo_MouseEnter" MouseUp="btnCallMondo_MouseUp">Call Mondo</TextBlock>
+							</Border>
+						</Grid>
+					</StackPanel>
+
+					<StackPanel Name="pnlRuleCreator">
+					</StackPanel>
+
+					<StackPanel Name="pnlBuddhaNature">
+					</StackPanel>
+
+					<StackPanel Name="pnlGuess">
+					</StackPanel>
+				</StackPanel>
+			</Grid>
+	   </DockPanel>
+
+		<!--<StackPanel Margin="10" Grid.Column="1">-->
+			<Grid Margin="10" Grid.Column="1">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+					<RowDefinition Height="*" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+				
+				<DockPanel Grid.Row="0">
+					<Label DockPanel.Dock="Top" FontSize="14" Content="Master - " Foreground="#AAAAAA" Margin="10" Padding="10"/>
+					<DockPanel LastChildFill="True">
+						<Label DockPanel.Dock="Top" Content="Players" Padding="5" Margin="10,5,10,0" Foreground="Black" Background="#CCCCCC" />
+						<ScrollViewer VerticalScrollBarVisibility="Hidden" Margin="10,0,10,10" Background="#333333">
+							<StackPanel Name="stkPlayers">
+							</StackPanel>
+						</ScrollViewer>
+					</DockPanel>
+				</DockPanel>
+				
+				<DockPanel Grid.Row="1">
+					<Label DockPanel.Dock="Top" Content="Event Log" Padding="5" Margin="10,5,10,0" Foreground="Black" Background="#CCCCCC" />
+					<ScrollViewer DockPanel.Dock="Top" VerticalScrollBarVisibility="Hidden" Margin="10,0,10,10" Background="#333333">
+						<StackPanel Name="stkLog">
+						</StackPanel>
+					</ScrollViewer>
+				</DockPanel>
+				
+				<DockPanel Grid.Row="2">
+					<Label DockPanel.Dock="Top" Content="Koans" Padding="5" Margin="10,5,10,0" Foreground="Black" Background="#CCCCCC" />
+					<ScrollViewer DockPanel.Dock="Top" VerticalScrollBarVisibility="Hidden" Margin="10,0,10,10" Background="#333333">
+						<StackPanel Name="stkKoans">
+						</StackPanel>
+					</ScrollViewer>
+				</DockPanel>
+			</Grid>
+		<!--</StackPanel>-->
         
     </Grid>
 </Window>
