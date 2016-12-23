@@ -14,7 +14,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace Client
 {
@@ -62,6 +69,18 @@ namespace Client
 			}
 
 			return pResponse;
+		}
+
+
+		public static void AddImageToWrapPanel(WrapPanel pPanel, string sImageName)
+		{
+			Rectangle pContainer = new Rectangle();
+			ImageBrush pImage = new ImageBrush(new BitmapImage(new Uri(Master.GetBaseDir() + "/Resources/Zendo/" + sImageName + ".png")));
+			pContainer.Fill = pImage;
+			pContainer.Height = 30;
+			pContainer.Width = 30;
+
+			pPanel.Children.Add(pContainer);
 		}
 	}
 

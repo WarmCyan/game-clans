@@ -36,6 +36,25 @@ namespace Client.GameWindows
 			InitializeComponent();
 
 			m_sGameID = sGameID;
+
+			//pnlStatusKoan.
+			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
+			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
+			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
+			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
+			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
+			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
+			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
+			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
+			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
+			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
+			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
+			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
+			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
+			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
+			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
+			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
+			Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
 		}
 	}
 }

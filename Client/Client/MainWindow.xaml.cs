@@ -41,6 +41,8 @@ namespace Client
 
 		private List<string> m_lGames;
 		private List<string> m_lGameIDs;
+		private List<string> m_lGameNames;
+		private List<string> m_lDisplay;
 	
 		public MainWindow()
 		{
@@ -83,6 +85,8 @@ namespace Client
 			// handle the games list
 			m_lGames = new List<string>();
 			m_lGameIDs = new List<string>();
+			m_lGameNames = new List<string>();
+			m_lDisplay = new List<string>();
 
 			if (pResponse.Element("Data").Element("Games") != null)
 			{
@@ -90,6 +94,9 @@ namespace Client
 				{
 					m_lGameIDs.Add(pGame.Value);
 					m_lGames.Add(pGame.Attribute("GameType").Value);
+					m_lGameNames.Add(pGame.Attribute("GameName").Value);
+
+					m_lDisplay.Add(pGame.Attribute("GameName").Value + " (" + pGame.Attribute("GameType").Value + ")");
 				}
 			}
 			for (int i = 0; i < m_lGames.Count; i++) 
@@ -100,7 +107,7 @@ namespace Client
 				pLabel.Margin = new Thickness(2, 2, 2, 0);
 				pLabel.Background = Master.BUTTON_NORMAL;
 				pLabel.Foreground = new SolidColorBrush(Colors.White);
-				pLabel.Content = m_lGames[i];
+				pLabel.Content = m_lDisplay[i];
 
 				pLabel.MouseEnter += delegate { pLabel.Background = Master.BUTTON_HOVER; };
 				pLabel.MouseLeave += delegate { pLabel.Background = Master.BUTTON_NORMAL; };
