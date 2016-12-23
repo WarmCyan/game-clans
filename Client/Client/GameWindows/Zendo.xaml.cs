@@ -40,7 +40,9 @@ namespace Client.GameWindows
 
 		// used for restoring master state
 		private string m_sPrevClan;
-		private string m_sPrevUser; 
+		private string m_sPrevUser;
+
+		private string m_sMode;
 
 		public Zendo(string sGameID, string sGameName)
 		{
@@ -56,7 +58,7 @@ namespace Client.GameWindows
 			m_sGameID = sGameID;
 			m_sGameName = sGameName;
 
-			this.Title = Master.GetActiveClan() + " - " + m_sGameName;
+			this.Title = "Zendo - " + m_sGameName;
 
 			//pnlStatusKoan.
 			/*Master.AddImageToWrapPanel(pnlStatusKoan, "BD");
@@ -93,12 +95,6 @@ namespace Client.GameWindows
 			Master.SetActiveUserName(m_sPrevUser);
 		}
 
-		// stuff
-		private void DisplayGuessPanel()
-		{
-			// stuff
-		}
-
 		private void GetUserBoard()
 		{
 			this.TempSetMaster();
@@ -112,7 +108,20 @@ namespace Client.GameWindows
 			if (pResponse.Attribute("Type").Value == "Error") { MessageBox.Show(pResponse.Element("Text").Value, "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 			else
 			{
+				// reset all panels
 				this.CollapseAll();
+
+				// reset all text fields
+				txtKoanEditor.Text = "";
+				txtKoanRule1Editor.Text = "";
+				txtKoanRule2Editor.Text = "";
+				txtGuess.Text = "";
+				txtRule.Text = "";
+				
+				// reset all koan displays
+				this.FillBadKoan();
+				this.FillGoodKoan();
+				this.FillKoan();
 			
 				// get the specific parts
 				XElement pStatusXml = pResponse.Element("Data").Element("Status");
@@ -135,6 +144,7 @@ namespace Client.GameWindows
 
 				// display panels based on action
 				string sAction = pActionXml.Value;
+				m_sMode = sAction;
 				if (sAction == "join")
 				{
 					pnlJoin.Visibility = Visibility.Visible;
@@ -155,6 +165,7 @@ namespace Client.GameWindows
 					pnlRuleDisplay.Visibility = Visibility.Visible;
 					pnlBuddhaNature.Visibility = Visibility.Visible;
 					lblRule.Text = "Your rule - '" + pMasterXml.Attribute("Rule").Value + "'";
+					lblGuessRule.Visibility = Visibility.Collapsed;
 				}
 				else if (sAction == "predict")
 				{
@@ -166,7 +177,9 @@ namespace Client.GameWindows
 					pnlRuleDisplay.Visibility = Visibility.Visible;
 					pnlBuddhaNature.Visibility = Visibility.Visible;
 					pnlGrantEnlightenment.Visibility = Visibility.Visible;
+					pnlSingleKoanCreator.Visibility = Visibility.Visible;
 					lblRule.Text = "Your rule - '" + pMasterXml.Attribute("Rule").Value + "'";
+					lblGuessRule.Visibility = Visibility.Visible;
 					lblGuessRule.Text = "Guess - '" + pStatusXml.Attribute("Guess").Value + "'";
 				}
 				else if (sAction == "final")
@@ -176,14 +189,23 @@ namespace Client.GameWindows
 				else if (sAction == "waiting")
 				{
 					pnlWaiting.Visibility = Visibility.Visible;
+					if (pKoansXml.Elements("Koan").ToList().Count == 0)
+					{
+						pnlStartGame.Visibility = Visibility.Visible;
+					}
 				}
+				
+				// set master label
+				string sMaster = pMasterXml.Value;
+				lblMaster.Content = "Master - " + sMaster;
+
 				
 				// panels visible no matter what
 				pnlRules.Visibility = Visibility.Visible;
 
 				// set number of guesses
 				int iNumGuesses = Convert.ToInt32(pNumGuessesXml.Value);
-				if (sAction != "initial" && sAction != "disprove" && sAction != "judge" && sAction != "final" && sAction != "join")
+				if (sAction != "initial" && sAction != "disprove" && sAction != "judge" && sAction != "final" && sAction != "join" && sMaster != m_sUserName)
 				{
 					pnlGuess.Visibility = Visibility.Visible;
 					lblGuessingStoneCount.Content = "You have " + iNumGuesses + " guessing stones";
@@ -194,10 +216,6 @@ namespace Client.GameWindows
 					}
 				}
 
-				// set master label
-				string sMaster = pMasterXml.Value;
-				lblMaster.Content = "Master - " + sMaster;
-
 				// fill players box
 				stkPlayers.Children.Clear();
 				foreach (string sPlayer in pPlayersXml.Elements("Player"))
@@ -205,6 +223,7 @@ namespace Client.GameWindows
 					Border pBorder = new Border();
 					pBorder.BorderThickness = new Thickness(2, 0, 2, 2);
 					pBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(68, 68, 68));
+					pBorder.Padding = new Thickness(5, 5, 5, 5);
 
 					Label pLabel = new Label();
 					pLabel.Foreground = new SolidColorBrush(Colors.White);
@@ -213,11 +232,65 @@ namespace Client.GameWindows
 					pBorder.Child = pLabel;
 
 					stkPlayers.Children.Add(pBorder);
+				}
 
-					//StackPanel pPanel = new StackPanel();
-					
-					/*Rectangle pRectangle = new Rectangle();
-					pRectangle.*/
+				// fill log event box
+				List<XElement> pEventsXmlChildren = pEventsXml.Elements("LogEvent").ToList();
+				stkLog.Children.Clear();
+				for (int i = pEventsXmlChildren.Count - 1; i >= 0; i--)
+				{
+					XElement pEvent = pEventsXmlChildren[i];
+					string sMsg = pEvent.Element("Message").Value;
+
+					Border pBorder = new Border();
+					pBorder.BorderThickness = new Thickness(2, 0, 2, 2);
+					pBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(68, 68, 68));
+					pBorder.Padding = new Thickness(5, 5, 5, 5);
+
+					StackPanel pPanel = new StackPanel();
+
+					TextBlock pLabel = new TextBlock();
+					pLabel.Foreground = new SolidColorBrush(Colors.White);
+					pLabel.Text = sMsg;
+					pLabel.TextWrapping = TextWrapping.Wrap;
+					pPanel.Children.Add(pLabel);
+
+					// check the data tag
+					XElement pData = pEvent.Element("Data");
+					if (pData.Value != "")
+					{
+						string sKoanContents = pEvent.Element("Data").Element("Koan").Value;
+
+						WrapPanel pKoanPanel = new WrapPanel();
+						Master.FillKoanDisplay(pKoanPanel, sKoanContents);
+
+						pPanel.Children.Add(pKoanPanel);
+					}
+
+					pBorder.Child = pPanel;
+					stkLog.Children.Add(pBorder);
+				}
+
+				// fill koans box
+				List<XElement> pKoansXmlChildren = pKoansXml.Elements("Koan").ToList();
+				stkKoans.Children.Clear();
+				for (int i = pKoansXmlChildren.Count - 1; i >= 0; i--)
+				{
+					XElement pKoan = pKoansXmlChildren[i];
+
+					Border pBorder = new Border();
+					pBorder.BorderThickness = new Thickness(2, 0, 2, 2);
+					pBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(68, 68, 68));
+					pBorder.Padding = new Thickness(5, 5, 5, 5);
+
+					string sKoanContents = pKoan.Value;
+
+					WrapPanel pKoanPanel = new WrapPanel();
+					Master.FillKoanDisplay(pKoanPanel, sKoanContents);
+
+					pBorder.Child = pKoanPanel;
+
+					stkKoans.Children.Add(pBorder);
 				}
 			}
 		}
@@ -237,6 +310,91 @@ namespace Client.GameWindows
 			pnlRules.Visibility = Visibility.Collapsed;
 			pnlGiveUp.Visibility = Visibility.Collapsed;
 			pnlStartGame.Visibility = Visibility.Collapsed;
+		}
+
+		private void FillGoodKoan()
+		{
+			txtKoanRule1Editor.Background = Master.EDITOR_NORMAL;
+			string sContents = txtKoanRule1Editor.Text;
+
+			string sKoan = "T" + sContents;
+			bool bValid = Master.FillKoanDisplay(pnlKoanRule1, sKoan);
+			if (!bValid) { txtKoanRule1Editor.Background = Master.EDITOR_BAD; }
+		}
+		private void FillBadKoan()
+		{
+			txtKoanRule2Editor.Background = Master.EDITOR_NORMAL;
+			string sContents = txtKoanRule2Editor.Text;
+
+			string sKoan = "F" + sContents;
+			bool bValid = Master.FillKoanDisplay(pnlKoanRule2, sKoan);
+			if (!bValid) { txtKoanRule2Editor.Background = Master.EDITOR_BAD; }
+		}
+		private void FillKoan()
+		{
+			txtKoanEditor.Background = Master.EDITOR_NORMAL;
+			string sKoan = txtKoanEditor.Text;
+
+			bool bValid = Master.FillKoanDisplay(pnlKoanCreatorDisplay, sKoan);
+			if (!bValid) { txtKoanEditor.Background = Master.EDITOR_BAD; }
+		}
+
+		private void SubmitKoan(bool bMondo)
+		{
+			string sFunctionCall = "SubmitKoan";
+			if (bMondo) { sFunctionCall = "SubmitMondo"; }
+		
+			string sKoan = txtKoanEditor.Text.ToUpper();
+
+			// make the server call
+			this.TempSetMaster();
+			string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='sKoan'>" + sKoan + "</param>");
+			string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + sFunctionCall, sBody, true);
+			this.TempResetMaster();
+
+			// check for errors
+			if (Master.CleanResponse(sResponse) != "")
+			{
+				XElement pResponse = Master.ReadResponse(sResponse);
+				if (pResponse.Attribute("Type").Value == "Error") { MessageBox.Show(pResponse.Element("Text").Value, "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+			}
+			else { this.GetUserBoard(); }
+		}
+
+		private void SubmitKoanAnalysis(bool bHasBuddhaNature)
+		{
+			string sResponse = "";
+			if (m_sMode == "judge")
+			{
+				this.TempSetMaster();
+				string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='bHasBuddhaNature'>" + bHasBuddhaNature + "</param>");
+				sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitPendingKoanAnalysis", sBody, true);
+				this.TempResetMaster();
+			}
+			else if (m_sMode == "predict")
+			{
+				this.TempSetMaster();
+				string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='bPrediction'>" + bHasBuddhaNature + "</param>");
+				sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitMondoPrediction", sBody, true);
+				this.TempResetMaster();
+			}
+			else if (m_sMode == "disprove")
+			{
+				string sKoan = txtKoanEditor.Text.ToUpper();
+			
+				this.TempSetMaster();
+				string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='sKoan'>" + sKoan + "</param><param name='bHasBuddhaNature'>" + bHasBuddhaNature + "</param>");
+				sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "DisproveGuess", sBody, true);
+				this.TempResetMaster();
+			}
+
+			// check for errors
+			if (Master.CleanResponse(sResponse) != "")
+			{
+				XElement pResponse = Master.ReadResponse(sResponse);
+				if (pResponse.Attribute("Type").Value == "Error") { MessageBox.Show(pResponse.Element("Text").Value, "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+			}
+			else { this.GetUserBoard(); }
 		}
 
 		private void btnJoinGame_MouseLeave(object sender, MouseEventArgs e) { btnJoinGame.Background = Master.BUTTON_NORMAL; }
@@ -274,6 +432,9 @@ namespace Client.GameWindows
 		
 		private void btnRefresh_MouseLeave(object sender, MouseEventArgs e) { btnRefresh.Background = Master.BUTTON_NORMAL; }
 		private void btnRefresh_MouseEnter(object sender, MouseEventArgs e) { btnRefresh.Background = Master.BUTTON_HOVER; }
+		
+		private void btnStartGame_MouseLeave(object sender, MouseEventArgs e) { btnStartGame.Background = Master.BUTTON_NORMAL; }
+		private void btnStartGame_MouseEnter(object sender, MouseEventArgs e) { btnStartGame.Background = Master.BUTTON_HOVER; }
 
 		// button clicks
 		
@@ -287,15 +448,8 @@ namespace Client.GameWindows
 			else { this.GetUserBoard();	}
 		}
 
-		private void btnCallMaster_MouseUp(object sender, MouseButtonEventArgs e)
-		{
-
-		}
-
-		private void btnCallMondo_MouseUp(object sender, MouseButtonEventArgs e)
-		{
-
-		}
+		private void btnCallMaster_MouseUp(object sender, MouseButtonEventArgs e) { this.SubmitKoan(false); }
+		private void btnCallMondo_MouseUp(object sender, MouseButtonEventArgs e) { this.SubmitKoan(true); }
 
 		private void btnExampleRules_MouseUp(object sender, MouseButtonEventArgs e)
 		{
@@ -304,27 +458,54 @@ namespace Client.GameWindows
 		
 		private void btnSubmitRule_MouseUp(object sender, MouseButtonEventArgs e)
 		{
+			string sRule = txtRule.Text;
+			string sCorrectKoan = "T" + txtKoanRule1Editor.Text;
+			string sIncorrectKoan = "F" + txtKoanRule2Editor.Text;
 
+			this.TempSetMaster();
+			string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='sRule'>" + sRule + "</param><param name='sBuddhaNatureKoan'>" + sCorrectKoan.ToUpper() + "</param><param name='sNonBuddhaNatureKoan'>" + sIncorrectKoan.ToUpper() + "</param>");
+			string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitInitialKoans", sBody, true);
+			this.TempResetMaster();
+			
+			XElement pResponse = Master.ReadResponse(sResponse);
+			if (pResponse.Attribute("Type").Value == "Error") { MessageBox.Show(pResponse.Element("Text").Value, "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+			else { this.GetUserBoard(); }
 		}
 		
-		private void btnHasBuddhaNature_MouseUp(object sender, MouseButtonEventArgs e)
-		{
-
-		}
-
-		private void btnHasNotBuddhaNature_MouseUp(object sender, MouseButtonEventArgs e)
-		{
-
-		}
+		private void btnHasBuddhaNature_MouseUp(object sender, MouseButtonEventArgs e) { this.SubmitKoanAnalysis(true); }
+		private void btnHasNotBuddhaNature_MouseUp(object sender, MouseButtonEventArgs e) { this.SubmitKoanAnalysis(false); }
 		
 		private void btnSubmitGuess_MouseUp(object sender, MouseButtonEventArgs e)
 		{
+			string sGuess = txtGuess.Text;
 
+			this.TempSetMaster();
+			string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='sGuess'>" + sGuess + "</param>");
+			string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitGuess", sBody, true);
+			this.TempResetMaster();
+			
+			// check for errors
+			if (Master.CleanResponse(sResponse) != "")
+			{
+				XElement pResponse = Master.ReadResponse(sResponse);
+				if (pResponse.Attribute("Type").Value == "Error") { MessageBox.Show(pResponse.Element("Text").Value, "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+			}
+			else { this.GetUserBoard(); }
 		}
 
 		private void btnGrantEnlightenment_MouseUp(object sender, MouseButtonEventArgs e)
 		{
-
+			this.TempSetMaster();
+			string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "GrantEnlightenment", Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID)), true);
+			this.TempResetMaster();
+			
+			// check for errors
+			if (Master.CleanResponse(sResponse) != "")
+			{
+				XElement pResponse = Master.ReadResponse(sResponse);
+				if (pResponse.Attribute("Type").Value == "Error") { MessageBox.Show(pResponse.Element("Text").Value, "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+			}
+			else { this.GetUserBoard(); }
 		}
 
 		private void btnRules_MouseUp(object sender, MouseButtonEventArgs e)
@@ -337,28 +518,22 @@ namespace Client.GameWindows
 
 		}
 		
-		private void btnRefresh_MouseUp(object sender, MouseButtonEventArgs e)
+		private void btnRefresh_MouseUp(object sender, MouseButtonEventArgs e) { this.GetUserBoard(); }
+		
+		private void btnStartGame_MouseUp(object sender, MouseButtonEventArgs e)
 		{
+			this.TempSetMaster();
+			string sBody = "<params><param name='sGameID'>" + m_sGameID + "</param></params>";
+			string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "StartGame", sBody, true);
+			this.TempResetMaster();
+
 			this.GetUserBoard();
 		}
-		
+
 		// koan editors
-		
-		private void txtKoanEditor_KeyUp(object sender, KeyEventArgs e)
-		{
 
-		}
-
-		private void txtKoanRule1Editor_KeyUp(object sender, KeyEventArgs e)
-		{
-
-		}
-
-		private void txtKoanRule2Editor_KeyUp(object sender, KeyEventArgs e)
-		{
-
-		}
-
-
+		private void txtKoanEditor_KeyUp(object sender, KeyEventArgs e) { this.FillKoan(); }
+		private void txtKoanRule1Editor_KeyUp(object sender, KeyEventArgs e) { this.FillGoodKoan(); }
+		private void txtKoanRule2Editor_KeyUp(object sender, KeyEventArgs e) { this.FillBadKoan(); }
 	}
 }

@@ -36,6 +36,8 @@ namespace Client
 
 		public static SolidColorBrush BUTTON_NORMAL = new SolidColorBrush(Color.FromRgb(21, 21, 21)); 
 		public static SolidColorBrush BUTTON_HOVER = new SolidColorBrush(Color.FromRgb(69, 186, 255));
+		public static SolidColorBrush EDITOR_BAD = new SolidColorBrush(Color.FromRgb(200, 20, 20));
+		public static SolidColorBrush EDITOR_NORMAL = new SolidColorBrush(Color.FromRgb(17, 17, 17));
 
 		public static void SetActiveClan(string sClanName) { s_sActiveClan = sClanName; }
 		public static string GetActiveClan() { return s_sActiveClan; }

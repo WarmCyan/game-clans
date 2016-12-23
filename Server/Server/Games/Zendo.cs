@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Zendo.cs
 //  Date created: 11/28/2016
-//  Date edited: 12/22/2016
+//  Date edited: 12/23/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: My implementation of the awesome game of Zendo!
@@ -720,8 +720,8 @@ namespace GameClansServer.Games
 
 			// add the koan disprovivng the guess
 			ZendoKoan pKoan = new ZendoKoan(m_lKoans.Count, sKoan, "master");
-			pKoan.Koan = pKoan.StringKoan;
 			pKoan.HasBuddhaNature = bHasBuddhaNature;
+			pKoan.Koan = pKoan.StringKoan;
 			m_pPendingGuess.Disproval = pKoan;
 
 			m_lKoans.Add(pKoan);
@@ -935,7 +935,7 @@ namespace GameClansServer.Games
 
 			// master stuff
 			string sMaster = "<Master";
-			if (m_sMaster == sUserName) { sMaster += " Rule='" + m_sRule + "'"; }
+			if (m_sMaster == sUserName) { sMaster += " Rule='" + Master.EncodeXML(m_sRule) + "'"; }
 			sMaster += ">" + m_sMaster + "</Master>";
 
 			// if pending guess

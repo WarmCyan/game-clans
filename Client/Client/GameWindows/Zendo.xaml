@@ -14,12 +14,16 @@
 			<!-- koan builder thing in upper right -->
 
 		</Grid.ColumnDefinitions>
-		<DockPanel Margin="10" Grid.Column="0" LastChildFill="False">
+		<DockPanel Margin="10" Grid.Column="0" LastChildFill="True">
 			<TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Name="lblStatus" FontSize="18" Text="This is a test" Foreground="#FFFFFF" Margin="10" Padding="10"/>
-			<WrapPanel DockPanel.Dock="Top" Name="pnlStatusKoan" Orientation="Horizontal">
+			<WrapPanel DockPanel.Dock="Top" Name="pnlStatusKoan" Orientation="Horizontal" Margin="20,0">
 			</WrapPanel>
 
-			<Grid DockPanel.Dock="Top">
+			<Border DockPanel.Dock="Bottom" BorderBrush="#444444" BorderThickness="2" Margin="20, 10">
+				<TextBlock TextAlignment="Center" Name="btnRefresh" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnRefresh_MouseLeave" MouseEnter="btnRefresh_MouseEnter" MouseUp="btnRefresh_MouseUp">Refresh</TextBlock>
+			</Border>
+			
+			<Grid>
 				<ScrollViewer VerticalScrollBarVisibility="Hidden">
 				<StackPanel Name="pnlActions">
 					<StackPanel Name="pnlWaiting" Visibility="Collapsed">
@@ -62,6 +66,7 @@
 						</Border>
 						<Label Margin="20,0" Foreground="White">Rule:</Label>
 						<TextBox Name="txtRule" Margin="20, 0, 20, 5" Padding="5" Foreground="White" Background="#111111" />
+						<TextBlock Padding="5" Margin="20,0" Foreground="White" TextWrapping="Wrap">Reminder: a symbol in a koan is constructed from two letters, a color and a direction. (B - blue, R - red, G - green, P - purple, Y - yellow, O - orange) (L - left, U - up, D - down, R - right)</TextBlock>
 						<Label Margin="20,0" Foreground="White">Koan with buddha-nature:</Label>
 						<WrapPanel Name="pnlKoanRule1"></WrapPanel>
 						<TextBox Name="txtKoanRule1Editor" Margin="20, 5, 20, 5" Padding="5" Foreground="White" Background="#111111" KeyUp="txtKoanRule1Editor_KeyUp" />
@@ -73,20 +78,20 @@
 						</Border>
 					</StackPanel>
 
-					<StackPanel Name="pnlBuddhaNature" Visibility="Collapsed">
+					<StackPanel Name="pnlBuddhaNature" Visibility="Visible">
 						<TextBlock Padding="5" Margin="20,0" Foreground="White" TextWrapping="Wrap">Does this koan have the buddha-nature?</TextBlock>
 						<Grid>
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="*" />
 								<ColumnDefinition Width="*" />
 							</Grid.ColumnDefinitions>
-							<Border Grid.Column="0" Name="brdrHasBuddhaNature" BorderBrush="#444444" BorderThickness="2" Margin="20" Background="#151515" MouseEnter="btnHasBuddhaNature_MouseEnter" MouseLeave="btnHasBuddhaNature_MouseLeave" MouseUp="btnExampleRules_MouseUp">
-								<WrapPanel Name="pnlYesbutton" HorizontalAlignment="Center">
+							<Border Grid.Column="0" Name="brdrHasBuddhaNature" BorderBrush="#444444" BorderThickness="2" Margin="20" Background="#151515" MouseEnter="btnHasBuddhaNature_MouseEnter" MouseLeave="btnHasBuddhaNature_MouseLeave" MouseUp="btnHasBuddhaNature_MouseUp">
+								<WrapPanel Name="pnlYesbutton" HorizontalAlignment="Center" MouseUp="btnHasBuddhaNature_MouseUp">
 									<TextBlock TextAlignment="Center" Name="btnHasBuddhaNature" Foreground="White" Padding="10">Yup!</TextBlock>
 								</WrapPanel>
 							</Border>
 							<Border Grid.Column="1" Name="brdrHasNotBuddhaNature" BorderBrush="#444444" BorderThickness="2" Margin="20" Background="#151515" MouseEnter="btnHasNotBuddhaNature_MouseEnter" MouseLeave="btnHasNotBuddhaNature_MouseLeave" MouseUp="btnHasNotBuddhaNature_MouseUp">
-								<WrapPanel Name="pnlNotButton" HorizontalAlignment="Center">
+								<WrapPanel Name="pnlNotButton" HorizontalAlignment="Center" MouseUp="btnHasNotBuddhaNature_MouseUp">
 									<TextBlock TextAlignment="Center" Name="btnHasNotBuddhaNature" Foreground="White" Padding="10">Nope</TextBlock>
 								</WrapPanel>
 							</Border>
@@ -96,6 +101,7 @@
 					<StackPanel Name="pnlGuess" Visibility="Collapsed">
 						<Label Margin="20, 0, 20, 10" Name="lblGuessingStoneCount" Content="You have 0 Guessing Stones" Foreground="White" />
 						<StackPanel Name="pnlActualGuess" Visibility="Collapsed">
+							<Label Margin="20, 0, 20, 10" Content="Guess:" Foreground="White" />
 							<TextBox Name="txtGuess" Margin="20, 5, 20, 5" Padding="5" Foreground="White" Background="#111111" />
 							<Border BorderBrush="#444444" BorderThickness="2" Margin="20">
 								<TextBlock TextAlignment="Center" Name="btnSubmitGuess" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnSubmitGuess_MouseLeave" MouseEnter="btnSubmitGuess_MouseEnter" MouseUp="btnSubmitGuess_MouseUp">Submit Guess (-1 guessing stone)</TextBlock>
@@ -124,13 +130,14 @@
 					
 					<StackPanel Name="pnlStartGame" Visibility="Collapsed">
 						<TextBlock Padding="5" Margin="20,0" Foreground="White" TextWrapping="Wrap">Make sure everyone has joined before starting.</TextBlock>
+							<Border BorderBrush="#444444" BorderThickness="2" Margin="20">
+								<TextBlock TextAlignment="Center" Name="btnStartGame" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnStartGame_MouseLeave" MouseEnter="btnStartGame_MouseEnter" MouseUp="btnStartGame_MouseUp">Start Game</TextBlock>
+							</Border>
 					</StackPanel>
 				</StackPanel>
 				</ScrollViewer>
 			</Grid>
-			<Border DockPanel.Dock="Bottom" BorderBrush="#444444" BorderThickness="2" Margin="20, 10">
-				<TextBlock TextAlignment="Center" Name="btnRefresh" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnRefresh_MouseLeave" MouseEnter="btnRefresh_MouseEnter" MouseUp="btnRefresh_MouseUp">Refresh</TextBlock>
-			</Border>
+			
 		</DockPanel>
 
 		<!--<StackPanel Margin="10" Grid.Column="1">-->
@@ -145,26 +152,32 @@
 					<Label DockPanel.Dock="Top" FontSize="14" Name="lblMaster" Content="Master - " Foreground="#AAAAAA" Margin="10" Padding="10"/>
 					<DockPanel LastChildFill="True">
 						<Label DockPanel.Dock="Top" Content="Players" Padding="5" Margin="10,5,10,0" Foreground="Black" Background="#CCCCCC" />
-						<ScrollViewer VerticalScrollBarVisibility="Hidden" Margin="10,0,10,10" Background="#333333">
-							<StackPanel Name="stkPlayers">
-							</StackPanel>
+						<ScrollViewer VerticalScrollBarVisibility="Hidden" Margin="10,0,10,10" Background="#333333" CanContentScroll="True">
+							<DockPanel>
+								<StackPanel Name="stkPlayers">
+								</StackPanel>
+							</DockPanel>
 						</ScrollViewer>
 					</DockPanel>
 				</DockPanel>
 				
 				<DockPanel Grid.Row="1">
 					<Label DockPanel.Dock="Top" Content="Event Log" Padding="5" Margin="10,5,10,0" Foreground="Black" Background="#CCCCCC" />
-					<ScrollViewer DockPanel.Dock="Top" VerticalScrollBarVisibility="Hidden" Margin="10,0,10,10" Background="#333333">
-						<StackPanel Name="stkLog">
-						</StackPanel>
+					<ScrollViewer DockPanel.Dock="Top" VerticalScrollBarVisibility="Hidden" Margin="10,0,10,10" Background="#333333" CanContentScroll="True">
+						<DockPanel>
+							<StackPanel Name="stkLog">
+							</StackPanel>
+						</DockPanel>
 					</ScrollViewer>
 				</DockPanel>
 				
 				<DockPanel Grid.Row="2">
 					<Label DockPanel.Dock="Top" Content="Koans" Padding="5" Margin="10,5,10,0" Foreground="Black" Background="#CCCCCC" />
-					<ScrollViewer DockPanel.Dock="Top" VerticalScrollBarVisibility="Hidden" Margin="10,0,10,10" Background="#333333">
-						<StackPanel Name="stkKoans">
-						</StackPanel>
+					<ScrollViewer DockPanel.Dock="Top" VerticalScrollBarVisibility="Hidden" Margin="10,0,10,10" Background="#333333" CanContentScroll="True">
+						<DockPanel>
+							<StackPanel Name="stkKoans">
+							</StackPanel>
+						</DockPanel>
 					</ScrollViewer>
 				</DockPanel>
 			</Grid>

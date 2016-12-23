@@ -104,7 +104,7 @@ namespace GameClansServer
 		/*public string ChangePassword(string sClanNameList, string sUserNameList, string sUserOldPassPhrase, string sUserNewPassPhrase)
 		{
 		
-		}	*/
+		}*/
 
 		public string ListActiveGames(string sClanName, string sUserName, string sUserPassPhrase)
 		{
