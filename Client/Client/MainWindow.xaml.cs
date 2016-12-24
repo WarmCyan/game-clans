@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: MainWindow.xaml.cs
 //  Date created: 12/8/2016
-//  Date edited: 12/23/2016
+//  Date edited: 12/24/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: This windows has all the clans and clan stuff on it. Games will open in a new window
@@ -49,6 +49,9 @@ namespace Client
 			InitializeComponent();
 			_hidden.InitializeWeb();
 
+			// check version with server
+			if (!this.CheckVersion()) { this.Close(); return; }
+
 			m_dClanStack = new Dictionary<string, string>();
 			m_dClanStackLabels = new Dictionary<string, Border>();
 
@@ -61,15 +64,34 @@ namespace Client
 			}
 			else { Master.SetKey(File.ReadAllText(Master.GetBaseDir() + "_key.dat")); }
 
+			this.RefreshClanStack();
+			
 			// set data if a persistant clan thing was saved (persists active clan between application closing/opening)
 			if (File.Exists(Master.GetBaseDir() + "_active.dat"))
 			{
 				string[] aLines = File.ReadAllLines(Master.GetBaseDir() + "_active.dat");
-				Master.SetActiveClan(aLines[0]);
-				Master.SetActiveUserName(aLines[1]);
+				/*Master.SetActiveClan(aLines[0]);
+				Master.SetActiveUserName(aLines[1]);*/
+				this.ChangeActiveClan(aLines[0] + "|" + aLines[1]);
 			}
+		}
 
-			this.RefreshClanStack();
+		public bool CheckVersion()
+		{
+			string sResponse = WebCommunications.SendGetRequest(Master.GetBaseURL() + Master.GetServerURL() + "RequiredClientVersion", true);
+			XElement pResponse = Master.ReadResponse(sResponse);
+
+			if (pResponse.Element("Text").Value != Master.CLIENT_VERSION)
+			{
+				// thanks to http://stackoverflow.com/questions/14819426/how-to-create-hyperlink-in-messagebox-show	
+				if (MessageBox.Show("You have an outdated client version. Please reinstall the application from http://digitalwarriorlabs.com/games/game_clans\n(" + Master.CLIENT_VERSION + " -> " + pResponse.Element("Text").Value + ")", "Bad Version", MessageBoxButton.OKCancel, MessageBoxImage.Asterisk) == MessageBoxResult.OK)
+				{
+					System.Diagnostics.Process.Start("http://digitalwarriorlabs.com/games/game_clans");
+				}
+				return false;
+			}
+			
+			return true;
 		}
 		
 		public void BuildDashboard()
@@ -234,6 +256,9 @@ namespace Client
 			// set currently active components
 			Master.SetActiveClan(sClanName);
 			Master.SetActiveUserName(sUserName);
+
+			// write currently active to _active
+			File.WriteAllLines(Master.GetBaseDir() + "_active.dat", new List<string>() { sClanName, sUserName });
 
 			// highlight label in sidebar
 			foreach (Border pBorder in stkClanStack.Children)

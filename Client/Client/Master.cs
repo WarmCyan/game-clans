@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Master.cs
 //  Date created: 12/8/2016
-//  Date edited: 12/23/2016
+//  Date edited: 12/24/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -27,6 +27,8 @@ namespace Client
 {
 	public class Master
 	{
+		public static string CLIENT_VERSION = "1.0.0";
+	
 		private static List<string> s_lValidZendoImageNames = new List<string>() { "BD", "BL", "BR", "BU", "F", "GD", "GL", "GR", "GU", "OD", "OL", "OR", "OU", "PD", "PL", "PR", "PU", "RD", "RL", "RR", "RU", "T", "YD", "YL", "YR", "YU" };
 
 	
