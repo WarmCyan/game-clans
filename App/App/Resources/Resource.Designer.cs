@@ -246,6 +246,9 @@ namespace App
 			// aapt resource value: 0x7f050044
 			public const int lblScoreScore = 2131034180;
 			
+			// aapt resource value: 0x7f050046
+			public const int lblVersion = 2131034182;
+			
 			// aapt resource value: 0x7f05001c
 			public const int lstKoanImages = 2131034140;
 			

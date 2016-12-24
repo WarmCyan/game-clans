@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: SettingsActivity.cs
 //  Date created: 12/22/2016
-//  Date edited: 12/22/2016
+//  Date edited: 12/24/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -30,6 +30,9 @@ namespace App
 			this.SetContentView(Resource.Layout.Settings);
 
 			base.CreateDrawer();
+
+			TextView pVersionLabel = FindViewById<TextView>(Resource.Id.lblVersion);
+			pVersionLabel.Text = "App Version " + Master.APP_VERSION;
 
 			// Create your application here
 

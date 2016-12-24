@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: MainActivity.cs
 //  Date created: 12/9/2016
-//  Date edited: 12/16/2016
+//  Date edited: 12/24/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -18,8 +18,8 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
-
 using Android.Support.V4.Widget;
+
 using DWL.Utility;
 
 namespace App
@@ -78,8 +78,15 @@ namespace App
 				if (pResponse.Element("Text").Value != Master.APP_VERSION)
 				{
 					var pBuilder = new AlertDialog.Builder(this);
-					pBuilder.SetMessage("You have an outdated version of this app. Please reinstall the app from http://digitalwarriorlabs.com.\n(" + Master.APP_VERSION + " -> " + pResponse.Element("Text").Value + ")");
-					pBuilder.SetPositiveButton("Ok", (e, s) => { System.Environment.Exit(0); });
+					pBuilder.SetMessage("You have an outdated version of this app. Please reinstall the app from http://digitalwarriorlabs.com/games/game_clans\n(" + Master.APP_VERSION + " -> " + pResponse.Element("Text").Value + ")");
+					pBuilder.SetPositiveButton("Ok", (e, s) => 
+					{
+						//Intent pBrowserIntent = new Intent(this, Intent.ActionView, new Uri("http://digitalwarriorlabs.com/games/game_clans"));
+						Intent pBrowserIntent = new Intent(Intent.ActionView, Android.Net.Uri.Parse("http://digitalwarriorlabs.com/games/game_clans"));
+						StartActivity(pBrowserIntent);
+						System.Environment.Exit(0); 
+					});
+					pBuilder.SetNegativeButton("Cancel", (e, s) => { System.Environment.Exit(0); });
 					pBuilder.Show();
 					return false;
 				}

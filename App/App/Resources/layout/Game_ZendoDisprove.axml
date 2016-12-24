@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:textSize="15dp"
-                android:text="Reminder: every part of a koan consists of [color letter][direction letter], so BU represents a blue arrow pointing up." />
+                android:text="Reminder: a symbol in a koan is constructed from two letters, a color and a direction. (B - blue, R - red, G - green, P - purple, Y - yellow, O - orange) (L - left, U - up, D - down, R - right)" />
             <app.FlowLayout
                 android:id="@+id/flowKoan"
                 android:layout_margin="5dp"
