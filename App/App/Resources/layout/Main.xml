@@ -22,7 +22,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
                     android:textSize="25dp"
-                    android:text="WildfireXIII" />
+                    android:text="" />
                 <TextView
                     android:id="@+id/lblMyStatsPlace"
                     android:layout_width="0dp"
@@ -30,7 +30,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
                     android:textSize="25dp"
-                    android:text="1st" />
+                    android:text="" />
                 <TextView
                     android:id="@+id/lblMyStatsScore"
                     android:layout_width="0dp"
@@ -38,7 +38,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
                     android:textSize="25dp"
-                    android:text="1000" />
+                    android:text="" />
             </LinearLayout>
 			<!-- Scoreboard -->
             <LinearLayout
