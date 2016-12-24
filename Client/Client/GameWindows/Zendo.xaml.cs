@@ -453,7 +453,8 @@ namespace Client.GameWindows
 
 		private void btnExampleRules_MouseUp(object sender, MouseButtonEventArgs e)
 		{
-
+			ZendoSampleRules pExamples = new ZendoSampleRules();
+			pExamples.Show();
 		}
 		
 		private void btnSubmitRule_MouseUp(object sender, MouseButtonEventArgs e)
@@ -514,12 +515,17 @@ namespace Client.GameWindows
 
 		private void btnRules_MouseUp(object sender, MouseButtonEventArgs e)
 		{
-
+			ZendoRules pZendoRules = new ZendoRules();
+			pZendoRules.Show();
 		}
 
 		private void btnGiveUp_MouseUp(object sender, MouseButtonEventArgs e)
 		{
+			this.TempSetMaster();
+			string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "VoteToGiveUp", Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID)), true);
+			this.TempResetMaster();
 
+			this.GetUserBoard();
 		}
 		
 		private void btnRefresh_MouseUp(object sender, MouseButtonEventArgs e) { this.GetUserBoard(); }

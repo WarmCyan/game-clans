@@ -30,13 +30,13 @@
             android:layout_width="fill_parent"
             android:layout_margin="20dp"
             android:textSize="18dp"
-            android:text="Any student can then attempt to create a koan. When a student constructs a koan, they can submit it by calling either 'Master' or 'Mondo'. If they call 'Master', the master will mark it with the white or black stone denoting buddha-nature. If the student calls 'Mondo', students have the opportunity to predict if the new koan has the buddha-nature or not. Once at least half of the students have made their predictions, the master is allowed to officially mark whether it has the buddha-nature or not. Any student who guessed correctly gets a 'guessing stone.'" />
+            android:text="Any student can then attempt to create a koan. When a student constructs a koan, they can submit it by calling either 'Master' or 'Mondo'. If they call 'Master', the master will mark it with the white or black stone denoting buddha-nature. If the student calls 'Mondo', students have the opportunity to predict if the new koan has the buddha-nature or not. Once at least half of the students have made their predictions, the master is allowed to officially mark whether it has the buddha-nature or not. Any student who predicted correctly gets a 'guessing stone.'" />
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:layout_margin="20dp"
             android:textSize="18dp"
-            android:text="If a student has any guessing stones, they can spend them to try and guess what the master's rule is. Once the student has submitted the guess, the master must then attempt to disprove the guess by either constructing a koan that has the buddha-nature that your guess says shouldn't, or a koan that does not have the buddha-nature that your guess says should. If the master is unable to disprove your guess, you've achieved enlightenment and have won the game!" />
+            android:text="If a student has any guessing stones, they can spend them to try and guess what the master's rule is. Once the student has submitted the guess, the master must then attempt to disprove the guess by either constructing a koan that has the buddha-nature that the guess says shouldn't, or a koan that does not have the buddha-nature that the guess says should. If the master is unable to disprove the guess, the student achieves enlightenment and has won the game!" />
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"

@@ -58,11 +58,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CreateClan.xaml.cs">
+      <DependentUpon>CreateClan.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CreateGame.xaml.cs">
       <DependentUpon>CreateGame.xaml</DependentUpon>
     </Compile>
     <Compile Include="GameWindows\Zendo.xaml.cs">
       <DependentUpon>Zendo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GameWindows\ZendoRules.xaml.cs">
+      <DependentUpon>ZendoRules.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GameWindows\ZendoSampleRules.xaml.cs">
+      <DependentUpon>ZendoSampleRules.xaml</DependentUpon>
     </Compile>
     <Compile Include="JoinClan.xaml.cs">
       <DependentUpon>JoinClan.xaml</DependentUpon>
@@ -72,11 +81,23 @@
       <DependentUpon>Password.xaml</DependentUpon>
     </Compile>
     <Compile Include="_hidden.cs" />
+    <Page Include="CreateClan.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="CreateGame.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GameWindows\Zendo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GameWindows\ZendoRules.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GameWindows\ZendoSampleRules.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

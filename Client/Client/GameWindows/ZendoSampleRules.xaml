@@ -1,0 +1,49 @@
+﻿<Window x:Class="Client.GameWindows.ZendoSampleRules"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client.GameWindows"
+        mc:Ignorable="d"
+         Title="Sample Zendo Rules" Height="600" Width="600" Background="#222222" TextOptions.TextFormattingMode="Display">
+	<Grid>
+		<ScrollViewer>
+			<StackPanel>
+				<TextBlock FontSize="16" Foreground="White" Margin="10" Padding="5" TextWrapping="Wrap">
+					Example rules: a koan has the buddha-nature if and only if:
+				</TextBlock>
+				<TextBlock FontSize="16" Foreground="White" Margin="10" Padding="5" TextWrapping="Wrap">
+					- All the pieces are the same color 
+				</TextBlock>
+				<TextBlock FontSize="16" Foreground="White" Margin="10" Padding="5" TextWrapping="Wrap">
+					- It contains at least one red piece
+				</TextBlock>
+				<TextBlock FontSize="16" Foreground="White" Margin="10" Padding="5" TextWrapping="Wrap">
+					- It contains no green pieces
+				</TextBlock>
+				<TextBlock FontSize="16" Foreground="White" Margin="10" Padding="5" TextWrapping="Wrap">
+					- It contains at least one of each color
+				</TextBlock>
+				<TextBlock FontSize="16" Foreground="White" Margin="10" Padding="5" TextWrapping="Wrap">
+					- All the pieces point in the same direction
+				</TextBlock>
+				<TextBlock FontSize="16" Foreground="White" Margin="10" Padding="5" TextWrapping="Wrap">
+					- No two consecutive pieces point in the same direction
+				</TextBlock>
+				<TextBlock FontSize="16" Foreground="White" Margin="10" Padding="5" TextWrapping="Wrap">
+					- It contains at least one piece that points up
+				</TextBlock>
+				<TextBlock FontSize="16" Foreground="White" Margin="10" Padding="5" TextWrapping="Wrap">
+					- It has no more than 5 pieces
+				</TextBlock>
+				<TextBlock FontSize="16" Foreground="White" Margin="10" Padding="5" TextWrapping="Wrap">
+					- It has two pieces that point towards each other 
+				</TextBlock>
+				<TextBlock FontSize="16" Foreground="White" Margin="10" Padding="5" TextWrapping="Wrap">
+					Note that rules can also be 'negative' as well, for example: 'A koan does NOT have the buddha-nature if it contains exactly three green pieces.'
+				</TextBlock>
+
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
+</Window>

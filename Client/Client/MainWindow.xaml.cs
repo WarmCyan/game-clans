@@ -104,7 +104,7 @@ namespace Client
 				int iIndex = i;
 				Label pLabel = new Label();
 				pLabel.Padding = new Thickness(10);
-				pLabel.Margin = new Thickness(2, 2, 2, 0);
+				pLabel.Margin = new Thickness(2, 0, 2, 2);
 				pLabel.Background = Master.BUTTON_NORMAL;
 				pLabel.Foreground = new SolidColorBrush(Colors.White);
 				pLabel.Content = m_lDisplay[i];
@@ -123,6 +123,7 @@ namespace Client
 				stkActiveGames.Children.Add(pLabel);
 			}
 
+			// fill notifications list
 			sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetServerURL() + "GetUnreadNotifications", Master.BuildCommonBody(), true);
 			pResponse = Master.ReadResponse(sResponse);
 
@@ -344,10 +345,10 @@ namespace Client
 			pJoinClan.ShowDialog();
 		}
 		
-
 		private void btnCreateClan_MouseUp(object sender, MouseButtonEventArgs e)
 		{
-
+			CreateClan pCreateClan = new CreateClan();
+			pCreateClan.ShowDialog();
 		}
 
 		private void btnMarkNotificationsRead_MouseUp(object sender, MouseButtonEventArgs e)
