@@ -1,4 +1,13 @@
-﻿using System;
+﻿//*************************************************************
+//  File: CreateGame.xaml.cs
+//  Date created: 12/23/2016
+//  Date edited: 12/23/2016
+//  Author: Nathan Martindale
+//  Copyright © 2016 Digital Warrior Labs
+//  Description: 
+//*************************************************************
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

@@ -364,6 +364,9 @@ namespace Client
 		private void btnRefresh_MouseLeave(object sender, MouseEventArgs e) { btnRefresh.Background = Master.BUTTON_NORMAL; }
 		private void btnRefresh_MouseEnter(object sender, MouseEventArgs e) { btnRefresh.Background = Master.BUTTON_HOVER; }
 		
+		private void btnSettings_MouseLeave(object sender, MouseEventArgs e) { btnSettings.Background = Master.BUTTON_NORMAL; }
+		private void btnSettings_MouseEnter(object sender, MouseEventArgs e) { btnSettings.Background = Master.BUTTON_HOVER; }
+		
 		private void btnJoinClan_MouseUp(object sender, MouseButtonEventArgs e)
 		{
 			JoinClan pJoinClan = new JoinClan();
@@ -389,5 +392,11 @@ namespace Client
 		}
 
 		private void btnRefresh_MouseUp(object sender, MouseButtonEventArgs e) { this.BuildDashboard(); }
+
+		private void btnSettings_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			Settings pSettings = new Settings();
+			pSettings.ShowDialog();
+		}
 	}
 }

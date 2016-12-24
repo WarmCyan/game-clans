@@ -18,6 +18,7 @@
 					<RowDefinition Height="*"/>
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
 				<ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Stretch">
 					<StackPanel Name="stkClanStack">
@@ -31,6 +32,11 @@
 				<StackPanel Grid.Row="2">
 					<Border BorderBrush="#444444" BorderThickness="0,2,0,0">
 						<TextBlock TextAlignment="Center" Name="btnCreateClan" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnCreateClan_MouseLeave" MouseEnter="btnCreateClan_MouseEnter" MouseUp="btnCreateClan_MouseUp">Create Clan</TextBlock>
+					</Border>
+				</StackPanel>
+				<StackPanel Grid.Row="3">
+					<Border BorderBrush="#444444" BorderThickness="0,2,0,0">
+						<TextBlock TextAlignment="Center" Name="btnSettings" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnSettings_MouseLeave" MouseEnter="btnSettings_MouseEnter" MouseUp="btnSettings_MouseUp">Settings</TextBlock>
 					</Border>
 				</StackPanel>
 			</Grid>
