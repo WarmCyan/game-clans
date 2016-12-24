@@ -17,7 +17,6 @@ namespace GameClansServer
 {
 	public class Master
 	{
-
 		// constants
 		public const string MSGTYPE_DEFAULT = "Default"; // message only
 		public const string MSGTYPE_DATA = "Data"; // data only
