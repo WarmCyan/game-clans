@@ -166,6 +166,62 @@ namespace Client
 					stkNotifications.Children.Add(pBorder);
 				}
 			}
+
+			// build scoreboard
+			sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetServerURL() + "GetClanLeaderboard", Master.BuildCommonBody(), true);
+			pResponse = Master.ReadResponse(sResponse);
+
+			if (pResponse.Element("Data").Element("Leaderboard") != null)
+			{
+				XElement pLeaderboard = pResponse.Element("Data").Element("Leaderboard");
+				stkScoreBoard.Children.Clear();
+
+				lblUserName.Content = Master.GetActiveUserName();
+				lblPlaceScore.Content = pLeaderboard.Attribute("Place").Value + " - " + pLeaderboard.Attribute("Score").Value + " points";
+				foreach (XElement pScoreXml in pLeaderboard.Elements("Score"))
+				{
+
+					Border pBorder = new Border();
+					pBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(68, 68, 68));
+					pBorder.BorderThickness = new Thickness(2, 0, 2, 2);
+					pBorder.Padding = new Thickness(10);
+
+					// thanks to http://stackoverflow.com/questions/9803710/programmatically-setting-the-width-of-a-grid-column-with-in-wpf
+					Grid pGrid = new Grid();
+					ColumnDefinition c1 = new ColumnDefinition();
+					c1.Width = new GridLength(3, GridUnitType.Star);
+					ColumnDefinition c2 = new ColumnDefinition();
+					c2.Width = new GridLength(2, GridUnitType.Star);
+					ColumnDefinition c3 = new ColumnDefinition();
+					c3.Width = new GridLength(2, GridUnitType.Star);
+
+					pGrid.ColumnDefinitions.Add(c1);
+					pGrid.ColumnDefinitions.Add(c2);
+					pGrid.ColumnDefinitions.Add(c3);
+
+					Label pName = new Label();
+					pName.Foreground = new SolidColorBrush(Colors.White);
+					pName.Content = pScoreXml.Attribute("User").Value;
+					Grid.SetColumn(pName, 0);
+					
+					Label pPlace = new Label();
+					pPlace.Foreground = new SolidColorBrush(Colors.White);
+					pPlace.Content = pScoreXml.Attribute("Place").Value;
+					Grid.SetColumn(pPlace, 1);
+					
+					Label pScore = new Label();
+					pScore.Foreground = new SolidColorBrush(Colors.White);
+					pScore.Content = pScoreXml.Attribute("Score").Value;
+					Grid.SetColumn(pScore, 2);
+
+					pGrid.Children.Add(pName);
+					pGrid.Children.Add(pPlace);
+					pGrid.Children.Add(pScore);
+
+					pBorder.Child = pGrid;
+					stkScoreBoard.Children.Add(pBorder);
+				}
+			}
 		}
 
 		public void ChangeActiveClan(string sClanText) // NOTE: clantext includes both clan name and username
@@ -279,6 +335,9 @@ namespace Client
 		private void btnMarkNotificationsRead_MouseLeave(object sender, MouseEventArgs e) { btnMarkNotificationsRead.Background = Master.BUTTON_NORMAL; }
 		private void btnMarkNotificationsRead_MouseEnter(object sender, MouseEventArgs e) { btnMarkNotificationsRead.Background = Master.BUTTON_HOVER; }
 		
+		private void btnRefresh_MouseLeave(object sender, MouseEventArgs e) { btnRefresh.Background = Master.BUTTON_NORMAL; }
+		private void btnRefresh_MouseEnter(object sender, MouseEventArgs e) { btnRefresh.Background = Master.BUTTON_HOVER; }
+		
 		private void btnJoinClan_MouseUp(object sender, MouseButtonEventArgs e)
 		{
 			JoinClan pJoinClan = new JoinClan();
@@ -302,5 +361,7 @@ namespace Client
 			CreateGame pCreateGame = new CreateGame();
 			pCreateGame.ShowDialog();
 		}
+
+		private void btnRefresh_MouseUp(object sender, MouseButtonEventArgs e) { this.BuildDashboard(); }
 	}
 }
