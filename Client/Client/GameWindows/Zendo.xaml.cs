@@ -466,9 +466,13 @@ namespace Client.GameWindows
 			string sBody = Master.BuildCommonBody(Master.BuildGameIDBodyPart(m_sGameID) + "<param name='sRule'>" + sRule + "</param><param name='sBuddhaNatureKoan'>" + sCorrectKoan.ToUpper() + "</param><param name='sNonBuddhaNatureKoan'>" + sIncorrectKoan.ToUpper() + "</param>");
 			string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "SubmitInitialKoans", sBody, true);
 			this.TempResetMaster();
-			
-			XElement pResponse = Master.ReadResponse(sResponse);
-			if (pResponse.Attribute("Type").Value == "Error") { MessageBox.Show(pResponse.Element("Text").Value, "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+
+			// check for errors
+			if (Master.CleanResponse(sResponse) != "")
+			{
+				XElement pResponse = Master.ReadResponse(sResponse);
+				if (pResponse.Attribute("Type").Value == "Error") { MessageBox.Show(pResponse.Element("Text").Value, "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+			}
 			else { this.GetUserBoard(); }
 		}
 		

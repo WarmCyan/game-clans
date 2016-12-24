@@ -61,6 +61,7 @@ namespace GameClansServer
 		// outward facing methods
 		public string ServerVersion() { return Master.MessagifySimple(Master.SERVER_VERSION); }
 		public string RequiredAppVersion() { return Master.MessagifySimple(Master.APP_VERSION); }
+		public string RequiredClientVersion() { return Master.MessagifySimple(Master.CLIENT_VERSION); }
 
 		public string CreateClan(string sClanName, string sClanPassPhrase)
 		{

@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: MainWindow.xaml.cs
 //  Date created: 12/8/2016
-//  Date edited: 12/15/2016
+//  Date edited: 12/23/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: This windows has all the clans and clan stuff on it. Games will open in a new window
@@ -122,6 +122,50 @@ namespace Client
 
 				stkActiveGames.Children.Add(pLabel);
 			}
+
+			sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetServerURL() + "GetUnreadNotifications", Master.BuildCommonBody(), true);
+			pResponse = Master.ReadResponse(sResponse);
+
+			stkNotifications.Children.Clear();
+			XElement pNotificationsXml = pResponse.Element("Data").Element("Notifications");
+			if (pNotificationsXml != null)
+			{
+				foreach (XElement pNotification in pNotificationsXml.Elements("Notification"))
+				{
+					// get the data from the element
+					string sMessage = pNotification.Value;
+					string sGameID = pNotification.Attribute("GameID").Value;
+					string sGameName = pNotification.Attribute("GameName").Value; 
+					
+					// make the gui elements
+					Border pBorder = new Border();
+					pBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(68, 68, 68));
+					pBorder.BorderThickness = new Thickness(2, 0, 2, 2);
+					pBorder.Padding = new Thickness(10);
+
+					TextBlock pLabel = new TextBlock();
+					pLabel.Foreground = new SolidColorBrush(Colors.White);
+					pLabel.Text = sGameName + " - " + sMessage;
+					pLabel.TextWrapping = TextWrapping.Wrap;
+
+					pLabel.MouseEnter += delegate { pBorder.Background = new SolidColorBrush(Color.FromRgb(100, 100, 100)); };
+					pLabel.MouseLeave += delegate { pBorder.Background = new SolidColorBrush(Colors.Transparent); };
+
+					// on click, open up that game window
+					pLabel.MouseUp += delegate
+					{
+						if (sGameID.Contains("Zendo"))
+						{ 
+							Zendo pWindow = new Zendo(sGameID, sGameName);
+							pWindow.Show();
+						}
+					};
+
+					// add the gui elements to the stack
+					pBorder.Child = pLabel;
+					stkNotifications.Children.Add(pBorder);
+				}
+			}
 		}
 
 		public void ChangeActiveClan(string sClanText) // NOTE: clantext includes both clan name and username
@@ -226,18 +270,37 @@ namespace Client
 		private void btnJoinClan_MouseEnter(object sender, MouseEventArgs e) { btnJoinClan.Background = Master.BUTTON_HOVER; }
 		private void btnJoinClan_MouseLeave(object sender, MouseEventArgs e) { btnJoinClan.Background = Master.BUTTON_NORMAL; }
 		
+		private void btnCreateClan_MouseEnter(object sender, MouseEventArgs e) { btnCreateClan.Background = Master.BUTTON_HOVER; }
+		private void btnCreateClan_MouseLeave(object sender, MouseEventArgs e) { btnCreateClan.Background = Master.BUTTON_NORMAL; }
+		
+		private void btnCreateGame_MouseLeave(object sender, MouseEventArgs e) { btnCreateGame.Background = Master.BUTTON_NORMAL; }
+		private void btnCreateGame_MouseEnter(object sender, MouseEventArgs e) { btnCreateGame.Background = Master.BUTTON_HOVER; }
+		
+		private void btnMarkNotificationsRead_MouseLeave(object sender, MouseEventArgs e) { btnMarkNotificationsRead.Background = Master.BUTTON_NORMAL; }
+		private void btnMarkNotificationsRead_MouseEnter(object sender, MouseEventArgs e) { btnMarkNotificationsRead.Background = Master.BUTTON_HOVER; }
+		
 		private void btnJoinClan_MouseUp(object sender, MouseButtonEventArgs e)
 		{
 			JoinClan pJoinClan = new JoinClan();
 			pJoinClan.ShowDialog();
 		}
 		
-		private void btnCreateClan_MouseEnter(object sender, MouseEventArgs e) { btnCreateClan.Background = Master.BUTTON_HOVER; }
-		private void btnCreateClan_MouseLeave(object sender, MouseEventArgs e) { btnCreateClan.Background = Master.BUTTON_NORMAL; }
 
 		private void btnCreateClan_MouseUp(object sender, MouseButtonEventArgs e)
 		{
 
+		}
+
+		private void btnMarkNotificationsRead_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetServerURL() + "MarkUnreadNotificationsRead", Master.BuildCommonBody(), true);
+			this.BuildDashboard();
+		}
+
+		private void btnCreateGame_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			CreateGame pCreateGame = new CreateGame();
+			pCreateGame.ShowDialog();
 		}
 	}
 }

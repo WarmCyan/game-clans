@@ -58,6 +58,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CreateGame.xaml.cs">
+      <DependentUpon>CreateGame.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GameWindows\Zendo.xaml.cs">
       <DependentUpon>Zendo.xaml</DependentUpon>
     </Compile>
@@ -69,6 +72,10 @@
       <DependentUpon>Password.xaml</DependentUpon>
     </Compile>
     <Compile Include="_hidden.cs" />
+    <Page Include="CreateGame.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GameWindows\Zendo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

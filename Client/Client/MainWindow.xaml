@@ -45,15 +45,26 @@
 				</Grid.ColumnDefinitions>
 
 				<StackPanel Grid.Column="0">
+					<Label Content="Unread Notifications" Padding="5" Margin="10,5,10,0" Foreground="Black" Background="#CCCCCC" />
+					<ScrollViewer VerticalScrollBarVisibility="Hidden" Margin="10,0,10,10" Background="#333333" Height="200">
+						<StackPanel Name="stkNotifications">
+						</StackPanel>
+					</ScrollViewer>
+					<Border BorderBrush="#444444" BorderThickness="2" Margin="10">
+						<TextBlock TextAlignment="Center" Name="btnMarkNotificationsRead" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnMarkNotificationsRead_MouseLeave" MouseEnter="btnMarkNotificationsRead_MouseEnter" MouseUp="btnMarkNotificationsRead_MouseUp">Mark Notifications As Read</TextBlock>
+					</Border>
 				</StackPanel>
 
 				<StackPanel Grid.Column="1">
 					<StackPanel>
 						<Label Content="Active Games" Padding="5" Margin="10,5,10,0" Foreground="Black" Background="#CCCCCC" />
-						<ScrollViewer VerticalScrollBarVisibility="Hidden" Margin="10,0,10,10" Background="#333333" Height="100">
+						<ScrollViewer VerticalScrollBarVisibility="Hidden" Margin="10,0,10,10" Background="#333333" Height="200">
 							<StackPanel Name="stkActiveGames">
 							</StackPanel>
 						</ScrollViewer>
+						<Border BorderBrush="#444444" BorderThickness="2" Margin="10">
+							<TextBlock TextAlignment="Center" Name="btnCreateGame" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnCreateGame_MouseLeave" MouseEnter="btnCreateGame_MouseEnter" MouseUp="btnCreateGame_MouseUp">Start New Game</TextBlock>
+						</Border>
 					</StackPanel>
 				</StackPanel>
 			</Grid>
