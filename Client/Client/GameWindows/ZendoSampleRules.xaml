@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client.GameWindows"
         mc:Ignorable="d"
+		Icon="../Logo.ico"
          Title="Sample Zendo Rules" Height="600" Width="600" Background="#222222" TextOptions.TextFormattingMode="Display">
 	<Grid>
 		<ScrollViewer>
