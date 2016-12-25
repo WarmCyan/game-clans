@@ -86,13 +86,13 @@
 								<ColumnDefinition Width="*" />
 								<ColumnDefinition Width="*" />
 							</Grid.ColumnDefinitions>
-							<Border Grid.Column="0" Name="brdrHasBuddhaNature" BorderBrush="#444444" BorderThickness="2" Margin="20" Background="#151515" MouseEnter="btnHasBuddhaNature_MouseEnter" MouseLeave="btnHasBuddhaNature_MouseLeave" MouseUp="btnHasBuddhaNature_MouseUp">
-								<WrapPanel Name="pnlYesbutton" HorizontalAlignment="Center" MouseUp="btnHasBuddhaNature_MouseUp">
+							<Border Grid.Column="0" Name="brdrHasBuddhaNature" BorderBrush="#444444" BorderThickness="2" Margin="20" Background="#151515" >
+									<WrapPanel Name="pnlYesbutton" HorizontalAlignment="Center" MouseEnter="btnHasBuddhaNature_MouseEnter" MouseLeave="btnHasBuddhaNature_MouseLeave" MouseUp="btnHasBuddhaNature_MouseUp">
 									<TextBlock TextAlignment="Center" Name="btnHasBuddhaNature" Foreground="White" Padding="10">Yup!</TextBlock>
 								</WrapPanel>
 							</Border>
-							<Border Grid.Column="1" Name="brdrHasNotBuddhaNature" BorderBrush="#444444" BorderThickness="2" Margin="20" Background="#151515" MouseEnter="btnHasNotBuddhaNature_MouseEnter" MouseLeave="btnHasNotBuddhaNature_MouseLeave" MouseUp="btnHasNotBuddhaNature_MouseUp">
-								<WrapPanel Name="pnlNotButton" HorizontalAlignment="Center" MouseUp="btnHasNotBuddhaNature_MouseUp">
+							<Border Grid.Column="1" Name="brdrHasNotBuddhaNature" BorderBrush="#444444" BorderThickness="2" Margin="20" Background="#151515" >
+									<WrapPanel Name="pnlNotButton" HorizontalAlignment="Center" MouseEnter="btnHasNotBuddhaNature_MouseEnter" MouseLeave="btnHasNotBuddhaNature_MouseLeave" MouseUp="btnHasNotBuddhaNature_MouseUp">
 									<TextBlock TextAlignment="Center" Name="btnHasNotBuddhaNature" Foreground="White" Padding="10">Nope</TextBlock>
 								</WrapPanel>
 							</Border>

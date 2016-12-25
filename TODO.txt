@@ -1,0 +1,3 @@
+- Fix android notifications
+- On desktop, when you join a clan, it doesn't show up in the clan list until
+  you restart the client

@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Zendo.cs
 //  Date created: 11/28/2016
-//  Date edited: 12/23/2016
+//  Date edited: 12/24/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: My implementation of the awesome game of Zendo!
@@ -615,8 +615,9 @@ namespace GameClansServer.Games
 			{
 				m_sStateStatus = "pending master";
 				// send a notification to the master 
-				m_pServer.AddNotification(m_sClanName, m_sMaster, "A student has called mondo on a new koan, and the students have made their predictions. The koan is ready for your analysis!", m_sGameID, m_sGameName);
+				m_pServer.AddNotification(m_sClanName, m_sMaster, "A student has called mondo on a new koan, and half of the students have made their predictions. The koan is ready for your analysis!", m_sGameID, m_sGameName);
 			}
+			m_lEventLog.Add(new ZendoLogEvent(sUserName + " has made their prediction!"));
 
 			this.Save();
 			return "";
