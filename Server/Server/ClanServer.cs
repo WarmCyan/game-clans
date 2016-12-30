@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: ClanServer.cs
 //  Date created: 11/28/2016
-//  Date edited: 12/22/2016
+//  Date edited: 12/30/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: Main server that has all the outward facing REST API functions
@@ -62,6 +62,25 @@ namespace GameClansServer
 		public string ServerVersion() { return Master.MessagifySimple(Master.SERVER_VERSION); }
 		public string RequiredAppVersion() { return Master.MessagifySimple(Master.APP_VERSION); }
 		public string RequiredClientVersion() { return Master.MessagifySimple(Master.CLIENT_VERSION); }
+
+
+		public string RegisterUser(string sEmail, string sPassword)
+		{
+			
+			return "";
+		}
+
+		public string ReturningUser(string sEmail, string sPassword)
+		{
+		
+			return "";
+		}
+
+		public string ChangeUserPassword(string sEmail, string sOldPassword, string sNewPassword)
+		{
+		
+			return "";
+		}
 
 		public string CreateClan(string sClanName, string sClanPassPhrase)
 		{

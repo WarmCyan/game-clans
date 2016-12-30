@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Master.cs
 //  Date created: 11/28/2016
-//  Date edited: 12/23/2016
+//  Date edited: 12/30/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: Superclass of static functions and properties
@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+using DWL.Utility;
 
 namespace GameClansServer
 {
@@ -40,6 +42,15 @@ namespace GameClansServer
 		public static string MessagifyError(string sMsg, string sData) { return Messagify(sMsg, MSGTYPE_ERROR, sData); }
 		public static string MessagifyData(string sData) { return Messagify("", MSGTYPE_DATA, sData); }
 		public static string Messagify(string sMsg, string sType, string sData) { return "<Message Type='" + sType + "'><Text>" + sMsg + "</Text><Data>" + sData + "</Data></Message>"; }
+
+		public static string GenerateKey()
+		{
+			Guid pKey = Guid.NewGuid();
+			string sKey = pKey.ToString().Replace("-", "");
+
+			string sHashedKey = Security.Sha256Hash(sKey);
+			return sHashedKey;
+		}
 	}
 
 }

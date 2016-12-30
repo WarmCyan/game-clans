@@ -14,3 +14,8 @@ App/packages/*
 App/App/bin/*
 App/App/obj/*
 App/.vs/*
+
+**/.suo
+
+Publish/*
+

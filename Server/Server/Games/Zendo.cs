@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Zendo.cs
 //  Date created: 11/28/2016
-//  Date edited: 12/24/2016
+//  Date edited: 12/30/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: My implementation of the awesome game of Zendo!
@@ -976,14 +976,17 @@ namespace GameClansServer.Games
 				int iNumKoans = 0;
 				Dictionary<string, int> dKoanCounts = new Dictionary<string, int>();
 
+				// add all the users
+				foreach (ZendoUser pUser in m_lStudents) { dKoanCounts.Add(pUser.UserName, 0); }
+
 				foreach (ZendoKoan pKoan in m_lKoans)
 				{
 					if (pKoan.User == m_sMaster || pKoan.User == "master") { continue; }
-					if (!dKoanCounts.ContainsKey(pKoan.User)) { dKoanCounts.Add(pKoan.User, 0); }
+					if (!dKoanCounts.ContainsKey(pKoan.User)) { dKoanCounts.Add(pKoan.User, 0); } // this is probably redundant, but leaving it just in case?
 					dKoanCounts[pKoan.User]++;
 					iNumKoans++;
 				}
-				
+			
 				// game ended notifications
 				foreach (string sPlayer in m_lPlayerNames)
 				{
@@ -994,7 +997,8 @@ namespace GameClansServer.Games
 						iScore = (int)(((float)dKoanCounts[sPlayer] / (float)iNumKoans) * 10);
 						if (sPlayer == m_sWinningUser) { iScore = 15; }
 					}
-					else { iScore = (int)(iNumKoans / 2); }
+					//else { iScore = (int)(iNumKoans / 2); }
+					else { iScore = 2; } // Master gets a flat 2 points, not above because in any groups larger than 3 people, on average the master will get more than non-enlightened students
 					m_pServer.UpdateUserScore(m_sClanName, sPlayer, "Zendo", iScore);
 				
 					m_pServer.AddNotification(m_sClanName, sPlayer, "The game has ended, " + m_sWinningUser + " has reached enlightenment! (You have receieved " + iScore + " points)", m_sGameID, m_sGameName);

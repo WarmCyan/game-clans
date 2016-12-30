@@ -51,7 +51,7 @@ namespace GameClansServer
 			Zendo z = new Zendo();
 			ClanServer cs = new ClanServer();
 
-			return z.GrantEnlightenment("g_Zendo_636180392774905364", "Testing Clan", "WildfireXIII", cs.Sha256Hash("testing"));
+			return z.GrantEnlightenment("g_Zendo_636182346200902367", "The Martindale Clan", "WildfireXIII", cs.Sha256Hash("testing"));
 		}
 
 		static string GetLastNotifications()
