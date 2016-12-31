@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: ZendoActivity.cs
 //  Date created: 12/13/2016
-//  Date edited: 12/22/2016
+//  Date edited: 12/31/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -32,6 +32,9 @@ namespace App
 		// member variables
 		private string m_sGameID;
 		private string m_sGameName;
+
+		private EventHandler m_pActionButtonDelegate = null;
+		private EventHandler m_pGuessButtonDelegate = null;
 	
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
@@ -140,10 +143,11 @@ namespace App
 			pGiveUpButton.Enabled = true;
 			pActionButton.Enabled = true;
 			string sAction = pActionXml.Value;
+			pActionButton.Click -= m_pActionButtonDelegate;
 			if (sAction == "join")
 			{
 				pActionButton.Text = "Join Game";
-				pActionButton.Click += delegate
+				m_pActionButtonDelegate = delegate
 				{
 					string sResponse2 = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetGameURL("Zendo") + "JoinGame", sBody, true);
 					XElement pResponse2 = Master.ReadResponse(sResponse2);
@@ -157,7 +161,7 @@ namespace App
 			else if (sAction == "initial")
 			{
 				pActionButton.Text = "Create Initial Koans";
-				pActionButton.Click += delegate
+				m_pActionButtonDelegate = delegate
 				{
 					Intent pIntent = new Intent(this, (new ZendoCreateRuleActivity()).Class);
 					this.StartActivityForResult(pIntent, 0);
@@ -166,7 +170,7 @@ namespace App
 			else if (sAction == "build")
 			{
 				pActionButton.Text = "Build Koan";
-				pActionButton.Click += delegate
+				m_pActionButtonDelegate = delegate
 				{
 					Intent pIntent = new Intent(this, (new ZendoBuildKoanActivity()).Class);
 					pIntent.PutExtra("Koans", pKoansXml.ToString());
@@ -176,7 +180,7 @@ namespace App
 			else if (sAction == "judge")
 			{
 				pActionButton.Text = "Analyze Koan";
-				pActionButton.Click += delegate
+				m_pActionButtonDelegate = delegate
 				{
 					Intent pIntent = new Intent(this, (new ZendoJudgeKoanActivity()).Class);
 					pIntent.PutExtra("Koan", pStatusXml.Element("Data").Element("Koan").Value);
@@ -187,7 +191,7 @@ namespace App
 			else if (sAction == "predict")
 			{
 				pActionButton.Text = "Predict Master's Analysis";
-				pActionButton.Click += delegate
+				m_pActionButtonDelegate = delegate
 				{
 					Intent pIntent = new Intent(this, (new ZendoPredictActivity()).Class);
 					pIntent.PutExtra("Koan", pStatusXml.Element("Data").Element("Koan").Value);
@@ -198,7 +202,7 @@ namespace App
 			else if (sAction == "disprove")
 			{
 				pActionButton.Text = "Disprove Guess";
-				pActionButton.Click += delegate
+				m_pActionButtonDelegate = delegate
 				{
 					Intent pIntent = new Intent(this, typeof(ZendoDisproveActivity));
 					pIntent.PutExtra("Guess", pStatusXml.Attribute("Guess").Value);
@@ -217,6 +221,7 @@ namespace App
 				pActionButton.Text = "Waiting...";
 				pActionButton.Enabled = false;
 			}
+			pActionButton.Click += m_pActionButtonDelegate;
 
 			// set number of guesses
 			int iNumGuesses = Convert.ToInt32(pNumGuessesXml.Value);
@@ -224,12 +229,14 @@ namespace App
 			pGuessButton.Text = "Guess (" + iNumGuesses.ToString() + " guess tokens)";
 			if (iNumGuesses > 0 && sAction == "build") { pGuessButton.Enabled = true; }
 			else { pGuessButton.Enabled = false; }
-			pGuessButton.Click += delegate
+			pGuessButton.Click -= m_pGuessButtonDelegate;
+			m_pGuessButtonDelegate = delegate
 			{
 				Intent pIntent = new Intent(this, typeof(ZendoGuessActivity));
 				pIntent.PutExtra("Koans", pKoansXml.ToString());
 				this.StartActivityForResult(pIntent, 0);
 			};
+			pGuessButton.Click += m_pGuessButtonDelegate;
 
 			// set master label
 			string sMaster = pMasterXml.Value;

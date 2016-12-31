@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: MainActivity.cs
 //  Date created: 12/9/2016
-//  Date edited: 12/24/2016
+//  Date edited: 12/31/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -27,6 +27,8 @@ namespace App
 	[Activity(Label = "Game Clans", MainLauncher = true, Icon = "@drawable/icon")]
 	public class MainActivity : BaseActivity // TODO: just extend MainActivity in the other activities and it should automagically get the drawer navigation?
 	{
+
+		private EventHandler m_pDataTextDelegate = null;
 	
 		protected override void OnCreate(Bundle bundle)
 		{
@@ -149,7 +151,9 @@ namespace App
 					TextView pDataText = pDataRow.FindViewById<TextView>(Resource.Id.txtText);
 					pDataText.Text = pNotif.Attribute("GameName").Value + " - " + pNotif.Value;
 
-					pDataText.Click += delegate
+					// reset event handler
+					pDataText.Click -= m_pDataTextDelegate;
+					m_pDataTextDelegate = delegate
 					{
 						string sGameID = pNotif.Attribute("GameID").Value;
 						Intent pIntent = null;
@@ -159,6 +163,18 @@ namespace App
 						this.Finish();
 						StartActivity(pIntent);
 					};
+					pDataText.Click += m_pDataTextDelegate;
+					
+					/*pDataText.Click += delegate
+					{
+						string sGameID = pNotif.Attribute("GameID").Value;
+						Intent pIntent = null;
+						if (sGameID.Contains("Zendo")) { pIntent = new Intent(this, typeof(ZendoActivity)); }
+						pIntent.SetAction(sGameID);
+						pIntent.PutExtra("GameName", pNotif.Attribute("GameName").Value);
+						this.Finish();
+						StartActivity(pIntent);
+					};*/
 
 					pNotifLayout.AddView(pDataRow);
 				}
@@ -186,7 +202,9 @@ namespace App
 			if (Master.TEMP_RUN) { return; }
 
 
-			//File.Delete(Master.GetBaseDir() + "_clans.dat");
+			/*File.Delete(Master.GetBaseDir() + "_clans.dat");
+			File.Delete(Master.GetBaseDir() + "_key.dat");
+			File.Delete(Master.GetBaseDir() + "_active.dat");*/
 
 			
 			Master.TEMP_RUN = true;

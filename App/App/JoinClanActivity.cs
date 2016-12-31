@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: JoinClanActivity.cs
 //  Date created: 12/11/2016
-//  Date edited: 12/15/2016
+//  Date edited: 12/31/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -42,8 +42,9 @@ namespace App
 			{
 				// TODO: SANITIZATION!
 				_hidden.InitializeWeb();
-				string sUserPass = File.ReadAllText(Master.GetBaseDir() + "_key.dat");
-				string sBody = "<params><param name='sClanName'>" + pClan.Text.ToString() + "</param><param name='sClanPassPhrase'>" + pPass.Text.ToString() + "</param><param name='sUserName'>" + pUser.Text.ToString() + "</param><param name='sUserPassPhrase'>" + sUserPass +  "</param></params>";
+				//string sUserPass = File.ReadAllText(Master.GetBaseDir() + "_key.dat");
+				string sUserPass = Master.GetKey();
+				string sBody = "<params><param name='sEmail'>" + Master.GetEmail() + "</param><param name='sClanName'>" + pClan.Text.ToString() + "</param><param name='sClanPassPhrase'>" + pPass.Text.ToString() + "</param><param name='sUserName'>" + pUser.Text.ToString() + "</param><param name='sUserPassPhrase'>" + sUserPass +  "</param></params>";
 				//string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer/ClanServer/JoinClan", sBody, true);
 				string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetServerURL() + "JoinClan", sBody, true);
 
