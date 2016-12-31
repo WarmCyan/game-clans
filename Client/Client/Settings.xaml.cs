@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Settings.xaml.cs
 //  Date created: 12/24/2016
-//  Date edited: 12/24/2016
+//  Date edited: 12/31/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -40,8 +40,8 @@ namespace Client
 
 		private void btnPassword_MouseUp(object sender, MouseButtonEventArgs e)
 		{
-			Password pPassword = new Password();
-			pPassword.ShowDialog();
+			/*Password pPassword = new Password();
+			pPassword.ShowDialog();*/
 		}
 	}
 }

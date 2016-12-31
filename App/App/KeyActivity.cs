@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: KeyActivity.cs
 //  Date created: 12/11/2016
-//  Date edited: 12/11/2016
+//  Date edited: 12/31/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Security.Cryptography;
+using System.Xml.Linq;
 
 using Android.App;
 using Android.Content;
@@ -25,7 +26,7 @@ using DWL.Utility;
 
 namespace App
 {
-	[Activity(Label = "Enter Password")]
+	[Activity(Label = "Register New User")]
 	public class KeyActivity : Activity
 	{
 		protected override void OnCreate(Bundle savedInstanceState)
@@ -33,6 +34,7 @@ namespace App
 			base.OnCreate(savedInstanceState);
 			SetContentView(Resource.Layout.Key);
 
+			EditText pEmail = FindViewById<EditText>(Resource.Id.txtEmail);
 			EditText pPass1 = FindViewById<EditText>(Resource.Id.txtUserPassword);
 			EditText pPass2 = FindViewById<EditText>(Resource.Id.txtUserPassword2);
 
@@ -40,6 +42,10 @@ namespace App
 
 			pSubmit.Click += delegate
 			{
+				if (pEmail.Text == "")
+				{
+					Master.Popup(this, "Your email cannot be blank.");
+				}
 				if (pPass1.Text == "")
 				{
 					Master.Popup(this, "Your password cannot be blank.");
@@ -52,26 +58,24 @@ namespace App
 					return;
 				}
 
-				// if non-blank key file, user is changing password, meaning if not all clans joined on this device, passwords will get out of sync
-				if (File.Exists(Master.GetBaseDir() + "_key.dat"))
+
+				string sBody = "<params><param name='sEmail'>" + pEmail.Text.ToString() + "</param><param name='sPassword'>" + Security.Sha256Hash(pPass1.Text.ToString()) + "</param></params>";
+				string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetServerURL() + "RegisterUser", sBody, true);
+				XElement pResponse = Master.ReadResponse(sResponse);
+
+				string sResponseMessage = pResponse.Element("Text").Value;
+
+				if (pResponse.Attribute("Type").Value == "Error")
 				{
-					bool bContinue = false;
-					var pBuilder = new AlertDialog.Builder(this);
-					pBuilder.SetMessage("Please note that your password is used by default for all of your usernames in the different clans. If this device does not have every clan you play with, your passwords will be out of sync. Are you sure you want to continue?");
-					pBuilder.SetPositiveButton("Yes", (s, e) => { bContinue = true; });
-					pBuilder.SetNegativeButton("No", (s, e) => { return; });
-					pBuilder.Create().Show();
-
-					// unnecessary safe-guard to make me feel better
-					if (!bContinue) { return; }
-
-					// TODO: make the server call
+					Popup(sResponseMessage);
+					return;
 				}
-
-				string sEncrypted = this.Sha256Hash(pPass1.Text);
-				File.WriteAllText(Master.GetBaseDir() + "_key.dat", sEncrypted);
-				Master.SetKey(sEncrypted);
-				this.Finish();
+				else
+				{
+					//MessageBox.Show(sResponseMessage);
+					Master.HandleUserRegistrationData(pResponse);
+					this.Finish();
+				}
 			};
 		}
 
@@ -80,26 +84,6 @@ namespace App
 			var pBuilder = new AlertDialog.Builder(this);
 			pBuilder.SetMessage(sMessage);
 			pBuilder.Create().Show();
-		}
-		
-		// thanks to http://www.codeshare.co.uk/blog/sha-256-and-sha-512-hash-examples/
-		private string Sha256Hash(string sString)
-		{
-			SHA256 p256 = SHA256Managed.Create();
-			byte[] aBytes = Encoding.UTF8.GetBytes(sString);
-			byte[] aHashBytes = p256.ComputeHash(aBytes);
-			string sHash = this.GetStringFromHash(aHashBytes);
-			return sHash;
-		}
-
-		private string GetStringFromHash(byte[] aHashBytes)
-		{
-			StringBuilder pResult = new StringBuilder();
-			for (int i = 0; i < aHashBytes.Length; i++)
-			{
-				pResult.Append(aHashBytes[i].ToString("X2"));
-			}
-			return pResult.ToString();
 		}
 	}
 }

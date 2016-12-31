@@ -42,10 +42,11 @@ namespace App
 			if (!File.Exists(Master.GetBaseDir() + "_settings.dat")) { File.WriteAllText(Master.GetBaseDir() + "_settings.dat", "notifications=on"); }
 			if (!File.Exists(Master.GetBaseDir() + "_key.dat"))
 			{
-				Intent pIntent = new Intent(this, (new KeyActivity().Class));
+				//Intent pIntent = new Intent(this, (new KeyActivity().Class));
+				Intent pIntent = new Intent(this, typeof(RegisterOrLogInActivity));
 				StartActivity(pIntent);
 			}
-			else { Master.SetKey(File.ReadAllText(Master.GetBaseDir() + "_key.dat")); }
+			else { Master.FillKeyEmail(); }
 
 			// TODO: save temp currently active clan so persistent between app open times, and load it here
 			if (File.Exists(Master.GetBaseDir() + "_active.dat")) 

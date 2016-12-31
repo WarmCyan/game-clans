@@ -1,7 +1,7 @@
 //*************************************************************
 //  File: Master.cs
 //  Date created: 12/9/2016
-//  Date edited: 12/24/2016
+//  Date edited: 12/31/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -28,13 +28,14 @@ namespace App
 		public static bool TEMP_RUN = false;
 		
 		public static bool VERSION_CHECKED = false;
-		public static string APP_VERSION = "1.0.0";
+		public static string APP_VERSION = "1.1.0";
 	
 		// member variables
 		private static string s_sBaseDir = "";
 		private static string s_sActiveClan = "";
 		private static string s_sActiveUserName = "";
 		private static string s_sKey = "";
+		private static string s_sEmail = "";
 
 		private static Dictionary<string, string> s_dSettings;
 
@@ -57,6 +58,9 @@ namespace App
 
 		public static void SetKey(string sKey) { s_sKey = sKey; }
 		public static string GetKey() { return s_sKey; }
+
+		public static void SetEmail(string sEmail) { s_sEmail = sEmail; }
+		public static string GetEmail() { return s_sEmail; }
 
 		// common functions
 		public static string CleanResponse(string sResponse) { return sResponse.Trim('\"').Replace("\\\"", "\"").Replace("\\r", "\r").Replace("\\n", "\n").Replace("\\t", "\t").Replace("\\\\", "\\"); }
@@ -204,6 +208,40 @@ namespace App
 		{
 			ReadSettings();
 			return s_dSettings[sSettingName];
+		}
+
+		// NOTE: pass in the ENTIRE response
+		public static void HandleUserRegistrationData(XElement pResponse)
+		{
+			string sKey = pResponse.Element("Data").Element("Key").Value;
+			string sEmail = pResponse.Element("Data").Element("Email").Value;
+
+			// write _key file
+			File.WriteAllLines(Master.GetBaseDir() + "_key.dat", new List<string>() { sKey, sEmail });
+			Master.SetKey(sKey);
+			Master.SetEmail(sEmail);
+
+			// check if clan data
+			if (pResponse.Element("Data").Element("ClanStubs") != null)
+			{
+				List<string> lClanLines = new List<string>();
+				foreach (XElement pElement in pResponse.Element("Data").Element("ClanStubs").Elements("ClanStub"))
+				{
+					string sClanName = pElement.Attribute("ClanName").Value;
+					string sUserName = pElement.Attribute("UserName").Value;
+
+					lClanLines.Add(sClanName + "|" + sUserName);
+				}
+
+				File.WriteAllLines(Master.GetBaseDir() + "_clans.dat", lClanLines);
+			}
+		}
+
+		public static void FillKeyEmail()
+		{
+			string[] aLines = File.ReadAllLines(Master.GetBaseDir() + "_key.dat");
+			Master.SetKey(aLines[0]);
+			Master.SetEmail(aLines[1]);
 		}
 	}
 }
