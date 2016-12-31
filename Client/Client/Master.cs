@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: Master.cs
 //  Date created: 12/8/2016
-//  Date edited: 12/24/2016
+//  Date edited: 12/30/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.IO;
 
 using System.Windows;
 using System.Windows.Controls;
@@ -27,7 +28,7 @@ namespace Client
 {
 	public class Master
 	{
-		public static string CLIENT_VERSION = "1.0.0";
+		public static string CLIENT_VERSION = "1.1.0";
 	
 		private static List<string> s_lValidZendoImageNames = new List<string>() { "BD", "BL", "BR", "BU", "F", "GD", "GL", "GR", "GU", "OD", "OL", "OR", "OU", "PD", "PL", "PR", "PU", "RD", "RL", "RR", "RU", "T", "YD", "YL", "YR", "YU" };
 
@@ -35,6 +36,7 @@ namespace Client
 		private static string s_sActiveClan = "";
 		private static string s_sActiveUserName = "";
 		private static string s_sKey = "";
+		private static string s_sEmail = ""; 
 
 		public static SolidColorBrush BUTTON_NORMAL = new SolidColorBrush(Color.FromRgb(21, 21, 21)); 
 		public static SolidColorBrush BUTTON_HOVER = new SolidColorBrush(Color.FromRgb(69, 186, 255));
@@ -46,6 +48,9 @@ namespace Client
 
 		public static void SetActiveUserName(string sUserName) { s_sActiveUserName = sUserName; }
 		public static string GetActiveUserName() { return s_sActiveUserName; }
+
+		public static void SetEmail(string sEmail) { s_sEmail = sEmail; }
+		public static string GetEmail() { return s_sEmail; }
 
 		public static void SetKey(string sKey) { s_sKey = sKey; }
 		public static string GetKey() { return s_sKey; }
@@ -127,6 +132,40 @@ namespace Client
 			}
 
 			return bValid;
+		}
+
+		// NOTE: pass in the ENTIRE response
+		public static void HandleUserRegistrationData(XElement pResponse)
+		{
+			string sKey = pResponse.Element("Data").Element("Key").Value;
+			string sEmail = pResponse.Element("Data").Element("Email").Value;
+
+			// write _key file
+			File.WriteAllLines(Master.GetBaseDir() + "_key.dat", new List<string>() { sKey, sEmail });
+			Master.SetKey(sKey);
+			Master.SetEmail(sEmail);
+
+			// check if clan data
+			if (pResponse.Element("Data").Element("ClanStubs") != null)
+			{
+				List<string> lClanLines = new List<string>();
+				foreach (XElement pElement in pResponse.Element("Data").Element("ClanStubs").Elements("ClanStub"))
+				{
+					string sClanName = pElement.Attribute("ClanName").Value;
+					string sUserName = pElement.Attribute("UserName").Value;
+
+					lClanLines.Add(sClanName + "|" + sUserName);
+				}
+
+				File.WriteAllLines(Master.GetBaseDir() + "_clans.dat", lClanLines);
+			}
+		}
+
+		public static void FillKeyEmail()
+		{
+			string[] aLines = File.ReadAllLines(Master.GetBaseDir() + "_key.dat");
+			Master.SetKey(aLines[0]);
+			Master.SetEmail(aLines[1]);
 		}
 	}
 

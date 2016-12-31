@@ -6,9 +6,10 @@
         xmlns:local="clr-namespace:Client.GameWindows"
         mc:Ignorable="d"
 		Icon="../Logo.ico"
-        Title="Zendo" Height="600" Width="800" Background="#222222" TextOptions.TextFormattingMode="Display">
+        Title="Zendo" Height="600" Width="1000" Background="#222222" TextOptions.TextFormattingMode="Display">
 	<Grid>
 		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
 			<ColumnDefinition Width="*" />
 			<ColumnDefinition Width="*" />
 
@@ -140,13 +141,23 @@
 			</Grid>
 			
 		</DockPanel>
+		
+				<DockPanel Grid.Column="1">
+					<Label DockPanel.Dock="Top" Content="Koans" Padding="5" Margin="10,5,10,0" Foreground="Black" Background="#CCCCCC" />
+					<ScrollViewer DockPanel.Dock="Top" VerticalScrollBarVisibility="Hidden" Margin="10,0,10,10" Background="#333333" CanContentScroll="True">
+						<DockPanel>
+							<StackPanel Name="stkKoans">
+							</StackPanel>
+						</DockPanel>
+					</ScrollViewer>
+				</DockPanel>
 
 		<!--<StackPanel Margin="10" Grid.Column="1">-->
-			<Grid Margin="10" Grid.Column="1">
+			<Grid Margin="10" Grid.Column="2">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="*" />
 					<RowDefinition Height="*" />
-					<RowDefinition Height="*" />
+					<!--<RowDefinition Height="*" />-->
 				</Grid.RowDefinitions>
 				
 				<DockPanel Grid.Row="0">
@@ -172,15 +183,6 @@
 					</ScrollViewer>
 				</DockPanel>
 				
-				<DockPanel Grid.Row="2">
-					<Label DockPanel.Dock="Top" Content="Koans" Padding="5" Margin="10,5,10,0" Foreground="Black" Background="#CCCCCC" />
-					<ScrollViewer DockPanel.Dock="Top" VerticalScrollBarVisibility="Hidden" Margin="10,0,10,10" Background="#333333" CanContentScroll="True">
-						<DockPanel>
-							<StackPanel Name="stkKoans">
-							</StackPanel>
-						</DockPanel>
-					</ScrollViewer>
-				</DockPanel>
 			</Grid>
 		<!--</StackPanel>-->
         

@@ -25,9 +25,9 @@ namespace GameClansServer
 		public const string MSGTYPE_BOTH = "Both"; // data and message
 		public const string MSGTYPE_ERROR = "Error"; // error message (can include data)
 
-		public const string SERVER_VERSION = "1.0.0";
-		public const string APP_VERSION = "1.0.0"; // this is the version of app required in order to work with the current server version
-		public const string CLIENT_VERSION = "1.0.0";
+		public const string SERVER_VERSION = "1.1.0";
+		public const string APP_VERSION = "1.1.0"; // this is the version of app required in order to work with the current server version
+		public const string CLIENT_VERSION = "1.1.0";
 
 		// methods
 

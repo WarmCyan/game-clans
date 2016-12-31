@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: MainWindow.xaml.cs
 //  Date created: 12/8/2016
-//  Date edited: 12/24/2016
+//  Date edited: 12/30/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: This windows has all the clans and clan stuff on it. Games will open in a new window
@@ -36,7 +36,6 @@ namespace Client
 	public partial class MainWindow : Window
 	{
 		// member variables
-		private Dictionary<string, string> m_dClanStack;
 		private Dictionary<string, Border> m_dClanStackLabels;
 
 		private List<string> m_lGames;
@@ -52,17 +51,19 @@ namespace Client
 			// check version with server
 			if (!this.CheckVersion()) { this.Close(); return; }
 
-			m_dClanStack = new Dictionary<string, string>();
 			m_dClanStackLabels = new Dictionary<string, Border>();
 
 			// make sure necessary files exist
 			if (!File.Exists(Master.GetBaseDir() + "_clans.dat")) { File.Create(Master.GetBaseDir() + "_clans.dat").Dispose(); }
 			if (!File.Exists(Master.GetBaseDir() + "_key.dat"))
 			{
-				Password pPassWindow = new Password();
-				pPassWindow.ShowDialog();
+				/*Password pPassWindow = new Password();
+				pPassWindow.ShowDialog();*/
+				LogInOrRegister pLogInOrRegister = new LogInOrRegister();
+				pLogInOrRegister.ShowDialog();
 			}
-			else { Master.SetKey(File.ReadAllText(Master.GetBaseDir() + "_key.dat")); }
+			//else { Master.SetKey(File.ReadAllText(Master.GetBaseDir() + "_key.dat")); }
+			else { Master.FillKeyEmail(); }
 
 			this.RefreshClanStack();
 			
@@ -70,8 +71,6 @@ namespace Client
 			if (File.Exists(Master.GetBaseDir() + "_active.dat"))
 			{
 				string[] aLines = File.ReadAllLines(Master.GetBaseDir() + "_active.dat");
-				/*Master.SetActiveClan(aLines[0]);
-				Master.SetActiveUserName(aLines[1]);*/
 				this.ChangeActiveClan(aLines[0] + "|" + aLines[1]);
 			}
 		}
@@ -276,6 +275,11 @@ namespace Client
 
 		private void RefreshClanStack()
 		{
+			// delete all previous stuff
+			stkClanStack.Children.Clear();
+			m_dClanStackLabels.Clear();
+
+			// read in file and fill new stuff
 			string[] aClans = File.ReadAllLines(Master.GetBaseDir() + "_clans.dat");
 			for (int i = 0; i < aClans.Length; i++) { this.AddClanToStack(aClans[i]); }
 		}
@@ -310,45 +314,6 @@ namespace Client
 			m_dClanStackLabels.Add(sClanText, pBorder);
 		}
 
-		private void btnJoin_Click(object sender, RoutedEventArgs e)
-		{
-			/*string sUser = txtUserName.Text;
-			string sPass = txtPassword.Text;
-			string sGame = txtGameID.Text;
-
-			string sClan = "Testing Clan";
-			string sBody = "<params><param name='sGameID'>" + sGame + "</param><param name='sClanName'>" + sClan + "</param><param name='sUserName'>" + sUser + "</param><param name='sUserPassPhrase'>" + sPass + "</param></params>";
-			
-			string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer.Games/Zendo/JoinGame", sBody, true);
-			sResponse = Master.CleanResponse(sResponse);
-			blkLog.Text += sResponse + "\n";*/
-		}
-
-		private void btnListGames_Click(object sender, RoutedEventArgs e)
-		{
-			/*string sUser = txtUserName.Text;
-			string sPass = txtPassword.Text;
-
-			string sClan = "Testing Clan";
-
-			string sBody = "<params><param name='sClanName'>" + sClan + "</param><param name='sUserName'>" + sUser + "</param><param name='sUserPassPhrase'>" + sPass + "</param></params>";
-
-			string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer/ClanServer/ListActiveGames", sBody, true);
-			sResponse = Master.CleanResponse(sResponse);
-			blkLog.Text += sResponse + "\n";*/
-		}
-
-		private void btnStartGame_Click(object sender, RoutedEventArgs e)
-		{
-			/*string sGame = txtGameID.Text;
-
-			string sBody = "<params><param name='sGameID'>" + sGame + "</param></params>";
-			
-			string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer.Games/Zendo/StartGame", sBody, true);
-			sResponse = Master.CleanResponse(sResponse);
-			blkLog.Text += sResponse + "\n";*/
-		}
-
 		private void btnJoinClan_MouseEnter(object sender, MouseEventArgs e) { btnJoinClan.Background = Master.BUTTON_HOVER; }
 		private void btnJoinClan_MouseLeave(object sender, MouseEventArgs e) { btnJoinClan.Background = Master.BUTTON_NORMAL; }
 		
@@ -371,6 +336,7 @@ namespace Client
 		{
 			JoinClan pJoinClan = new JoinClan();
 			pJoinClan.ShowDialog();
+			this.RefreshClanStack();
 		}
 		
 		private void btnCreateClan_MouseUp(object sender, MouseButtonEventArgs e)

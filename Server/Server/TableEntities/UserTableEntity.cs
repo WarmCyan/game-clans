@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: UserTableEntity.cs
 //  Date created: 11/28/2016
-//  Date edited: 11/28/2016
+//  Date edited: 12/30/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -33,6 +33,7 @@ namespace GameClansServer.TableEntities
 		public UserTableEntity() { }
 
 		public string PassPhrase { get; set; }
+		public string Email { get; set; }
 		public int ZendoScore { get; set; }
 	}
 }

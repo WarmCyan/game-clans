@@ -38,12 +38,20 @@ namespace GameClansServer
 
 			//string sMsg = GetLastNotifications();
 
-			string sMsg = GrantEnlightenment();
+			//string sMsg = GrantEnlightenment();
+
+			string sMsg = TestKeyGeneration();
 
 			Console.WriteLine(sMsg);
 			
 			Console.WriteLine("\nComplete!");
 			Console.Read();
+		}
+
+		static string TestKeyGeneration()
+		{
+			ClanServer cs = new ClanServer();
+			return Master.GenerateKey();
 		}
 
 		static string GrantEnlightenment()
@@ -102,7 +110,7 @@ namespace GameClansServer
 		static string JoinClan(string sUserName, string sPassword)
 		{
 			ClanServer cs = new ClanServer();
-			return cs.JoinClan("Testing Clan", "testing", sUserName, sPassword);
+			return cs.JoinClan("thing@thing.com", "Testing Clan", "testing", sUserName, sPassword);
 		}
 
 		static string GetClanLeaderboard(string sUserName, string sPassword)

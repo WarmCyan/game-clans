@@ -79,6 +79,12 @@
     <Compile Include="JoinClan.xaml.cs">
       <DependentUpon>JoinClan.xaml</DependentUpon>
     </Compile>
+    <Compile Include="LogIn.xaml.cs">
+      <DependentUpon>LogIn.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LogInOrRegister.xaml.cs">
+      <DependentUpon>LogInOrRegister.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Master.cs" />
     <Compile Include="Password.xaml.cs">
       <DependentUpon>Password.xaml</DependentUpon>
@@ -108,6 +114,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JoinClan.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LogIn.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LogInOrRegister.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

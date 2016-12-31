@@ -1,6 +1,6 @@
 ﻿//*************************************************************
-//  File: Password.xaml.cs
-//  Date created: 12/15/2016
+//  File: LogIn.xaml.cs
+//  Date created: 12/30/2016
 //  Date edited: 12/30/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
@@ -22,18 +22,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml.Linq;
 
-using System.IO;
-
 using DWL.Utility;
 
 namespace Client
 {
 	/// <summary>
-	/// Interaction logic for Password.xaml
+	/// Interaction logic for LogIn.xaml
 	/// </summary>
-	public partial class Password : Window
+	public partial class LogIn : Window
 	{
-		public Password()
+		public LogIn()
 		{
 			InitializeComponent();
 		}
@@ -43,17 +41,12 @@ namespace Client
 
 		private void btnSubmitPassword_MouseUp(object sender, MouseButtonEventArgs e)
 		{
-			if (txtEmail.Text == "") { MessageBox.Show("Your email must not be empty.", "Empty email", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-			if (txtPass.Password == "") { MessageBox.Show("Your password cannot be an empty string.", "Empty password", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-			if (txtPass.Password != txtPass2.Password) { MessageBox.Show("The passwords do not match.", "Inconsistent password", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-
-
 			string sBody = "<params><param name='sEmail'>" + txtEmail.Text + "</param><param name='sPassword'>" + Security.Sha256Hash(txtPass.Password) + "</param></params>";
-			string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetServerURL() + "RegisterUser", sBody, true);
+			string sResponse = WebCommunications.SendPostRequest(Master.GetBaseURL() + Master.GetServerURL() + "ReturningUser", sBody, true);
 			XElement pResponse = Master.ReadResponse(sResponse);
 
 			string sResponseMessage = pResponse.Element("Text").Value;
-			
+
 			if (pResponse.Attribute("Type").Value == "Error")
 			{
 				MessageBox.Show(sResponseMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Asterisk);

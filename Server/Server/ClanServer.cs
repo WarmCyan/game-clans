@@ -22,6 +22,8 @@ using Microsoft.WindowsAzure.Storage.Blob;
 
 using GameClansServer.TableEntities;
 
+using DWL.Utility;
+
 namespace GameClansServer
 {
 	public class ClanServer
@@ -66,20 +68,65 @@ namespace GameClansServer
 
 		public string RegisterUser(string sEmail, string sPassword)
 		{
-			
-			return "";
+			// make sure a user with this email doesn't already exist
+			TableOperation pUserRetrieveOp = TableOperation.Retrieve<UserRegistrationTableEntity>("USER", sEmail);
+			if (this.Table.Execute(pUserRetrieveOp).Result != null) { return Master.MessagifyError("A user with this email already exists."); }
+
+			// made it to this point, it's okay to make a new user
+			UserRegistrationTableEntity pUser = new UserRegistrationTableEntity(sEmail);
+			pUser.Password = Security.Sha256Hash(sPassword);
+			pUser.Key = Master.GenerateKey();
+			this.Table.Execute(TableOperation.Insert(pUser));
+
+			XElement pKey = new XElement("Key", pUser.Key);
+			XElement pEmail = new XElement("Email", sEmail);
+
+			return Master.Messagify("You have successfully registered!", Master.MSGTYPE_BOTH, pKey.ToString() + pEmail.ToString());
 		}
 
 		public string ReturningUser(string sEmail, string sPassword)
 		{
-		
-			return "";
+			UserRegistrationTableEntity pUser = VerifyUserRegistration(sEmail, sPassword);
+			if (pUser == null) { return Master.MessagifyError("Incorrect login information"); }
+
+			// otherwise return them their key and all their clan stubs
+			string sKey = pUser.Key;
+
+			XElement pKey = new XElement("Key", sKey);
+			XElement pEmail = new XElement("Email", sEmail);
+
+			// query their email partition key
+			TableQuery<RegistrationClanUserTableEntity> pQuery = new TableQuery<RegistrationClanUserTableEntity>().Where("PartitionKey eq '" + pUser.RowKey + "'");
+			List<RegistrationClanUserTableEntity> lClanInfos = this.Table.ExecuteQuery(pQuery).ToList();
+
+			XElement pClanStubs = new XElement("ClanStubs");
+			foreach (RegistrationClanUserTableEntity pClanInfo in lClanInfos)
+			{
+				string sCombined = pClanInfo.RowKey;
+
+				int iIndex = sCombined.IndexOf("|");
+				string sClanName = sCombined.Substring(0, iIndex);
+				string sUserName = sCombined.Substring(iIndex + 1);
+				
+				XElement pClanStub = new XElement("ClanStub");
+				pClanStub.SetAttributeValue("ClanName", sClanName);
+				pClanStub.SetAttributeValue("UserName", sUserName);
+				pClanStubs.Add(pClanStub);
+			}
+
+			return Master.Messagify("Logged in successfully!", Master.MSGTYPE_BOTH, pClanStubs.ToString() + pKey.ToString() + pEmail.ToString());
 		}
 
 		public string ChangeUserPassword(string sEmail, string sOldPassword, string sNewPassword)
 		{
-		
-			return "";
+			UserRegistrationTableEntity pUser = VerifyUserRegistration(sEmail, sOldPassword);
+			if (pUser == null) { return Master.MessagifyError("Incorrect login information"); }
+
+			// update the password
+			pUser.Password = Security.Sha256Hash(sNewPassword);
+			this.Table.Execute(TableOperation.Replace(pUser));
+			
+			return Master.MessagifySimple("Password changed successfully!");
 		}
 
 		public string CreateClan(string sClanName, string sClanPassPhrase)
@@ -96,7 +143,7 @@ namespace GameClansServer
 			return Master.MessagifySimple("You have successfully created the clan " + sClanName + "!");
 		}
 
-		public string JoinClan(string sClanName, string sClanPassPhrase, string sUserName, string sUserPassPhrase)
+		public string JoinClan(string sEmail, string sClanName, string sClanPassPhrase, string sUserName, string sUserPassPhrase)
 		{
 			// make sure the clan password is correct
 			if (!VerifyClanPassPhrase(sClanName, sClanPassPhrase)) { return Master.MessagifyError("Clan password incorrect."); }
@@ -115,7 +162,12 @@ namespace GameClansServer
 			// if we make it to this point, we're good, add a new user!
 			UserTableEntity pUser = new UserTableEntity(sClanName, sUserName);
 			pUser.PassPhrase = this.Sha256Hash(sUserPassPhrase);
+			pUser.Email = sEmail;
 			this.Table.Execute(TableOperation.Insert(pUser));
+
+			// add the email/clan/username association
+			RegistrationClanUserTableEntity pUserClan = new RegistrationClanUserTableEntity(sEmail, sClanName, sUserName);
+			this.Table.Execute(TableOperation.Insert(pUserClan));
 
 			//return "You have successfully joined the clan " + sClanName + " as " + sUserName;
 			return Master.Messagify("You have successfully joined the clan " + sClanName + " as " + sUserName, Master.MSGTYPE_BOTH, "<ClanStub ClanName='" + sClanName + "' UserName='" + sUserName + "' />");
@@ -355,6 +407,26 @@ namespace GameClansServer
 			this.Table.Execute(TableOperation.Insert(pGame));
 		}
 
+		public UserRegistrationTableEntity VerifyUserRegistration(string sEmail, string sPassword)
+		{
+			if (sEmail == null || sPassword == null) { return null; }
+
+			// get registration row from table
+			TableOperation pRegistrationOp = TableOperation.Retrieve<UserRegistrationTableEntity>("USER", sEmail);
+			TableResult pRegistrationResult = this.Table.Execute(pRegistrationOp);
+
+			if (pRegistrationResult.Result == null) { return null; }
+			UserRegistrationTableEntity pRegistration = (UserRegistrationTableEntity)pRegistrationResult.Result;
+
+			// hash clan passphrase
+			string sPassHash = Security.Sha256Hash(sPassword);
+
+			// return if hashes match
+
+			if (sPassHash == pRegistration.Password) { return pRegistration; }
+			return null;
+		}
+		
 		public bool VerifyClanPassPhrase(string sClanName, string sClanPassPhrase)
 		{
 			if (sClanName == null || sClanPassPhrase == null) { return false; }
@@ -367,7 +439,7 @@ namespace GameClansServer
 			ClanTableEntity pClan = (ClanTableEntity)pClanRetrieveResult.Result;
 
 			// hash clan passphrase
-			string sClanHash = this.Sha256Hash(sClanPassPhrase);
+			string sClanHash = Security.Sha256Hash(sClanPassPhrase);
 
 			// check if the passphrase matches 
 			return sClanHash == pClan.PassPhrase;
@@ -385,7 +457,7 @@ namespace GameClansServer
 			UserTableEntity pUser = (UserTableEntity)pUserRetrieveResult.Result;
 
 			// hash user passphrase
-			string sUserHash = this.Sha256Hash(sUserPassPhrase);
+			string sUserHash = Security.Sha256Hash(sUserPassPhrase);
 
 			// check if the passphrase matches
 			return sUserHash == pUser.PassPhrase;

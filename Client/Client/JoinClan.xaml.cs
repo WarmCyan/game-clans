@@ -1,7 +1,7 @@
 ﻿//*************************************************************
 //  File: JoinClan.xaml.cs
 //  Date created: 12/15/2016
-//  Date edited: 12/15/2016
+//  Date edited: 12/30/2016
 //  Author: Nathan Martindale
 //  Copyright © 2016 Digital Warrior Labs
 //  Description: 
@@ -45,7 +45,7 @@ namespace Client
 			// TODO: data sanitization!!!
 
 			string sUserPass = Master.GetKey();
-			string sBody = "<params><param name='sClanName'>" + txtClanName.Text + "</param><param name='sClanPassPhrase'>" + txtClanPassword.Password + "</param><param name='sUserName'>" + txtUserName.Text + "</param><param name='sUserPassPhrase'>" + sUserPass + "</param></params>";
+			string sBody = "<params><param name='sEmail'>" + Master.GetEmail() + "</param><param name='sClanName'>" + txtClanName.Text + "</param><param name='sClanPassPhrase'>" + txtClanPassword.Password + "</param><param name='sUserName'>" + txtUserName.Text + "</param><param name='sUserPassPhrase'>" + sUserPass + "</param></params>";
 			string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/GameClansServer/GameClansServer/ClanServer/JoinClan", sBody, true);
 
 			XElement pResponse = Master.ReadResponse(sResponse);
@@ -66,9 +66,6 @@ namespace Client
 				File.AppendAllLines(Master.GetBaseDir() + "_clans.dat", new List<string>() { sClanName + "|" + sUserName });
 				this.Close();
 			}
-
-			// TODO: even if user is already part of clan, need to check local clans file and make sure the data is there (and add it if not)
-
 		}
 	}
 }
